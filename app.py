@@ -6,13 +6,24 @@ Rupee-Cost Averaging Simulator, Eval-Gated Chat, and Smart Exit Flow.
 
 import streamlit as st
 import time
+import os
+import base64
 from portfolio_data import SCENARIOS, get_scenario
 from eval_gates import EvalGateEngine
 
-# Set page configuration
+# Load official Groww brand logo
+logo_path = os.path.join(os.path.dirname(__file__), "groww_logo.png")
+if os.path.exists(logo_path):
+    with open(logo_path, "rb") as f:
+        logo_b64 = base64.b64encode(f.read()).decode("utf-8")
+        groww_logo_uri = f"data:image/png;base64,{logo_b64}"
+else:
+    groww_logo_uri = "https://groww.in/groww-logo-270.png"
+
+# Set page configuration with official Groww icon
 st.set_page_config(
     page_title="Groww | Mutual Funds & SIP Companion",
-    page_icon="🌱",
+    page_icon=logo_path if os.path.exists(logo_path) else "https://groww.in/groww-logo-270.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -179,7 +190,13 @@ with st.sidebar:
 # --- TOP GROWW NAVBAR ---
 col_nav1, col_nav2 = st.columns([3, 1])
 with col_nav1:
-    st.markdown("<div class='groww-logo'>🌱 Groww <span style='color:#7C828D; font-size:1.1rem; font-weight:500;'>| Mutual Funds</span></div>", unsafe_allow_html=True)
+    st.markdown(f"""
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;">
+        <img src="{groww_logo_uri}" width="38" height="38" style="border-radius: 8px; vertical-align: middle; box-shadow: 0 2px 6px rgba(0,0,0,0.06);" />
+        <span style="color: #00D09C; font-weight: 800; font-size: 1.85rem; letter-spacing: -0.6px;">Groww</span>
+        <span style="color: #7C828D; font-size: 1.15rem; font-weight: 500; margin-left: 2px;">| Mutual Funds</span>
+    </div>
+    """, unsafe_allow_html=True)
 with col_nav2:
     st.markdown("<div style='text-align:right;'><span class='badge-verified'>✔ Non-Advisory Mode Active</span></div>", unsafe_allow_html=True)
 
@@ -302,7 +319,7 @@ elif st.session_state.current_screen == "📖 Monthly Perspective Story":
     # Story Card Container
     with st.container(border=True):
         if st.session_state.story_step == 0:
-            st.markdown("### 🌱 Card 1 of 3: Your Habit Consistency Streak")
+            st.markdown("### 🏆 Card 1 of 3: Your Habit Consistency Streak")
             st.markdown(f"#### **{m['completed_instalments']} of {m['target_instalments']} Instalments Completed**")
             st.progress(m['streak_pct'] / 100.0)
             st.markdown(
