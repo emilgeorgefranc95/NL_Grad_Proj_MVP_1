@@ -471,32 +471,40 @@ elif st.session_state.current_screen == "⚙️ Manage / Exit Flow":
         
         st.divider()
         if "Tight on cash" in exit_reason:
-            st.success("💡 **Recommended Flexibility:** You do not need to cancel your 10-year wealth plan over a 1-month cash crunch!")
+            st.info("💡 **Flexible Options Available:** If you are facing short-term cash flow constraints, you can adjust your schedule without needing to cancel your entire investment habit:")
             st.markdown(
-                "• **Skip Next Month (Zero Penalty):** We will pause only your upcoming debit. Your bank will not charge any bounce fees.\n"
-                "• **Reschedule Date:** You can move your SIP date to 3 days after your salary credit date."
+                "• **Skip Next Month:** Pauses only the upcoming instalment with zero bank bounce fees.\n"
+                "• **Move Date:** Reschedules debit to 3 days after your monthly salary credit."
             )
-            col_skip1, col_skip2 = st.columns(2)
+            col_skip1, col_skip2, col_skip3 = st.columns(3)
             with col_skip1:
-                if st.button("Confirm: Skip Next Month's Debit ✨", type="primary", use_container_width=True):
+                if st.button("Skip Next Month", type="primary", use_container_width=True):
                     st.session_state.skipped_month = True
                     st.balloons()
-                    st.success("Done! Your next instalment is skipped without breaking your SIP. AutoPay will resume the following month.")
+                    st.success("Next instalment skipped. Your AutoPay will automatically resume the following month.")
             with col_skip2:
-                if st.button("Move SIP Date to 10th (Post-Salary)", use_container_width=True):
+                if st.button("Move Date to 10th", use_container_width=True):
                     st.success("SIP debit date updated to the 10th of every month.")
+            with col_skip3:
+                if st.button("Cancel SIP Mandate", use_container_width=True):
+                    st.warning(f"Your SIP mandate has been cancelled as requested. You retain full ownership of your {m['total_units']:.2f} units.")
                     
         elif "Worried about market dips" in exit_reason:
-            st.warning(f"📉 **Factual Reminder:** Your average unit cost is currently ₹{m['average_nav_cost']:.2f}.")
+            st.info(f"ℹ️ **Objective Market Context:** Mutual fund SIPs are designed to navigate market cycles over multi-year horizons. Currently, you own **{m['total_units']:.2f} units** with an average purchase cost of **₹{m['average_nav_cost']:.2f}**.")
             st.markdown(
-                f"If you cancel today, your cost basis is frozen at a paper loss. Continuing your monthly ₹{user['monthly_sip']:,} "
-                f"at current lower NAVs (₹{m['current_nav']}) buys extra units, lowering your recovery hurdle."
+                "In long-term investing, temporary market drawdowns are a standard occurrence. "
+                "You have complete autonomy to pause, cancel, or continue based on your financial goals."
             )
-            if st.button("Read My Monthly Perspective Instead 📖", type="primary"):
-                st.session_state.current_screen = "📖 Monthly Perspective Story"
-                st.rerun()
+            col_m1, col_m2 = st.columns(2)
+            with col_m1:
+                if st.button("Read Monthly Perspective 📖", type="primary", use_container_width=True):
+                    st.session_state.current_screen = "📖 Monthly Perspective Story"
+                    st.rerun()
+            with col_m2:
+                if st.button("Proceed to Cancel SIP", use_container_width=True):
+                    st.warning(f"Your SIP mandate has been cancelled. Your existing {m['total_units']:.2f} units remain safely in your Groww portfolio.")
                 
         else:
-            st.error("You have complete autonomy. If you wish to cancel your SIP mandate entirely, you may do so:")
-            if st.button("Proceed with Immediate SIP Cancellation"):
-                st.warning("Your SIP mandate has been cancelled as requested. You can restart anytime.")
+            st.markdown("You have complete autonomy over your investments. If you wish to cancel this mandate, click below:")
+            if st.button("Proceed with Immediate SIP Cancellation", type="primary"):
+                st.warning(f"Your SIP mandate has been cancelled as requested. Your {m['total_units']:.2f} units remain safely in your Groww portfolio and can be redeemed anytime.")
