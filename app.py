@@ -492,17 +492,44 @@ elif st.session_state.current_screen == "⚙️ Manage / Exit Flow":
         elif "Worried about market dips" in exit_reason:
             st.info(f"ℹ️ **Objective Market Context:** Mutual fund SIPs are designed to navigate market cycles over multi-year horizons. Currently, you own **{m['total_units']:.2f} units** with an average purchase cost of **₹{m['average_nav_cost']:.2f}**.")
             st.markdown(
-                "In long-term investing, temporary market drawdowns are a standard occurrence. "
-                "You have complete autonomy to pause, cancel, or continue based on your financial goals."
+                "In long-term investing, temporary market drawdowns are standard market behavior. "
+                "If you feel uneasy continuing deductions right now, you can **pause your instalments** instead of terminating your 10-year wealth journey."
             )
+            
+            with st.container(border=True):
+                st.markdown("#### ⏸️ Pause Your SIP")
+                st.caption("Your bank mandate remains intact. No bounce fees will be charged, and your SIP will automatically resume after the pause period.")
+                
+                p_col1, p_col2 = st.columns([2, 1])
+                with p_col1:
+                    pause_choice = st.selectbox(
+                        "How many months would you like to pause?",
+                        [
+                            "1 Month (Resume in Dec 2026)",
+                            "2 Months (Resume in Jan 2027)",
+                            "3 Months (Resume in Feb 2027)",
+                            "6 Months (Resume in May 2027)"
+                        ],
+                        key="pause_duration_select"
+                    )
+                with p_col2:
+                    st.write("")
+                    st.write("")
+                    if st.button("Proceed with Pausing ✨", type="primary", use_container_width=True):
+                        st.session_state.skipped_month = True
+                        st.session_state.pause_info = pause_choice.split(" ")[0]
+                        st.balloons()
+                        st.success(f"Done! Your SIP has been paused for {pause_choice}. Your mandate will automatically resume.")
+            
             col_m1, col_m2 = st.columns(2)
             with col_m1:
-                if st.button("Read Monthly Perspective 📖", type="primary", use_container_width=True):
+                if st.button("Read Monthly Perspective 📖", type="secondary", use_container_width=True):
                     st.session_state.current_screen = "📖 Monthly Perspective Story"
                     st.rerun()
             with col_m2:
-                if st.button("Proceed to Cancel SIP", use_container_width=True):
-                    st.warning(f"Your SIP mandate has been cancelled. Your existing {m['total_units']:.2f} units remain safely in your Groww portfolio.")
+                if st.button("Proceed to Cancel SIP Mandate", use_container_width=True):
+                    st.session_state.skipped_month = False
+                    st.warning(f"Your SIP mandate has been cancelled as requested. Your existing {m['total_units']:.2f} units remain safely in your Groww portfolio.")
                 
         else:
             st.markdown("You have complete autonomy over your investments. If you wish to cancel this mandate, click below:")
