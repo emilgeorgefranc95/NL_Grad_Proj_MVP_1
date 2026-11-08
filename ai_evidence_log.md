@@ -155,3 +155,17 @@ To demonstrate commercial viability and direct business impact on Groww's enterp
 5. **Customer Support Ticket Deflection:**
    * Beginner panic queries (*"Why are my returns negative?"*, *"What is XIRR?"*) account for $30\text{--}35\%$ of early mutual fund support volume.
    * In-app companion decryptor achieves estimated **$25\%\text{--}30\%$ support deflection**, saving operational support overhead.
+
+
+---
+
+## 6. Pre-Mortem Risk Analysis & Mitigation Strategies
+
+To safeguard enterprise reputation, user trust, and regulatory adherence, the product architecture incorporates four strict risk mitigation guardrails:
+
+| Risk Domain | Failure Mode / Vulnerability | Root Cause | Architectural Mitigation Strategy | Verification / Guardrail Metric |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. SEBI Regulatory Compliance (Critical)** | AI output construed as unregistered investment advice or specific fund recommendations under SEBI (Investment Advisers) Regulations, 2013. | Open-ended generative LLM offering opinions on fund performance or buy/sell decisions. | **Tier 1 Hard-Coded Advisory Interceptor:** Regular expression and keyword classifier deflects any advisory query to certified financial advisors. Mandatory non-advisory disclaimer displayed on all cards: *"Educational tool only. Not investment advice."* | **Strictly 0% SEBI Advice Breaches** (100% adherence on 20-item Golden Set benchmark). |
+| **2. Arithmetic & Ledger Grounding** | LLM hallucinates portfolio return calculations, quotes incorrect XIRR, or displays incorrect unit counts, destroying user trust. | Generative token sampling performing arithmetic reasoning on raw inputs. | **Zero Runtime LLM Math:** All ledger figures, NAV deltas, rupee-cost savings, and streak data are computed deterministically in Python (`portfolio_data.py`). The LLM receives immutable verified numerical tokens as ground truth. | **100% Deterministic Agreement** between Python ledger state and UI render. |
+| **3. Operational Churn & Mandate Friction** | Bank mandate debits bounce due to month-end salary delays, incurring ₹250–₹500 bank penalty charges and triggering rage cancellation. | Tight 1-day debit warning window with no flexible rescheduling mechanism. | **3-Day Advance Intimation + 1-Click Skip:** WhatsApp & in-app push alerts 3 days prior with non-punitive 1-click *"Skip 1 Month"* or *"Move Debit to 10th (Salary Day)"* with zero penalty fees and zero dark patterns. | **Mandate Bounce Reduction $\ge 35\%$**; Zero cancellation friction ($<15\text{s}$ to cancel). |
+| **4. App Performance & Page Latency** | Synchronous LLM generation adds 2–4 seconds of latency to the core mutual fund holdings screen, degrading core app experience. | Runtime API calls to remote LLM endpoints on every page render. | **Asynchronous Overnight Batch Pre-Computation:** Monthly debriefs, story cards, and initial perspective summaries are pre-computed post-market close, stored in low-latency Redis/DynamoDB, and delivered in $<200\text{ms}$. | **$<200\text{ms}$ Page Load Latency** on mobile WebKit and Android native views. |

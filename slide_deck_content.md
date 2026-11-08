@@ -1,18 +1,18 @@
-# NextLeap PM Graduation Project: 10-Slide Deck Blueprint
+# NextLeap PM Graduation Project: Complete Slide Deck Blueprint
 
 **Target Company:** Groww | Growth Track  
 **File Name for Export:** `NL_Groww.pdf`  
-**Max Slides:** 10 Slides (Strict Limit)  
-**Strict Rule:** No fellow name anywhere on the slides!
+**Deck Structure:** Cover Slide + 10 Numbered Content Slides (Matches NextLeap "Top Fellow" Benchmark)  
+**Strict Rule:** No fellow name or personal email anywhere on the slides!
 
 ---
 
-## Slide 1: Title & Strategic Executive Summary
+## Cover Slide: Title & Strategic Context (Page 1)
 
 * **Slide Title:** Driving 12-Month SIP Continuation for First-Time Investors on Groww
-* **Subtitle:** An AI-Native Discovery, Post-Investment Conviction Engine, and Evaluated Prototype
+* **Subtitle:** An AI-Native Discovery Engine, Post-Investment Conviction Companion, and Evaluated Production Prototype
 * **Track:** Product Management Fellowship • Growth Track • Mutual Funds
-* **Strategic Problem Statement:** Starting an SIP is frictionless, but long-term continuation fails. Groww's strategic goal is to increase the % of first-time mutual fund investors who still have an active SIP 12 months after starting their first one.
+* **Strategic Problem Statement:** Starting an SIP is frictionless, but long-term continuation breaks down. Groww's strategic goal is to increase the % of first-time mutual fund investors who still have an active SIP 12 months after starting their first one.
 * **Hyperlinks (Bottom Banner):**
   * [Live AI-Native MVP Prototype](https://nlgradprojmvp1-mxxgftodd6jewu6ahse9nu.streamlit.app/)
   * [Live AI Discovery Engine](REPLACE_WITH_YOUR_CLAUDE_LINK)
@@ -21,7 +21,7 @@
 
 ---
 
-## Slide 2: Business Metric Decomposition
+## Slide 1: Business Metric Decomposition (Page 2)
 
 * **Slide Title:** 12-Month SIP Continuation Breaks Down at the Month 2–6 "Conviction Cliff"
 * **North Star Metric Equation:**
@@ -36,7 +36,7 @@
 
 ---
 
-## Slide 3: AI-Powered Discovery Engine (Part 1)
+## Slide 2: AI-Powered Discovery Engine (Page 3)
 
 * **Slide Title:** Public Investor Voice Reveals a Post-Onboarding Conviction Deficit
 * **Data Corpus Analyzed:** 9,000+ public retail investor conversations analyzed across Play Store (1,840 reviews), Reddit (4,700 comments on r/IndiaInvestments), TradingQ&A (310 threads), and YouTube Finance comments (2,450).
@@ -52,7 +52,7 @@
 
 ---
 
-## Slide 4: Primary User Research (Part 3)
+## Slide 3: Primary User Research (Page 4)
 
 * **Slide Title:** User Interviews Validate: Confusion and Lack of Handholding Drive Cancellation Intent
 * **Methodology:** 5 in-depth qualitative 1-on-1 interviews (30–45 mins) with retail SIP investors across Groww and competitor platforms.
@@ -68,7 +68,7 @@
 
 ---
 
-## Slide 5: Target User Segment & Critical Moment (Part 4)
+## Slide 4: Target User Segment & Critical Moment (Page 5)
 
 * **Slide Title:** Targeting First-Time Salaried Investors Entering the Underwhelming Quarter (Months 2–6)
 * **Target Segment Profile:**
@@ -83,7 +83,7 @@
 
 ---
 
-## Slide 6: Defining the Problem (The 6-Box Framework)
+## Slide 5: Defining the Problem (The 6-Box Framework) (Page 6)
 
 * **Slide Title:** Overwhelmed by Jargon and Unclear Metrics, First-Timers Lose Conviction in Months 2–6
 
@@ -95,7 +95,7 @@
 
 ---
 
-## Slide 7: Picking the Solution (Champion vs. Alternatives + RICE)
+## Slide 6: Picking the Solution (Champion vs. Alternatives + RICE) (Page 7)
 
 * **Slide Title:** Prioritizing an In-Context AI Companion to Translate Data into Plain-Language Conviction
 * **Winning Solution: 👑 GROWW PERSPECTIVE (Dynamic AI Portfolio Companion)**
@@ -112,7 +112,7 @@
 
 ---
 
-## Slide 8: The Solution in Action (Interactive MVP Walkthrough)
+## Slide 7: The Solution in Action (Interactive MVP Walkthrough) (Page 8)
 
 * **Slide Title:** An Eval-Gated, SEBI-Compliant In-App Companion Built and Deployed to Production
 * **Subtitle:** 4-Pillar Architecture Translating Ledger Data into Plain-Language Conviction & Flexibility
@@ -143,7 +143,7 @@
 
 ---
 
-## Slide 9: User Testing & Next Iteration Backlog (Part 6)
+## Slide 8: User Testing & Next Iteration Backlog (Page 9)
 
 * **Slide Title:** Prototype Testing Validates Anxiety Reduction; Surfaces Demand for Transactional Expansion
 * **Subtitle:** Usability Protocol with First-Time SIP Investors Validates Conviction Hypotheses
@@ -167,7 +167,7 @@
 * **Prioritized V2 Product Roadmap (Documented from User Feedback):**
 
 | Priority | Feature / Enhancement | User Need / Feedback Solved | Strategic Impact on 12-Mo Retention | Effort |
-| :---: | :--- | :--- | :--- | :---: |
+| :---: | :--- | :--- | :--- | :--- | :---: |
 | **P0** | **Opportunistic "Dip Top-Up" (1-Click Lump Sum in Story Mode)** | User desire to invest extra when the NAV Simulator proves units are on discount (Request a). | Converts passive reassurance into active capital accumulation, deepening investor commitment. | Med |
 | **P0** | **Pre-Debit Advance Intimations (3 Days Prior + 1-Click Skip)** | Solves bank balance anxiety and mandate bounce penalties raised in discovery. | Prevents involuntary mandate failures and bank penalty frustration before debit day. | Low |
 | **P1** | **Groww Wallet / UPI Auto-Fallback Mandate** | User request to fund SIPs via Groww Wallet balance when primary bank account is low (Request d). | Eliminates payment drop-offs when primary salary account runs low at month-end. | Med |
@@ -175,33 +175,102 @@
 
 ---
 
-## Slide 10: GTM Rollout, Metrics Framework & Risk Mitigations (Parts 7 & 8)
+## Slide 9: GTM Strategy and Measuring Success (Page 10)
 
-* **Slide Title:** Phased Rollout Plan, Impact Sizing & Metrics Framework to Defend the 12-Month Goal
-* **Subtitle:** Staged Rollout Strategy, Financial Impact Model, and Pre-Mortem Guardrails
+* **Slide Title:** GTM Strategy and Measuring Success
+* **Subtitle:** Phased Rollout Plan & Guardrailed Metrics Architecture to Defend 12-Month SIP Retention
+* **Visual Layout:** Two-Column Split (Left: GTM Strategy | Right: Measuring Success)
 
-* **Business Impact Sizing Model (Conservative Projections):**
-  * **Baseline Scale:** Groww onboards $\sim 500,000$ first-time mutual fund investors per month ($\sim 6\text{M}$ annually).
-  * **The Problem Baseline:** Current 12-month retention is $\sim 50\%$ (steepest 40% drop-off in Months 2–6).
-  * **Target Lift:** A modest $+6\%$ absolute lift in 12-month active SIP retention (from $50\%$ to $56\%$).
-  * **Incremental Retained Investors:** $500,000 \times 6\% = \mathbf{30,000\text{ users/cohort}} \implies \mathbf{360,000\text{ additional active investors/year}}$.
-  * **Direct AUM Preserved (Year 1):** At avg SIP of ₹2,500/mo ($₹30,000/\text{yr}$), preserves $\mathbf{₹1,080\text{ Crores AUM}}$ ($360\text{k} \times ₹30,000$).
-  * **Compounding AUM (Year 3):** With $>75\%$ post-M12 survival and $10\%$ annual SIP step-up, expands to $\mathbf{₹4,500+\text{ Crores AUM}}$.
-  * **CAC Protection Savings:** At $₹1,500$ CAC, saves $\mathbf{₹54\text{ Crores annually}}$ in otherwise wasted acquisition marketing.
+### Left Column: GTM Strategy (4-Phase Staged Rollout)
+* **Phase 1: Validation & Compliance Gate (Weeks 1–2)**
+  * Test companion with target friction cohort (first-time investors in Months 2–6).
+  * Run 20-item Golden Set validation (100% pass rate, zero SEBI advice breaches, deterministic math).
+  * Legal & compliance sign-off on non-advisory educational disclaimers.
+* **Phase 2: Canary Beta Launch (Weeks 3–6)**
+  * Release to a high-intent canary cohort of 10,000 first-time mutual fund investors entering Month 3.
+  * Collect behavioral telemetry: Story completion rate, AI query topics, and support deflection.
+* **Phase 3: Staged Rollout & A/B Experimentation (Weeks 7–12)**
+  * 50/50 randomized control trial during a market dip/correction:
+    * *Control Group:* Standard Groww holdings page (red P&L, raw XIRR).
+    * *Treatment Group:* Groww Perspective companion (Story debrief, RCA slider, AI decryptor, Skip/Pause).
+  * Measure Net Negative-Market Retention Delta, mandate continuation, and support ticket rate.
+* **Phase 4: Full Scale & Contextual Adoption (Month 4+)**
+  * Broad 100% rollout across all first-time mutual fund investors on Groww.
+  * Contextual in-product entry points: Monthly ledger release banner, 3-day advance pre-debit WhatsApp alerts, and smart exit alternative when user navigates toward cancellation.
 
-* **4-Phase GTM Rollout Strategy:**
-  * *Phase 1 (Validation - W1–W2):* Internal dogfooding and legal sign-off on 20-item Golden Set (zero SEBI breaches).
-  * *Phase 2 (Beta Canary - W3–W6):* Release to 10,000 first-time investors entering Month 3. Monitor support deflection.
-  * *Phase 3 (A/B Staged Rollout - W7–W12):* 50/50 randomized control trial during next market correction. Measure Net Negative-Market Retention Delta.
-  * *Phase 4 (Scale & Full Rollout - M4+):* 100% rollout across all first-time mutual fund investors on Groww.
+### Right Column: Measuring Success (Metrics Architecture)
+* **North Star Metric:**
+  * **12-Month Active SIP Continuation Rate for First-Time Investors**  
+    (% of first-time mutual fund investors with $\ge 1$ successful instalment in trailing 30 days at Month 12).
+* **Leading Indicators (Telemetry & Engagement):**
+  * **Story Mode Completion Rate:** % of target users who complete the 3-card monthly debrief ($\ge 65\%$ target).
+  * **AI Query Resolution Rate:** % of users whose question is answered without contacting support ($>85\%$ target).
+  * **Flexibility Adoption Rate:** % of at-risk users who choose "Skip 1 Month" or "Pause" instead of permanent cancellation ($>50\%$ target).
+* **Lagging Indicators (Retention & Business):**
+  * **Month 2–6 Churn Cliff Survival Rate:** % of first-timers surviving past Month 6 without cancelling ($>75\%$ target).
+  * **Net Negative-Market Retention Delta:** Active SIP continuation difference between Treatment vs Control during market drawdowns ($+5\%\text{--}+8\%$ target).
+  * **12-Month Active SIP Retention Rate:** Shift from 50% baseline to 56% (+6% absolute lift).
+* **Guard Rail Metrics (Trust & Compliance):**
+  * **SEBI Advice Breaches:** **Strictly 0%** (zero buy/sell/hold stock/fund recommendations).
+  * **Ledger Arithmetic Accuracy:** **100% deterministic** (zero math hallucinations via Python pre-computation).
+  * **Cancellation Flow Friction:** **$<15\text{ seconds}$** to complete cancellation; zero dark patterns or forced retention gates.
+  * **App Latency:** **$<200\text{ms}$** render time via asynchronous overnight ledger pre-computation.
 
-* **Metrics Architecture:**
-  * *North Star Metric:* 12-Month Active SIP Continuation Rate for First-Time Investors ($\ge 1$ debit in trailing 30 days).
-  * *Lagging Metric:* Month 2–6 Churn Cliff Survival Rate ($>75\%$ post-M6 retention).
-  * *Leading Indicators:* Story Mode Completion Rate, Flexibility Adoption (Skip/Pause vs. Cancel), AI Query Resolution Rate.
-  * *Guardrails:* Zero SEBI Advice Breaches (Strictly 0%), Cancellation Friction ($<15\text{s}$, zero dark patterns), Arithmetic Grounding (100%).
+---
 
-* **Pre-Mortem Risks & Mitigations:**
-  * *SEBI Regulatory Risk:* Handled via Tier 1 Advisory Interceptor and mandatory SEBI educational disclaimers.
-  * *Arithmetic Hallucination Risk:* Handled by deterministic Python ledger pre-computation (LLM does zero math).
-  * *App Latency Risk:* Handled by asynchronous overnight pre-computation (zero user page load latency).
+## Slide 10: Measuring the Impact and Risks (Page 11)
+
+* **Slide Title:** Measuring the Impact and Risks
+* **Subtitle:** Multi-Year Enterprise Financial Impact Sizing & Pre-Mortem Risk Mitigation Strategies
+* **Visual Layout:** Two-Column Split (Left: Impact Sizing | Right: Risk & Mitigation Strategies)
+
+### Left Column: Impact Sizing (Conservative Financial Model)
+* **Addressable Population:**
+  * **$\sim 500,000$ first-time mutual fund investors onboarded monthly** on Groww ($\sim 6\text{M}$ annual cohort).
+* **The Churn Problem Baseline:**
+  * **$\sim 50\%$ drop off within 12 months**, with the steepest 40% churn cliff concentrated in Months 2–6 due to market dip anxiety and mandate debit friction.
+* **Target Retention Lift:**
+  * **$+6.0\%$ absolute increase in 12-Month SIP Retention** (shifting baseline from $50.0\%$ to $56.0\%$, a $+12\%$ relative improvement).
+* **Directional Impact Sizing:**
+  * $500,000 \times 6\% = \mathbf{30,000\text{ additional retained investors / month}}$
+  * $\mathbf{360,000\text{ additional active investors / year}}$ retained on Groww.
+* **₹1,080 Cr Direct AUM Preserved (Year 1):**
+  * At average SIP of ₹2,500/month ($₹30,000/\text{year}$):
+  * $360,000 \times ₹30,000 = \mathbf{₹1,080\text{ Crores direct AUM preserved}}$ in Year 1.
+* **₹4,500+ Cr Compounding Lifetime AUM (Year 3):**
+  * Post-Month 12 survival rate exceeds $75\%$; assuming $10\%$ annual SIP step-up:
+  * Cumulative compounding AUM retained grows to $\mathbf{₹4,500+\text{ Crores AUM}}$ by Year 3.
+* **₹54 Cr Annual CAC Efficiency Savings:**
+  * At ₹1,500 CAC per verified retail investor, preserves $\mathbf{₹54\text{ Crores annually}}$ in otherwise wasted acquisition marketing ($360,000 \times ₹1,500$).
+* **Support Ticket Deflection:**
+  * Beginner panic queries reduced by $25\%\text{--}30\%$, cutting customer support operational load.
+
+### Right Column: Risk & Mitigation Strategies
+* **1. Regulatory & SEBI Non-Advisory Risk (Critical):**
+  * *Risk:* In-app AI conversational companion could be perceived as offering unregistered investment advice or fund recommendations, violating SEBI (Investment Advisers) Regulations.
+  * *Mitigation:* Hard-coded Tier 1 Advisory Interceptor immediately detects buy/sell/switch intents and deflects to certified advisors with a mandatory educational disclaimer: *"Educational tool only. Not investment advice."* Validated with 100% adherence on a 20-case Golden Set benchmark.
+* **2. Arithmetic & Hallucination Risk:**
+  * *Risk:* LLMs generating inaccurate portfolio numbers, distorted returns, or fabricated XIRR calculations, destroying user trust.
+  * *Mitigation:* Zero runtime LLM math. All ledger metrics (invested amount, current value, returns delta, discounted units) are pre-computed deterministically in Python. The LLM only receives verified string tokens as ground truth.
+* **3. Operational Churn & Mandate Penalty Risk:**
+  * *Risk:* Salary delays causing bank mandate debits to bounce, inflicting ₹250–₹500 bank penalty fees and triggering reactionary SIP cancellations.
+  * *Mitigation:* 3-day advance pre-debit notifications via WhatsApp and in-app banners offering 1-click non-punitive *"Skip 1 Month"* or *"Move Debit to 10th (Salary Day)"* with zero bounce fees and zero dark patterns.
+* **4. Performance & Page Latency Risk:**
+  * *Risk:* Real-time LLM inference adding 2–4 seconds of loading delay to the core mutual fund holdings page.
+  * *Mitigation:* Asynchronous overnight batch generation. Story cards and initial perspective summaries are pre-computed post-market close, ensuring $<200\text{ms}$ instantaneous native UI rendering.
+
+---
+
+## Alternative: 10-Slide Deck if Cover Counts Toward Limit (Strict 10-Page Format)
+
+If your submission portal strictly caps total PDF pages at 10 (including Cover), merge Slide 4 & Slide 5 as follows:
+* **Slide 1:** Cover Slide (Title, Strategic Goal, Live Prototype Links)
+* **Slide 2:** Business Metric Decomposition (North Star & 5-Stage Funnel)
+* **Slide 3:** Secondary Research: AI Discovery Engine (9k+ Reviews)
+* **Slide 4:** Primary Research: 5 User Interviews & Verbatim Evidence
+* **Slide 5:** Target User Segment & Problem Definition (Merged Sushant Persona + 6-Box Framework)
+* **Slide 6:** Picking the Solution (RICE Prioritization Table)
+* **Slide 7:** The Solution in Action (4-Screen Mobile Prototype Walkthrough)
+* **Slide 8:** User Testing Insights & V2 Roadmap (Hypothesis Validation & Backlog)
+* **Slide 9:** GTM Strategy & Measuring Success (Phased Rollout + Metrics)
+* **Slide 10:** Measuring the Impact and Risks (Impact Sizing + Risk & Mitigation Strategies)
