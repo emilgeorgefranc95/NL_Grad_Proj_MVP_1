@@ -157,18 +157,21 @@
   3. *Layman Jargon Decryption:* Users validated the plain-English translations (*"Very accurate and free of jargon, especially explaining what XIRR is and why it's noisy in Months 1 to 6... understood by any layman"*).
   4. *Habit Defense via Flexibility:* Users confirmed they would actively choose Skip/Pause over cancellation (*"If I face a tight month I would definitely use this... I can skip 1 month or manually select how many months to pause from the dropdown with immediate effect"*).
 
-* **User Desires & Product Insight (The Next Frontier):**
-  * *User Feedback:* Users found zero friction in the companion, but naturally expected full transactional capabilities: *"In the next version, I expect features to invest in a fund (one-time or new SIP), exit a fund, explore new funds, and add money through Groww Wallet."*
-  * *PM Strategic Synthesis:* When an AI companion successfully builds conviction, users immediately want to take financial action (e.g., buying extra units while NAV is discounted). The companion must evolve from passive guidance to an actionable financial co-pilot.
+* **User-Requested Features for Version 2 (Feedback from Prototype Testing):**
+  * *Context:* The MVP prototype was strictly scoped to validate post-onboarding conviction and anxiety reduction during Months 2–6. Following testing, users requested expanding the companion into full transactional workflows:
+    1. **In-App Investing (One-Time Top-Up / New SIP):** Ability to make opportunistic lump-sum investments when market dips occur or start new SIPs directly from the story mode.
+    2. **Fund Exit & Redemption Flow:** Complete execution flow to redeem or switch units when goals mature.
+    3. **Fund Exploration & Discovery:** In-app discovery module to research and compare peer funds.
+    4. **Groww Wallet Balance Integration:** Enabling users to fund SIP debits directly via their Groww Wallet balance as an automated fallback when bank balances run low.
 
-* **Prioritized V2 Product Backlog:**
+* **Prioritized V2 Product Roadmap (Documented from User Feedback):**
 
 | Priority | Feature / Enhancement | User Need / Feedback Solved | Strategic Impact on 12-Mo Retention | Effort |
 | :---: | :--- | :--- | :--- | :---: |
-| **P0** | **Opportunistic "Dip Top-Up" (1-Click Lump Sum in Story Mode)** | User desire to invest extra when the NAV Simulator proves units are on discount. | Converts passive reassurance into active capital accumulation, deepening investor commitment. | Med |
+| **P0** | **Opportunistic "Dip Top-Up" (1-Click Lump Sum in Story Mode)** | User desire to invest extra when the NAV Simulator proves units are on discount (Request a). | Converts passive reassurance into active capital accumulation, deepening investor commitment. | Med |
 | **P0** | **Pre-Debit Advance Intimations (3 Days Prior + 1-Click Skip)** | Solves bank balance anxiety and mandate bounce penalties raised in discovery. | Prevents involuntary mandate failures and bank penalty frustration before debit day. | Low |
-| **P1** | **Groww Wallet / UPI Auto-Fallback Mandate** | User request to fund SIPs via Groww Wallet balance when primary bank account is low. | Eliminates payment drop-offs when primary salary account runs low at month-end. | Med |
-| **P1** | **SEBI-Compliant Goal-Based Fund Exploration** | User request to explore new funds directly from their portfolio context. | Deepens long-term investor engagement and cross-fund diversification past Month 6. | High |
+| **P1** | **Groww Wallet / UPI Auto-Fallback Mandate** | User request to fund SIPs via Groww Wallet balance when primary bank account is low (Request d). | Eliminates payment drop-offs when primary salary account runs low at month-end. | Med |
+| **P1** | **SEBI-Compliant Goal-Based Fund Exploration & Exit** | User request to explore new funds and manage full redemptions (Requests b & c). | Deepens long-term investor engagement and cross-fund diversification past Month 6. | High |
 
 ---
 
