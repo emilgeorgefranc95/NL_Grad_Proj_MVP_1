@@ -180,7 +180,7 @@ class EvalGateEngine:
         # =====================================================================
 
         # 1. Total Returns & How Returns Are Calculated
-        if re.search(r"how.*return.*calculat|return.*formula|total return|how.*p&l", q_lower):
+        if re.search(r"calculat.*return|how.*return.*calculat|return.*formula|total return|how.*p&l", q_lower):
             response = (
                 f"📊 **How Your Total Return is Calculated**\n\n"
                 f"Your total return on the dashboard currently stands at **{formatted_return_inr} ({formatted_return_pct})**.\n\n"
@@ -195,7 +195,7 @@ class EvalGateEngine:
             )
 
         # 2. Total Invested
-        elif re.search(r"total invest|how much.*invest|my invest", q_lower):
+        elif re.search(r"\btotal invest|how much.*invest|\bmy total invest", q_lower):
             response = (
                 f"💰 **Your Total Invested Breakdown**\n\n"
                 f"You have invested a cumulative total of **₹{m['total_invested']:,.2f}** into {user['fund_name']}.\n\n"

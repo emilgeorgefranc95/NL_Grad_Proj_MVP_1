@@ -207,10 +207,8 @@ if "screen" not in st.session_state:
     st.session_state.screen = "holdings"
 if "story_step" not in st.session_state:
     st.session_state.story_step = 0
-if "sip_query" not in st.session_state:
-    st.session_state.sip_query = "How are my returns calculated?"
-if "active_q" not in st.session_state:
-    st.session_state.active_q = "How are my returns calculated?"
+if "active_question" not in st.session_state:
+    st.session_state.active_question = "How are my returns calculated?"
 if "skipped_month" not in st.session_state:
     st.session_state.skipped_month = False
 if "pause_duration" not in st.session_state:
@@ -254,9 +252,7 @@ with st.sidebar:
     if st.button("🔄 Reset Prototype State", use_container_width=True, key="btn_reset_state"):
         st.session_state.screen = "holdings"
         st.session_state.story_step = 0
-        st.session_state.sip_query = "How are my returns calculated?"
-        st.session_state.active_q = "How are my returns calculated?"
-        st.session_state["input_ask_text"] = "How are my returns calculated?"
+        st.session_state.active_question = "How are my returns calculated?"
         st.session_state.skipped_month = False
         st.session_state.pause_duration = ""
         st.rerun()
@@ -433,9 +429,7 @@ if st.session_state.screen == "holdings":
     with col_act1:
         if st.button("What is XIRR? ℹ️", use_container_width=True, key="btn_holdings_xirr"):
             st.session_state.screen = "ask_ai"
-            st.session_state.sip_query = "What is XIRR and why is it showing -14%?"
-            st.session_state.active_q = "What is XIRR and why is it showing -14%?"
-            st.session_state["input_ask_text"] = "What is XIRR and why is it showing -14%?"
+            st.session_state.active_question = "What is XIRR and why is it showing -14%?"
             st.rerun()
     with col_act2:
         if st.button("Manage SIP ⚙️", use_container_width=True, key="btn_holdings_manage"):
@@ -535,139 +529,102 @@ elif st.session_state.screen == "ask_ai":
     </div>
     """, unsafe_allow_html=True)
     
-    # State update callbacks for instant reactivity without desync
-    def select_sip_query(q_text):
-        st.session_state.sip_query = q_text
-        st.session_state.active_q = q_text
-        st.session_state["input_ask_text"] = q_text
-
-    def on_custom_ask():
-        typed = st.session_state.get("input_ask_text", "").strip()
-        if typed:
-            st.session_state.active_q = typed
-            st.session_state.sip_query = typed
-
     # Prompt Chips Section - Category 1: Numbers & Formulas
     st.caption("🔢 Explore Dashboard Numbers & Calculations:")
     n_col1, n_col2 = st.columns(2)
     with n_col1:
-        st.button(
-            "📊 How are returns calculated?",
-            use_container_width=True,
-            key="chip_ret_calc",
-            on_click=select_sip_query,
-            args=("How are my returns calculated?",)
-        )
+        if st.button("📊 How are returns calculated?", use_container_width=True, key="chip_ret_calc"):
+            st.session_state.active_question = "How are my returns calculated?"
+            st.rerun()
     with n_col2:
-        st.button(
-            "💰 Total Invested breakdown",
-            use_container_width=True,
-            key="chip_total_inv",
-            on_click=select_sip_query,
-            args=("What is my total invested?",)
-        )
+        if st.button("💰 Total Invested breakdown", use_container_width=True, key="chip_total_inv"):
+            st.session_state.active_question = "What is my total invested?"
+            st.rerun()
 
     n_col3, n_col4 = st.columns(2)
     with n_col3:
-        st.button(
-            "🏷️ What is NAV & Unit Cost?",
-            use_container_width=True,
-            key="chip_nav_cost",
-            on_click=select_sip_query,
-            args=("What is NAV in simple words?",)
-        )
+        if st.button("🏷️ What is NAV & Unit Cost?", use_container_width=True, key="chip_nav_cost"):
+            st.session_state.active_question = "What is NAV in simple words?"
+            st.rerun()
     with n_col4:
-        st.button(
-            "⏱️ What does XIRR mean?",
-            use_container_width=True,
-            key="chip_what_xirr",
-            on_click=select_sip_query,
-            args=("What is XIRR and why is it showing -14%?",)
-        )
+        if st.button("⏱️ What does XIRR mean?", use_container_width=True, key="chip_what_xirr"):
+            st.session_state.active_question = "What is XIRR and why is it showing -14%?"
+            st.rerun()
             
     # Category 2: Doubts & Concepts
     st.caption("💡 Clarify Concepts & Doubts:")
     d_col1, d_col2 = st.columns(2)
     with d_col1:
-        st.button(
-            "📉 Why are returns red?",
-            use_container_width=True,
-            key="chip_why_neg",
-            on_click=select_sip_query,
-            args=("Why are my returns red even though I have been disciplined?",)
-        )
+        if st.button("📉 Why are returns red?", use_container_width=True, key="chip_why_neg"):
+            st.session_state.active_question = "Why are my returns red even though I have been disciplined?"
+            st.rerun()
     with d_col2:
-        st.button(
-            "🛡️ Is my money safe?",
-            use_container_width=True,
-            key="chip_safety",
-            on_click=select_sip_query,
-            args=("Is my investment safe on Groww?",)
-        )
+        if st.button("🛡️ Is my money safe?", use_container_width=True, key="chip_safety"):
+            st.session_state.active_question = "Is my investment safe on Groww?"
+            st.rerun()
 
     d_col3, d_col4 = st.columns(2)
     with d_col3:
-        st.button(
-            "🌱 What is Direct Growth?",
-            use_container_width=True,
-            key="chip_direct_growth",
-            on_click=select_sip_query,
-            args=("What does Direct Growth mean?",)
-        )
+        if st.button("🌱 What is Direct Growth?", use_container_width=True, key="chip_direct_growth"):
+            st.session_state.active_question = "What does Direct Growth mean?"
+            st.rerun()
     with d_col4:
-        st.button(
-            "⚠️ Should I stop this fund?",
-            use_container_width=True,
-            key="chip_should_stop",
-            on_click=select_sip_query,
-            args=("Should I sell this fund because it is in negative?",)
-        )
+        if st.button("⚠️ Should I stop this fund?", use_container_width=True, key="chip_should_stop"):
+            st.session_state.active_question = "Should I sell this fund because it is in negative?"
+            st.rerun()
     
     # Custom Question Input field
     st.markdown("---")
     q_col1, q_col2 = st.columns([4, 1])
     with q_col1:
-        st.text_input(
+        custom_typed = st.text_input(
             "Your Question:",
             placeholder="Ask about any number, term, or return...",
             label_visibility="collapsed",
-            key="input_ask_text",
-            on_change=on_custom_ask
+            key="custom_user_query"
         )
     with q_col2:
-        st.button("Ask ✨", type="primary", use_container_width=True, key="btn_ask_action", on_click=on_custom_ask)
+        if st.button("Ask ✨", type="primary", use_container_width=True, key="btn_ask_custom"):
+            if custom_typed.strip():
+                st.session_state.active_question = custom_typed.strip()
+                st.rerun()
         
-    # Active query resolution
-    active_q = st.session_state.get("active_q")
-    if not active_q:
-        active_q = st.session_state.get("input_ask_text", "").strip() or st.session_state.get("sip_query", "").strip()
+    # Active query resolution - Guaranteed default to "How are my returns calculated?"
+    active_q = st.session_state.get("active_question")
     if not active_q:
         active_q = "How are my returns calculated?"
+        st.session_state.active_question = active_q
     
-    if active_q:
-        with st.spinner("Decrypting dashboard ledger with SEBI safety gates..."):
-            time.sleep(0.12)
-            resp, eval_meta = engine.generate_perspective_response(active_q, scenario)
-            
+    # Sleek visual indicator showing currently answered question
+    st.markdown(f"""
+    <div style="background: #FFFFFF; border-left: 4px solid #00D09C; border-radius: 8px; padding: 8px 12px; margin: 10px 0 12px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
+        <div style="font-size: 0.70rem; color: #7C828D; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;">Active Dashboard Query</div>
+        <div style="font-size: 0.92rem; font-weight: 700; color: #191C1F; margin-top: 2px;">{active_q}</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    with st.spinner("Decrypting dashboard ledger with SEBI safety gates..."):
+        resp, eval_meta = engine.generate_perspective_response(active_q, scenario)
+        
+    with st.container(border=True):
+        st.markdown(resp)
+        st.markdown(f"""
+        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #EEF1F4; display: flex; justify-content: space-between; align-items: center;">
+            <span class="badge-verified">✔ Verified Ledger (Score: {eval_meta['quality_score']}/100)</span>
+            <span style="font-size: 0.70rem; color: #8F95A0; font-weight: 600;">SEBI Non-Advisory</span>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    if show_telemetry:
         with st.container(border=True):
-            st.markdown(resp)
-            st.markdown(f"""
-            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #EEF1F4; display: flex; justify-content: space-between; align-items: center;">
-                <span class="badge-verified">✔ Verified Ledger (Score: {eval_meta['quality_score']}/100)</span>
-                <span style="font-size: 0.70rem; color: #8F95A0; font-weight: 600;">SEBI Non-Advisory</span>
-            </div>
-            """, unsafe_allow_html=True)
-            
-        if show_telemetry:
-            with st.container(border=True):
-                st.caption("🔍 Mentor Eval Telemetry")
-                st.json({
-                    "query": active_q,
-                    "intent": engine.classify_intent(active_q),
-                    "checks": eval_meta["checks"],
-                    "quality_score": f"{eval_meta['quality_score']}/100",
-                    "safe": eval_meta["is_safe"]
-                })
+            st.caption("🔍 Mentor Eval Telemetry")
+            st.json({
+                "query": active_q,
+                "intent": engine.classify_intent(active_q),
+                "checks": eval_meta["checks"],
+                "quality_score": f"{eval_meta['quality_score']}/100",
+                "safe": eval_meta["is_safe"]
+            })
 
 # =====================================================================
 # SCREEN 4: SMART EXIT & FLEXIBILITY FLOW (MOBILE-FIRST)
