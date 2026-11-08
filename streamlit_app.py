@@ -491,10 +491,10 @@ elif st.session_state.screen == "story":
         elif curr_step == 2:
             st.markdown("#### 🧭 Card 3: The Accumulator's Compass")
             st.markdown(f"""
-            • **Current Market:** {m['market_condition']}  
-            • **Paper Loss vs. Realized Loss:** You haven't sold any units. You own **{m['total_units']:.2f} pieces** of India's top companies.  
-            • **10-Year Probability:** In Indian equities, 10-year holding periods historically carry `<1%` probability of negative returns.
-            """)
+* **Current Market:** {m['market_condition']}  
+* **Paper Loss vs. Realized Loss:** You haven't sold any units. You own **{m['total_units']:.2f} pieces** of India's top companies.  
+* **10-Year Probability:** In Indian equities, 10-year holding periods historically carry `<1%` probability of negative returns.
+""")
             st.success("🎯 **Recommended Action:** Let your monthly AutoPay run. No manual intervention required.")
             
     s_col1, s_col2 = st.columns(2)
@@ -550,6 +550,16 @@ elif st.session_state.screen == "ask_ai":
         if st.button("⏱️ What does XIRR mean?", use_container_width=True, key="chip_what_xirr"):
             st.session_state.active_question = "What is XIRR and why is it showing -14%?"
             st.rerun()
+
+    n_col5, n_col6 = st.columns(2)
+    with n_col5:
+        if st.button("⏱️ Why is XIRR 'Noisy in M1–6'?", use_container_width=True, key="chip_xirr_noisy"):
+            st.session_state.active_question = "Why is XIRR noisy in M1-6?"
+            st.rerun()
+    with n_col6:
+        if st.button("📅 Next Debit & AutoPay", use_container_width=True, key="chip_autopay_sched"):
+            st.session_state.active_question = "When is my next SIP debit date?"
+            st.rerun()
             
     # Category 2: Doubts & Concepts
     st.caption("💡 Clarify Concepts & Doubts:")
@@ -573,21 +583,23 @@ elif st.session_state.screen == "ask_ai":
             st.session_state.active_question = "Should I sell this fund because it is in negative?"
             st.rerun()
     
-    # Custom Question Input field
+    # Custom Question Input field (Pressing Enter or tapping Ask ✨ submits)
     st.markdown("---")
-    q_col1, q_col2 = st.columns([4, 1])
-    with q_col1:
-        custom_typed = st.text_input(
-            "Your Question:",
-            placeholder="Ask about any number, term, or return...",
-            label_visibility="collapsed",
-            key="custom_user_query"
-        )
-    with q_col2:
-        if st.button("Ask ✨", type="primary", use_container_width=True, key="btn_ask_custom"):
-            if custom_typed.strip():
-                st.session_state.active_question = custom_typed.strip()
-                st.rerun()
+    with st.form("ask_custom_form", clear_on_submit=False):
+        q_col1, q_col2 = st.columns([3.2, 1])
+        with q_col1:
+            custom_typed = st.text_input(
+                "Your Question:",
+                placeholder="Ask about any number or term (e.g. noisy in M1-6)...",
+                label_visibility="collapsed",
+                key="custom_user_query"
+            )
+        with q_col2:
+            btn_submitted = st.form_submit_button("Ask ✨", type="primary", use_container_width=True)
+            
+    if btn_submitted and custom_typed.strip():
+        st.session_state.active_question = custom_typed.strip()
+        st.rerun()
         
     # Active query resolution - Guaranteed default to "How are my returns calculated?"
     active_q = st.session_state.get("active_question")

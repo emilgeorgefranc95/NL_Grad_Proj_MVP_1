@@ -30,7 +30,8 @@ VOLATILITY_KEYWORDS = [
 JARGON_KEYWORDS = [
     r"\bxirr\b", r"\bnav\b", r"\bunits?\b",
     r"\bexpense ratio\b", r"\bter\b", r"\bbenchmark\b",
-    r"\bcagr\b", r"\bwhat is sip\b", r"\bcompounding\b"
+    r"\bcagr\b", r"\bwhat is sip\b", r"\bcompounding\b",
+    r"\bnoisy\b", r"m1[-–]6", r"month.*1[-–]6", r"m1 to 6"
 ]
 
 
@@ -235,7 +236,24 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 5. XIRR / Annualized Return
+        # 5. XIRR - Noisy in Months 1-6 Decryptor
+        elif re.search(r"noisy|m1[-–]6|m1 to 6|month.*1[-–]6|month.*1 to 6|why.*noisy|statistically noisy", q_lower):
+            response = (
+                f"⏱️ **Why XIRR is \"Noisy in Months 1–6\"**\n\n"
+                f"On your dashboard, XIRR shows **{m['xirr_pct']}%** with the caption *\"Noisy in M1–6\"*. Here is why financial planners disregard early XIRR numbers and why you shouldn't worry:\n\n"
+                f"* **The 365-Day Annualization Trap:** XIRR calculates an **annualized** compounding rate. Because you have only completed **{m['completed_instalments']} months**, the mathematical formula takes a minor 30-day NAV dip and compounds it as if it will repeat across 365 days of the year. This artificially magnifies a small dip into an exaggerated negative percentage ({m['xirr_pct']}%).\n"
+                f"* **The Speedometer Analogy:** Think of XIRR like your car's speedometer. If you tap the gas pedal for 2 seconds, your speedometer might spike to 60 km/h, but that does not mean you drove 60 kilometers in that hour! Similarly, XIRR in Month {m['completed_instalments']} is an instantaneous snapshot, not your actual 1-year result.\n"
+                f"* **Small Sample Size ({m['completed_instalments']} Months Active):** With only {m['completed_instalments']} monthly instalments completed, every single rupee of daily market movement swings the XIRR formula dramatically.\n"
+                f"* **When Does XIRR Stabilize?:** In equity mutual funds, XIRR becomes statistically meaningful and reliable only after **12 to 24 months** of consistent SIP investing.\n"
+                f"* **What You Should Look at in Month {m['completed_instalments']} Instead:**\n"
+                f"  * **Actual Total Return:** {formatted_return_inr} ({formatted_return_pct}) — your actual unannualized profit/loss on ₹{m['total_invested']:,.2f} invested.\n"
+                f"  * **Discounted Units Accumulated:** You now own **{m['total_units']:.2f} units** ({m['units_bought_this_month']:.2f} units added this month).\n"
+                f"  * **Average Purchase Cost:** Lowered to **₹{m['average_nav_cost']:.2f} per unit** (down {m['cost_basis_reduction_pct']}% via Rupee-Cost Averaging).\n\n"
+                f"---\n"
+                f"{self.disclaimer}"
+            )
+
+        # 6. General XIRR / Annualized Return
         elif re.search(r"\bxirr\b|annualized", q_lower):
             response = (
                 f"⏱️ **Demystifying XIRR (Extended Internal Rate of Return)**\n\n"
