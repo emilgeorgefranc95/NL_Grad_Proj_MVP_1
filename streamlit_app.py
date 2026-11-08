@@ -535,30 +535,36 @@ elif st.session_state.screen == "ask_ai":
     with n_col1:
         if st.button("📊 How are returns calculated?", use_container_width=True, key="chip_ret_calc"):
             st.session_state.active_question = "How are my returns calculated?"
+            st.session_state.custom_user_query = ""
             st.rerun()
     with n_col2:
         if st.button("💰 Total Invested breakdown", use_container_width=True, key="chip_total_inv"):
             st.session_state.active_question = "What is my total invested?"
+            st.session_state.custom_user_query = ""
             st.rerun()
 
     n_col3, n_col4 = st.columns(2)
     with n_col3:
         if st.button("🏷️ What is NAV & Unit Cost?", use_container_width=True, key="chip_nav_cost"):
             st.session_state.active_question = "What is NAV in simple words?"
+            st.session_state.custom_user_query = ""
             st.rerun()
     with n_col4:
         if st.button("⏱️ What does XIRR mean?", use_container_width=True, key="chip_what_xirr"):
             st.session_state.active_question = "What is XIRR and why is it showing -14%?"
+            st.session_state.custom_user_query = ""
             st.rerun()
 
     n_col5, n_col6 = st.columns(2)
     with n_col5:
         if st.button("⏱️ Why is XIRR 'Noisy in M1–6'?", use_container_width=True, key="chip_xirr_noisy"):
             st.session_state.active_question = "Why is XIRR noisy in M1-6?"
+            st.session_state.custom_user_query = ""
             st.rerun()
     with n_col6:
         if st.button("📅 Next Debit & AutoPay", use_container_width=True, key="chip_autopay_sched"):
             st.session_state.active_question = "When is my next SIP debit date?"
+            st.session_state.custom_user_query = ""
             st.rerun()
             
     # Category 2: Doubts & Concepts
@@ -567,25 +573,29 @@ elif st.session_state.screen == "ask_ai":
     with d_col1:
         if st.button("📉 Why are returns red?", use_container_width=True, key="chip_why_neg"):
             st.session_state.active_question = "Why are my returns red even though I have been disciplined?"
+            st.session_state.custom_user_query = ""
             st.rerun()
     with d_col2:
         if st.button("🛡️ Is my money safe?", use_container_width=True, key="chip_safety"):
             st.session_state.active_question = "Is my investment safe on Groww?"
+            st.session_state.custom_user_query = ""
             st.rerun()
 
     d_col3, d_col4 = st.columns(2)
     with d_col3:
         if st.button("🌱 What is Direct Growth?", use_container_width=True, key="chip_direct_growth"):
             st.session_state.active_question = "What does Direct Growth mean?"
+            st.session_state.custom_user_query = ""
             st.rerun()
     with d_col4:
         if st.button("⚠️ Should I stop this fund?", use_container_width=True, key="chip_should_stop"):
             st.session_state.active_question = "Should I sell this fund because it is in negative?"
+            st.session_state.custom_user_query = ""
             st.rerun()
     
     # Custom Question Input field (Pressing Enter or tapping Ask ✨ submits)
     st.markdown("---")
-    with st.form("ask_custom_form", clear_on_submit=False):
+    with st.form("ask_custom_form", clear_on_submit=True):
         q_col1, q_col2 = st.columns([3.2, 1])
         with q_col1:
             custom_typed = st.text_input(
