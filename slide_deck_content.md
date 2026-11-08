@@ -177,17 +177,30 @@
 
 ## Slide 10: GTM Rollout, Metrics Framework & Risk Mitigations (Parts 7 & 8)
 
-* **Slide Title:** Phased Rollout Plan and Metrics Framework to Defend the 12-Month Retention Goal
-* **4-Phase GTM Strategy:**
-  * *Phase 1 (Validation - W1–W2):* Internal dogfooding and eval-gate benchmark validation on 20-item Golden Set.
-  * *Phase 2 (Beta Launch - W3–W6):* Release to 10,000 first-time investors entering Month 3 on Groww. Monitor support deflection.
+* **Slide Title:** Phased Rollout Plan, Impact Sizing & Metrics Framework to Defend the 12-Month Goal
+* **Subtitle:** Staged Rollout Strategy, Financial Impact Model, and Pre-Mortem Guardrails
+
+* **Business Impact Sizing Model (Conservative Projections):**
+  * **Baseline Scale:** Groww onboards $\sim 500,000$ first-time mutual fund investors per month ($\sim 6\text{M}$ annually).
+  * **The Problem Baseline:** Current 12-month retention is $\sim 50\%$ (steepest 40% drop-off in Months 2–6).
+  * **Target Lift:** A modest $+6\%$ absolute lift in 12-month active SIP retention (from $50\%$ to $56\%$).
+  * **Incremental Retained Investors:** $500,000 \times 6\% = \mathbf{30,000\text{ users/cohort}} \implies \mathbf{360,000\text{ additional active investors/year}}$.
+  * **Direct AUM Preserved (Year 1):** At avg SIP of ₹2,500/mo ($₹30,000/\text{yr}$), preserves $\mathbf{₹1,080\text{ Crores AUM}}$ ($360\text{k} \times ₹30,000$).
+  * **Compounding AUM (Year 3):** With $>75\%$ post-M12 survival and $10\%$ annual SIP step-up, expands to $\mathbf{₹4,500+\text{ Crores AUM}}$.
+  * **CAC Protection Savings:** At $₹1,500$ CAC, saves $\mathbf{₹54\text{ Crores annually}}$ in otherwise wasted acquisition marketing.
+
+* **4-Phase GTM Rollout Strategy:**
+  * *Phase 1 (Validation - W1–W2):* Internal dogfooding and legal sign-off on 20-item Golden Set (zero SEBI breaches).
+  * *Phase 2 (Beta Canary - W3–W6):* Release to 10,000 first-time investors entering Month 3. Monitor support deflection.
   * *Phase 3 (A/B Staged Rollout - W7–W12):* 50/50 randomized control trial during next market correction. Measure Net Negative-Market Retention Delta.
   * *Phase 4 (Scale & Full Rollout - M4+):* 100% rollout across all first-time mutual fund investors on Groww.
+
 * **Metrics Architecture:**
-  * *North Star Metric:* 12-Month Active SIP Continuation Rate for First-Time Investors.
-  * *Lagging Metric:* Month 2–6 Churn Cliff Survival Rate (>75% post-M6 retention).
-  * *Leading Indicators:* Story Completion Rate, Flexibility Adoption (Skip/Pause vs. Cancel), AI Query Resolution Rate.
-  * *Guardrails:* Zero SEBI Advice Breaches (Strictly 0%), Cancellation Friction (<15s, zero dark patterns), Arithmetic Grounding (100%).
+  * *North Star Metric:* 12-Month Active SIP Continuation Rate for First-Time Investors ($\ge 1$ debit in trailing 30 days).
+  * *Lagging Metric:* Month 2–6 Churn Cliff Survival Rate ($>75\%$ post-M6 retention).
+  * *Leading Indicators:* Story Mode Completion Rate, Flexibility Adoption (Skip/Pause vs. Cancel), AI Query Resolution Rate.
+  * *Guardrails:* Zero SEBI Advice Breaches (Strictly 0%), Cancellation Friction ($<15\text{s}$, zero dark patterns), Arithmetic Grounding (100%).
+
 * **Pre-Mortem Risks & Mitigations:**
   * *SEBI Regulatory Risk:* Handled via Tier 1 Advisory Interceptor and mandatory SEBI educational disclaimers.
   * *Arithmetic Hallucination Risk:* Handled by deterministic Python ledger pre-computation (LLM does zero math).
