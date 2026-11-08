@@ -115,13 +115,31 @@
 ## Slide 8: The Solution in Action (Interactive MVP Walkthrough)
 
 * **Slide Title:** An Eval-Gated, SEBI-Compliant In-App Companion Built and Deployed to Production
-* **Visual Prototype Features (Include Screenshots):**
-  1. *Dashboard Integration:* Clean Groww holdings view with the prominent banner: *"Your Monthly Perspective is Ready!"*
-  2. *Story Mode & Interactive RCA Simulator:* Swiping through the 3 cards. Highlights the live **NAV Simulation Slider** showing how a lower NAV automatically buys more units for the same ₹3,000.
-  3. *Ask About My SIP:* Shows the conversational assistant answering *"What does XIRR mean?"* with the speed-limit metaphor and verified quality badge (100/100).
-  4. *Smart Exit Flexibility:* Surfaces non-punitive alternatives (Skip 1 Month with zero penalty or Move Date to salary day) with zero dark patterns.
+* **Subtitle:** 4-Pillar Architecture Translating Ledger Data into Plain-Language Conviction & Flexibility
+* **Visual Prototype Walkthrough (4-Screen Mobile Grid Layout):**
+
+  1. **Screen 1: The Contextual Anchor (Holdings Dashboard)**
+     * *Asset:* `holdings_dashboard_2_clean.png` (or `The Contextual Anchor (Holdings Dashboard)-2.png`)
+     * *Key Elements:* 2x2 Overview showing `-₹520.00 (-5.78%)` absolute paper loss reframed by `Annualized (XIRR): -14.2% Noisy in M1–6`, alongside the prominent emerald *"October 2026 Perspective Ready"* trigger card.
+     * *UX Impact:* Replaces immediate visual panic with reassurance right at the holdings surface before the investor considers churning.
+
+  2. **Screen 2: Cognitive Reframing (Story Mode — Card 2 & Interactive Simulator)**
+     * *Asset:* `story_mode_card2_clean.png` (or `Cognitive Reframing (Story Mode — Card 2).png`)
+     * *Key Elements:* Rupee-Cost Averaging visualizer (*"You Bought Units on Discount! ₹3,000 bought 78.70 units (+6.55 extra units vs last month)"*), average cost reduction (₹41.65 to ₹40.46), and interactive **NAV Simulation Slider**.
+     * *UX Impact:* Proves mathematically that falling markets accelerate unit accumulation, turning market dips into celebrated buying opportunities.
+
+  3. **Screen 3: Frictionless Reassurance (Ask About My SIP — Plain-English Decryptor)**
+     * *Asset:* `ask_ai_reassurance_clean.png` (or `Frictionless Reassurance (Ask About My SIP).png`)
+     * *Key Elements:* Plain-English decryptor answering *"What is XIRR and why is it showing -14%?"* via the car speedometer metaphor, clean bulleted breakdown, and `✔ Verified Ledger (Score: 100/100)` SEBI non-advisory badge.
+     * *UX Impact:* Eliminates external Google/YouTube support deflection by explaining any dashboard term or number in-context.
+
+  4. **Screen 4: Smart Exit Flexibility (Manage & Pause Architecture)**
+     * *Asset:* `smart_exit_flow_1_clean.png` (Cash Crunch) & `smart_exit_flow_2_clean.png` (Dip Panic)
+     * *Key Elements:* Root-cause exit diagnostic offering non-punitive alternatives: 1-click *"Skip Next Month"* (zero bank bounce fee), *"Move Date to 10th (Post-Salary)"*, or *"1–6 Month SIP Pause"* with zero dark patterns.
+     * *UX Impact:* Defends the 12-month habit from being permanently cancelled due to temporary month-end cash constraints.
+
 * **Live Deployment Link:** [https://nlgradprojmvp1-mxxgftodd6jewu6ahse9nu.streamlit.app/](https://nlgradprojmvp1-mxxgftodd6jewu6ahse9nu.streamlit.app/)
-* **Quality & Safety:** Validated against a 20-item Golden Set with automated SEBI advice interceptors.
+* **Quality & Safety Assurance:** 100% agreement on 20-item Golden Set benchmark with deterministic Python ledger math and zero SEBI advice breaches.
 
 ---
 
