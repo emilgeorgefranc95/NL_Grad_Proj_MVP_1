@@ -1,6 +1,6 @@
 """
 app.py - Groww Perspective: Interactive AI-Native SIP Retention Companion
-Multi-screen, highly interactive Groww prototype with Story Mode, 
+Mobile-optimized, clean, uncluttered fintech UX with Story Mode, 
 Rupee-Cost Averaging Simulator, Eval-Gated Chat, and Smart Exit Flow.
 """
 
@@ -20,103 +20,141 @@ if os.path.exists(logo_path):
 else:
     groww_logo_uri = "https://groww.in/groww-logo-270.png"
 
-# Set page configuration with official Groww icon
+# Set page configuration - Centered for clean mobile frame
 st.set_page_config(
     page_title="Groww | Mutual Funds & SIP Companion",
     page_icon=logo_path if os.path.exists(logo_path) else "https://groww.in/groww-logo-270.png",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="centered",
+    initial_sidebar_state="collapsed"
 )
 
-# Custom Groww aesthetic CSS - High Contrast Theme Enforcement
+# Custom Groww aesthetic CSS - Mobile-First, Uncluttered, High Contrast
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     
+    /* 1. Global Reset & Streamlit Chrome Removal */
     html, body, [class*="css"], .stApp {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
         background-color: #F4F6F9 !important;
         color: #191C1F !important;
     }
     
-    /* Force high-contrast dark text on ALL headings, paragraphs, and markdown */
-    h1, h2, h3, h4, h5, h6, p, span, label, div {
-        color: #191C1F !important;
+    /* Hide Streamlit default header, toolbar, footer and deploy button */
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
+    [data-testid="stToolbar"] {
+        display: none !important;
+    }
+    footer {
+        display: none !important;
+    }
+    #MainMenu {
+        display: none !important;
+    }
+    .stDeployButton {
+        display: none !important;
+    }
+    div[data-testid="stDecoration"] {
+        display: none !important;
+    }
+    [data-testid="stStatusWidget"], .viewerBadge_container__1QSob, #manage-app-button {
+        display: none !important;
     }
     
-    /* Secondary and caption text in readable charcoal */
+    /* 2. Sleek Mobile App Viewport Container (Max 480px) */
+    .block-container {
+        max-width: 460px !important;
+        padding-top: 0.75rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 0.85rem !important;
+        padding-right: 0.85rem !important;
+        margin: 0 auto !important;
+    }
+    
+    /* 3. High-Contrast Typography & Mobile Heading Scales */
+    h1, h2, h3, h4, h5, h6 {
+        color: #191C1F !important;
+        letter-spacing: -0.4px !important;
+        margin-top: 0.2rem !important;
+        margin-bottom: 0.35rem !important;
+    }
+    h1 { font-size: 1.30rem !important; font-weight: 800 !important; }
+    h2 { font-size: 1.15rem !important; font-weight: 700 !important; }
+    h3 { font-size: 1.00rem !important; font-weight: 700 !important; }
+    h4 { font-size: 0.90rem !important; font-weight: 600 !important; }
+    p, span, label, div {
+        color: #191C1F !important;
+        font-size: 0.88rem !important;
+    }
+    
     .stCaption, [data-testid="stCaptionContainer"], small {
-        color: #555B68 !important;
+        color: #5E6573 !important;
+        font-size: 0.76rem !important;
         font-weight: 500 !important;
     }
     
-    /* White Card Containers with crisp borders & subtle drop shadow */
+    /* 4. White Card Containers with crisp borders & subtle drop shadow */
     [data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #FFFFFF !important;
-        border: 1.5px solid #DCE1E7 !important;
+        border: 1px solid #DCE1E7 !important;
         border-radius: 14px !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-        padding: 0.5rem !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03) !important;
+        padding: 0.4rem !important;
+        margin-bottom: 0.5rem !important;
     }
     
-    /* Text inside bordered cards */
-    [data-testid="stVerticalBlockBorderWrapper"] h1,
-    [data-testid="stVerticalBlockBorderWrapper"] h2,
-    [data-testid="stVerticalBlockBorderWrapper"] h3,
-    [data-testid="stVerticalBlockBorderWrapper"] h4,
-    [data-testid="stVerticalBlockBorderWrapper"] p,
-    [data-testid="stVerticalBlockBorderWrapper"] span {
-        color: #191C1F !important;
-    }
-    
-    .groww-logo {
-        color: #00A87E !important;
-        font-weight: 800 !important;
-        font-size: 1.7rem !important;
-        letter-spacing: -0.5px !important;
-    }
-    
-    /* Badge styling */
-    .badge-verified {
-        background: #E6F9F4 !important;
-        color: #007A5E !important;
-        padding: 6px 14px !important;
-        border-radius: 20px !important;
-        font-size: 0.82rem !important;
-        font-weight: 700 !important;
-        border: 1.5px solid #8DE3CE !important;
-        display: inline-block !important;
-    }
-    
-    /* Metric styling */
-    .negative-metric {
-        color: #D32F2F !important;
-        font-weight: 700 !important;
-        font-size: 1.35rem !important;
-    }
-    
-    .positive-metric {
-        color: #00875A !important;
-        font-weight: 700 !important;
-        font-size: 1.35rem !important;
-    }
-    
-    /* Buttons styling - Groww Emerald Green */
+    /* 5. Buttons styling - Groww Emerald Green */
     .stButton > button[kind="primary"] {
         background-color: #00D09C !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
+        font-size: 0.88rem !important;
         border: none !important;
         border-radius: 10px !important;
+        padding: 0.5rem 1rem !important;
+        box-shadow: 0 2px 6px rgba(0, 208, 156, 0.25) !important;
+        transition: all 0.15s ease !important;
+    }
+    .stButton > button[kind="primary"]:hover {
+        background-color: #00B788 !important;
+        box-shadow: 0 3px 8px rgba(0, 208, 156, 0.35) !important;
     }
     
     .stButton > button {
         border-radius: 10px !important;
         font-weight: 600 !important;
+        font-size: 0.85rem !important;
         color: #191C1F !important;
+        border: 1px solid #DCE1E7 !important;
+        background-color: #FFFFFF !important;
+        padding: 0.45rem 0.75rem !important;
     }
     
-    /* Sidebar text high contrast */
+    /* 6. Groww Badges & Pills */
+    .badge-verified {
+        background: #E6F9F4 !important;
+        color: #007A5E !important;
+        padding: 4px 10px !important;
+        border-radius: 14px !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        border: 1px solid #8DE3CE !important;
+        display: inline-block !important;
+    }
+    
+    .badge-gray {
+        background: #F1F4F7 !important;
+        color: #5E6573 !important;
+        padding: 4px 10px !important;
+        border-radius: 14px !important;
+        font-size: 0.72rem !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+    }
+    
+    /* 7. Sidebar text high contrast */
     [data-testid="stSidebar"] {
         background-color: #181A20 !important;
     }
@@ -135,7 +173,7 @@ st.markdown("""
 engine = EvalGateEngine()
 
 if "current_screen" not in st.session_state:
-    st.session_state.current_screen = "📱 Dashboard"
+    st.session_state.current_screen = "📱 Holdings"
 if "story_step" not in st.session_state:
     st.session_state.story_step = 0
 if "sip_query" not in st.session_state:
@@ -143,10 +181,19 @@ if "sip_query" not in st.session_state:
 if "skipped_month" not in st.session_state:
     st.session_state.skipped_month = False
 
+# Screen name mapping for clean mobile tabs
+SCREEN_MAP = {
+    "📱 Holdings": "📱 Holdings",
+    "📖 Story": "📖 Monthly Perspective Story",
+    "💬 Ask AI": "💬 Ask About My SIP",
+    "⚙️ Manage": "⚙️ Manage / Exit Flow"
+}
+REVERSE_SCREEN_MAP = {v: k for k, v in SCREEN_MAP.items()}
+
 # --- SIDEBAR: Scenario Switcher & Controls ---
 with st.sidebar:
-    st.markdown("### 🎛️ Mentor Sandbox")
-    st.caption("Switch user cohorts to evaluate AI adaptation:")
+    st.markdown("### 🎛️ Investor Cohort Selector")
+    st.caption("Switch user profiles to evaluate adaptive AI logic:")
     
     scenario_keys = list(SCENARIOS.keys())
     selected_key = st.selectbox(
@@ -159,7 +206,7 @@ with st.sidebar:
     m = scenario["metrics"]
     
     st.divider()
-    st.markdown("#### 👤 Investor Profile")
+    st.markdown("#### 👤 Persona Details")
     st.markdown(f"**Name:** {user['name']} (Age {user['age']})")
     st.markdown(f"**Monthly SIP:** ₹{user['monthly_sip']:,}")
     st.markdown(f"**Fund:** {user['fund_name']}")
@@ -167,363 +214,404 @@ with st.sidebar:
     st.markdown(f"**Goal:** {user['goal']}")
     
     st.divider()
-    st.markdown("#### 🧭 Screen Navigation")
-    screens = [
-        "📱 Dashboard",
-        "📖 Monthly Perspective Story",
-        "💬 Ask About My SIP",
-        "⚙️ Manage / Exit Flow"
-    ]
-    st.session_state.current_screen = st.radio("Go to Screen:", screens, index=screens.index(st.session_state.current_screen))
+    st.markdown("#### 🧭 Jump to Screen")
+    sb_screens = ["📱 Holdings", "📖 Story", "💬 Ask AI", "⚙️ Manage"]
+    current_short = REVERSE_SCREEN_MAP.get(st.session_state.current_screen, "📱 Holdings")
+    chosen_screen = st.radio("Screen:", sb_screens, index=sb_screens.index(current_short), key="sb_radio_screen")
+    if SCREEN_MAP[chosen_screen] != st.session_state.current_screen:
+        st.session_state.current_screen = SCREEN_MAP[chosen_screen]
+        st.rerun()
     
     st.divider()
     show_telemetry = st.checkbox("🔍 Show Mentor Eval Telemetry", value=False)
     
     st.divider()
     if st.button("🔄 Reset Prototype State", use_container_width=True):
-        st.session_state.current_screen = "📱 Dashboard"
+        st.session_state.current_screen = "📱 Holdings"
         st.session_state.story_step = 0
         st.session_state.sip_query = ""
         st.session_state.skipped_month = False
         st.rerun()
 
-# --- TOP GROWW NAVBAR ---
-col_nav1, col_nav2 = st.columns([3, 1])
-with col_nav1:
-    st.markdown(f"""
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 0.5rem;">
-        <img src="{groww_logo_uri}" width="38" height="38" style="border-radius: 8px; vertical-align: middle; box-shadow: 0 2px 6px rgba(0,0,0,0.06);" />
-        <span style="color: #00D09C; font-weight: 800; font-size: 1.85rem; letter-spacing: -0.6px;">Groww</span>
-        <span style="color: #7C828D; font-size: 1.15rem; font-weight: 500; margin-left: 2px;">| Mutual Funds</span>
-    </div>
-    """, unsafe_allow_html=True)
-with col_nav2:
-    st.markdown("<div style='text-align:right;'><span class='badge-verified'>✔ Non-Advisory Mode Active</span></div>", unsafe_allow_html=True)
+# Scenario fallback if sidebar hasn't run yet
+if "user" not in locals():
+    scenario = get_scenario("scenario_a_dip_month3")
+    user = scenario["user_profile"]
+    m = scenario["metrics"]
 
-# Mobile-friendly top navigation tabs
-nav_c1, nav_c2, nav_c3, nav_c4 = st.columns(4)
-with nav_c1:
-    if st.button("📱 Dashboard", use_container_width=True, type="primary" if st.session_state.current_screen == "📱 Dashboard" else "secondary"):
-        st.session_state.current_screen = "📱 Dashboard"
+# =====================================================================
+# SLEEK GROWW MOBILE APP BAR
+# =====================================================================
+st.markdown(f"""
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 2px 2px 8px 2px; border-bottom: 1px solid #E6ECEF; margin-bottom: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+        <img src="{groww_logo_uri}" width="28" height="28" style="border-radius: 7px; vertical-align: middle;" />
+        <span style="color: #00D09C; font-weight: 800; font-size: 1.35rem; letter-spacing: -0.5px;">Groww</span>
+        <span style="color: #8C939F; font-size: 0.85rem; font-weight: 600; margin-left: 2px;">Mutual Funds</span>
+    </div>
+    <div>
+        <span class="badge-verified">🛡️ SEBI Safe</span>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Compact 4-Tab Navigation Bar (Side-by-side, perfectly proportioned for mobile)
+nav_cols = st.columns(4)
+current_active_tab = REVERSE_SCREEN_MAP.get(st.session_state.current_screen, "📱 Holdings")
+
+with nav_cols[0]:
+    if st.button("📱 Holdings", use_container_width=True, type="primary" if current_active_tab == "📱 Holdings" else "secondary"):
+        st.session_state.current_screen = "📱 Holdings"
         st.rerun()
-with nav_c2:
-    if st.button("📖 Perspective Story", use_container_width=True, type="primary" if st.session_state.current_screen == "📖 Monthly Perspective Story" else "secondary"):
+with nav_cols[1]:
+    if st.button("📖 Story", use_container_width=True, type="primary" if current_active_tab == "📖 Story" else "secondary"):
         st.session_state.current_screen = "📖 Monthly Perspective Story"
         st.rerun()
-with nav_c3:
-    if st.button("💬 Ask My SIP", use_container_width=True, type="primary" if st.session_state.current_screen == "💬 Ask About My SIP" else "secondary"):
+with nav_cols[2]:
+    if st.button("💬 Ask AI", use_container_width=True, type="primary" if current_active_tab == "💬 Ask AI" else "secondary"):
         st.session_state.current_screen = "💬 Ask About My SIP"
         st.rerun()
-with nav_c4:
-    if st.button("⚙️ Manage / Exit", use_container_width=True, type="primary" if st.session_state.current_screen == "⚙️ Manage / Exit Flow" else "secondary"):
+with nav_cols[3]:
+    if st.button("⚙️ Manage", use_container_width=True, type="primary" if current_active_tab == "⚙️ Manage" else "secondary"):
         st.session_state.current_screen = "⚙️ Manage / Exit Flow"
         st.rerun()
 
-# Usability Testing Guide Card (Collapsible)
-with st.expander("🧪 Usability Test Guide (Click to expand test instructions)", expanded=False):
+# Clean collapsible Usability Guide
+with st.expander("🧪 Test Guide & Cohort Tasks", expanded=False):
     st.markdown(f"""
-    **Welcome to the Groww Perspective Prototype Test!**  
-    You are testing as **{user['name']}**, an investor in **{user['current_month']}** holding **{user['fund_name']}**.
-    
-    **Try completing these 4 simple tasks:**
-    1. **Task 1 (Understand Your Returns):** Check your Dashboard and click **"Open My Monthly Perspective Story ✨"**. Step through the 3 cards to see why your drop is explained as buying units at a discount.
-    2. **Task 2 (Interactive Simulation):** On Card 2 of the story, drag the **NAV Slider** to simulate what happens if market prices drop to ₹35 or rise to ₹50 next month.
-    3. **Task 3 (Ask a Doubt):** Go to **"Ask About My SIP"** and test a question (e.g. click *"📉 Why is my return negative?"* or *"⏱️ What does XIRR mean?"*).
-    4. **Task 4 (Managing Cash Flow):** Go to **"Manage / Exit Flow"**, choose *"Tight on cash this month"*, and test the 1-click **"Skip Next Month's Debit"** feature.
+    **Current User:** {user['name']} ({user['current_month']} • ₹{user['monthly_sip']:,}/mo)  
+    1. **Holdings:** Review the 2x2 Overview and tap **"Open Monthly Perspective"**.  
+    2. **Story:** On Card 2, test the **NAV Slider** to see how lower prices buy more units.  
+    3. **Ask AI:** Test questions like *"Why is return negative?"* or *"What is XIRR?"*.  
+    4. **Manage:** Test 1-click **"Skip Next Month"** or **"Pause SIP"**.  
     """)
 
-st.divider()
-
 # =====================================================================
-# SCREEN 1: GROWW PORTFOLIO DASHBOARD
+# SCREEN 1: GROWW PORTFOLIO DASHBOARD (MOBILE-FIRST)
 # =====================================================================
-if st.session_state.current_screen == "📱 Dashboard":
-    st.markdown(f"## Mutual Fund Holdings • {user['name']}")
-    st.caption(f"Portfolio health for {user['fund_name']}")
+if st.session_state.current_screen == "📱 Holdings":
+    # Compact User & Fund Header
+    st.markdown(f"""
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 6px 0 10px 0;">
+        <div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: #191C1F;">{user['name']}</div>
+            <div style="font-size: 0.76rem; color: #6F7684; font-weight: 500;">{user['fund_name']}</div>
+        </div>
+        <div style="text-align: right;">
+            <span class="badge-gray">{user['current_month']}</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Hero Callout Banner for Perspective
-    with st.container():
-        st.info(
-            f"💡 **Your {user['current_month']} Perspective is Ready!** We translated your monthly NAV movement and unit "
-            f"accumulation into plain English. "
-        )
-        if st.button("Open My Monthly Perspective Story ✨", type="primary", use_container_width=True):
-            st.session_state.current_screen = "📖 Monthly Perspective Story"
+    # Hero Perspective Callout Card (Emerald Groww styling)
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #E8F9F3 0%, #F4FDF9 100%); border: 1.5px solid #8DE3CE; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0, 208, 156, 0.08);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
+            <span style="font-size: 1.1rem;">💡</span>
+            <span style="font-size: 0.88rem; font-weight: 800; color: #007A5E;">{user['current_month']} Perspective Ready</span>
+        </div>
+        <div style="font-size: 0.78rem; color: #334155; line-height: 1.35; margin-bottom: 8px;">
+            We translated your monthly NAV movements and unit accumulation into plain English.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Open My Monthly Perspective Story ✨", type="primary", use_container_width=True):
+        st.session_state.current_screen = "📖 Monthly Perspective Story"
+        st.rerun()
+    
+    # Portfolio Overview: Compact 2x2 Mobile Grid (Zero scrolling needed!)
+    ret_color = "#EB5757" if m['total_return_inr'] < 0 else "#00A87E"
+    ret_sign = "+" if m['total_return_inr'] >= 0 else ""
+    xirr_color = "#EB5757" if m['xirr_pct'] < 0 else "#00A87E"
+    
+    st.markdown(f"""
+    <div style="background: #FFFFFF; border: 1px solid #DCE1E7; border-radius: 14px; padding: 14px 14px 12px 14px; margin-top: 10px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <span style="font-size: 0.74rem; font-weight: 700; color: #7C828D; text-transform: uppercase; letter-spacing: 0.4px;">Portfolio Overview</span>
+            <span style="font-size: 0.72rem; color: #8F95A0; font-weight: 500;">{m['completed_instalments']} SIPs completed</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <!-- Top Left: Total Invested -->
+            <div style="background: #F8FAFB; border-radius: 10px; padding: 9px 11px;">
+                <div style="font-size: 0.68rem; color: #7C828D; font-weight: 600;">TOTAL INVESTED</div>
+                <div style="font-size: 1.10rem; font-weight: 800; color: #191C1F; margin-top: 2px;">₹{m['total_invested']:,.2f}</div>
+            </div>
+            <!-- Top Right: Current Value -->
+            <div style="background: #F8FAFB; border-radius: 10px; padding: 9px 11px;">
+                <div style="font-size: 0.68rem; color: #7C828D; font-weight: 600;">CURRENT VALUE</div>
+                <div style="font-size: 1.10rem; font-weight: 800; color: #191C1F; margin-top: 2px;">₹{m['current_value']:,.2f}</div>
+            </div>
+            <!-- Bottom Left: Total Returns -->
+            <div style="background: #F8FAFB; border-radius: 10px; padding: 9px 11px;">
+                <div style="font-size: 0.68rem; color: #7C828D; font-weight: 600;">TOTAL RETURNS</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: {ret_color}; margin-top: 2px;">{ret_sign}₹{m['total_return_inr']:,.2f}</div>
+                <div style="font-size: 0.70rem; font-weight: 700; color: {ret_color};">{ret_sign}{m['total_return_pct']}%</div>
+            </div>
+            <!-- Bottom Right: Annualized Return -->
+            <div style="background: #F8FAFB; border-radius: 10px; padding: 9px 11px;">
+                <div style="font-size: 0.68rem; color: #7C828D; font-weight: 600;">ANNUALIZED (XIRR)</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: {xirr_color}; margin-top: 2px;">{m['xirr_pct']}%</div>
+                <div style="font-size: 0.66rem; color: #8F95A0;">Noisy in M1–6</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Active SIP Holdings Card
+    status_text = "⏸️ Paused for next month" if st.session_state.skipped_month else "🟢 Active AutoPay"
+    next_date = "Dec 5, 2026" if st.session_state.skipped_month else "Nov 5, 2026"
+    
+    st.markdown(f"""
+    <div style="background: #FFFFFF; border: 1px solid #DCE1E7; border-radius: 14px; padding: 12px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #191C1F;">{user['fund_name']}</div>
+                <div style="font-size: 0.72rem; color: {'#E67E22' if st.session_state.skipped_month else '#00A87E'}; font-weight: 600; margin-top: 2px;">{status_text} • Next: {next_date}</div>
+            </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; padding-top: 8px; border-top: 1px solid #EEF1F4;">
+            <div>
+                <div style="font-size: 0.66rem; color: #7C828D; font-weight: 600;">MONTHLY SIP</div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #191C1F;">₹{user['monthly_sip']:,}</div>
+            </div>
+            <div>
+                <div style="font-size: 0.66rem; color: #7C828D; font-weight: 600;">TOTAL UNITS</div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #191C1F;">{m['total_units']:.2f}</div>
+            </div>
+            <div>
+                <div style="font-size: 0.66rem; color: #7C828D; font-weight: 600;">AVG COST</div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #191C1F;">₹{m['average_nav_cost']:.2f}</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col_act1, col_act2 = st.columns(2)
+    with col_act1:
+        if st.button("What is XIRR? ℹ️", use_container_width=True):
+            st.session_state.current_screen = "💬 Ask About My SIP"
+            st.session_state.sip_query = "What does XIRR mean in simple words?"
             st.rerun()
-    
-    st.markdown("### Portfolio Overview")
-    c1, c2, c3, c4 = st.columns(4)
-    
-    with c1:
-        with st.container(border=True):
-            st.caption("Total Invested")
-            st.markdown(f"### ₹{m['total_invested']:,.2f}")
-            st.caption(f"{m['completed_instalments']} instalments completed")
-            
-    with c2:
-        with st.container(border=True):
-            st.caption("Current Value")
-            st.markdown(f"### ₹{m['current_value']:,.2f}")
-            ret_sign = "+" if m['total_return_inr'] >= 0 else ""
-            ret_color = "positive-metric" if m['total_return_inr'] >= 0 else "negative-metric"
-            st.markdown(f"<span class='{ret_color}'>{ret_sign}₹{m['total_return_inr']:,.2f} ({ret_sign}{m['total_return_pct']}%)</span>", unsafe_allow_html=True)
-            
-    with c3:
-        with st.container(border=True):
-            st.caption("1-Day Return")
-            od_sign = "+" if m['one_day_return_inr'] >= 0 else ""
-            od_color = "positive-metric" if m['one_day_return_inr'] >= 0 else "negative-metric"
-            st.markdown(f"### <span class='{od_color}'>{od_sign}₹{m['one_day_return_inr']:,.2f}</span>", unsafe_allow_html=True)
-            st.caption(f"{od_sign}{m['one_day_return_pct']}% today")
-            
-    with c4:
-        with st.container(border=True):
-            st.caption("Annualized Return (XIRR)")
-            x_color = "positive-metric" if m['xirr_pct'] >= 0 else "negative-metric"
-            st.markdown(f"### <span class='{x_color}'>{m['xirr_pct']}%</span>", unsafe_allow_html=True)
-            st.caption("⚠️ Noisy in Months 1–6")
-            if st.button("What is XIRR? ℹ️", key="btn_xirr_dash"):
-                st.session_state.current_screen = "💬 Ask About My SIP"
-                st.session_state.sip_query = "What does XIRR mean in simple words?"
-                st.rerun()
-
-    # Holdings details
-    st.markdown("### Active SIPs")
-    with st.container(border=True):
-        f_col1, f_col2, f_col3, f_col4 = st.columns([3, 2, 2, 2])
-        with f_col1:
-            st.markdown(f"**{user['fund_name']}**")
-            status_text = "⏸️ Paused for next month" if st.session_state.skipped_month else "🟢 Active SIP • AutoPay Enabled"
-            st.caption(status_text)
-        with f_col2:
-            st.markdown(f"**Monthly SIP:** ₹{user['monthly_sip']:,}")
-            st.caption(f"Next Debit: {'Dec 5, 2026' if st.session_state.skipped_month else 'Nov 5, 2026'}")
-        with f_col3:
-            st.markdown(f"**Total Units:** {m['total_units']:.2f}")
-            st.caption(f"Avg Cost: ₹{m['average_nav_cost']:.2f}")
-        with f_col4:
-            if st.button("Manage SIP ⚙️", key="btn_manage_holdings"):
-                st.session_state.current_screen = "⚙️ Manage / Exit Flow"
-                st.rerun()
+    with col_act2:
+        if st.button("Manage SIP ⚙️", use_container_width=True):
+            st.session_state.current_screen = "⚙️ Manage / Exit Flow"
+            st.rerun()
 
 # =====================================================================
-# SCREEN 2: INTERACTIVE PERSPECTIVE STORY MODE (Instagram / Spotify Wrapped Style)
+# SCREEN 2: INTERACTIVE PERSPECTIVE STORY MODE (MOBILE-FIRST)
 # =====================================================================
 elif st.session_state.current_screen == "📖 Monthly Perspective Story":
-    st.markdown("## 📖 Monthly Wealth Perspective")
-    st.caption("Step-by-step plain-language story of what happened to your SIP this month.")
+    # Story Top Bar
+    step_titles = [
+        "1. Consistency Streak",
+        "2. Rupee-Cost Averaging",
+        "3. Long-Term Compass"
+    ]
+    curr_step = st.session_state.story_step
     
-    steps = ["1. Habit Streak", "2. Rupee-Cost Averaging", "3. Long-Term Compass"]
-    st.progress((st.session_state.story_step + 1) / 3.0)
+    st.markdown(f"""
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 4px 0 8px 0;">
+        <div style="font-size: 1.05rem; font-weight: 800; color: #191C1F;">📖 Monthly Perspective</div>
+        <div style="font-size: 0.74rem; font-weight: 700; color: #00A87E;">Card {curr_step + 1} of 3</div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Story Card Container
+    st.progress((curr_step + 1) / 3.0)
+    
+    # Story Cards Container
     with st.container(border=True):
-        if st.session_state.story_step == 0:
-            st.markdown("### 🏆 Card 1 of 3: Your Habit Consistency Streak")
-            st.markdown(f"#### **{m['completed_instalments']} of {m['target_instalments']} Instalments Completed**")
+        if curr_step == 0:
+            st.markdown("#### 🏆 Card 1: Consistency Streak")
+            st.markdown(f"**{m['completed_instalments']} of {m['target_instalments']} Instalments Completed**")
             st.progress(m['streak_pct'] / 100.0)
-            st.markdown(
-                f"You have invested consistently for **{m['completed_instalments']} consecutive months**. "
-                f"You are **{m['streak_pct']:.0f}%** of the way towards your Year 1 habit milestone!\n\n"
-                f"**Why this matters:** In the first 12 months, building the automated discipline to save ₹{user['monthly_sip']:,} "
-                f"every month matters far more than short-term price movements."
-            )
-            st.metric(label="Consistency Streak", value=f"{m['completed_instalments']} Months Active", delta="100% on track")
             
-        elif st.session_state.story_step == 1:
-            st.markdown("### 📊 Card 2 of 3: Rupee-Cost Averaging in Action")
+            st.markdown(f"""
+            You have invested consistently for **{m['completed_instalments']} consecutive months**. You are **{m['streak_pct']:.0f}%** of the way towards your Year 1 habit milestone!
+            
+            **Why this matters:** In Months 1–12, building the automated discipline to save ₹{user['monthly_sip']:,} each month matters far more than short-term price swings.
+            """)
+            st.info(f"🔥 **Habit Score:** {m['completed_instalments']} Months Active • 100% On Track")
+            
+        elif curr_step == 1:
+            st.markdown("#### 📊 Card 2: Rupee-Cost Averaging")
             if m["additional_units_this_month"] > 0:
-                st.markdown(f"#### **You Bought Units on Discount!**")
-                st.markdown(
-                    f"Because the market dipped to an NAV of **₹{m['current_nav']}**, your regular ₹{user['monthly_sip']:,} "
-                    f"bought **{m['units_bought_this_month']:.2f} units** this month—that's **+{m['additional_units_this_month']:.2f} extra units** "
-                    f"compared to last month for the exact same ₹{user['monthly_sip']:,} investment!"
-                )
-                st.markdown(
-                    f"**The Mathematical Benefit:** Your average cost per unit dropped from **₹{m['previous_average_nav']:.2f}** "
-                    f"to **₹{m['average_nav_cost']:.2f}** ({m['cost_basis_reduction_pct']}% reduction). "
-                    f"This lower cost basis means your portfolio will break even and turn profitable faster when the market recovers."
-                )
+                st.markdown(f"""
+                <div style="background: #E8F9F3; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; border-left: 4px solid #00D09C;">
+                    <div style="font-weight: 800; color: #007A5E; font-size: 0.95rem;">You Bought Units on Discount!</div>
+                    <div style="font-size: 0.82rem; color: #2C3E50; margin-top: 4px;">
+                        Because NAV dropped to <b>₹{m['current_nav']}</b>, your regular ₹{user['monthly_sip']:,} purchased <b>{m['units_bought_this_month']:.2f} units</b> (<b>+{m['additional_units_this_month']:.2f} extra units</b> vs last month).
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                st.markdown(f"""
+                **The Benefit:** Your average cost dropped from **₹{m['previous_average_nav']:.2f}** to **₹{m['average_nav_cost']:.2f}** ({m['cost_basis_reduction_pct']}% lower). A lower cost basis turns your portfolio profitable faster when markets recover.
+                """)
             else:
-                st.markdown("#### **Steady Unit Accumulation**")
-                st.markdown(f"Your ₹{user['monthly_sip']:,} purchased **{m['units_bought_this_month']:.2f} units** this month at ₹{m['current_nav']} NAV.")
+                st.markdown(f"Your ₹{user['monthly_sip']:,} accumulated **{m['units_bought_this_month']:.2f} units** this month at ₹{m['current_nav']} NAV.")
             
-            st.divider()
-            # Interactive Slider Simulator for Mentors/Users
-            st.markdown("##### 🎮 Interactive Simulator: What happens if NAV fluctuates?")
-            sim_nav = st.slider("Simulate Next Month's NAV (₹):", min_value=30.0, max_value=55.0, value=float(m['current_nav']), step=0.5)
+            st.markdown("---")
+            st.markdown("##### 🎮 Simulator: What if NAV fluctuates?")
+            sim_nav = st.slider("Simulate NAV (₹):", min_value=30.0, max_value=55.0, value=float(m['current_nav']), step=0.5)
             sim_units = user['monthly_sip'] / sim_nav
-            st.info(f"If next month's NAV is **₹{sim_nav:.2f}**, your ₹{user['monthly_sip']:,} will automatically buy **{sim_units:.2f} units**! Lower prices accumulate more assets.")
+            st.caption(f"At ₹{sim_nav:.2f} NAV, ₹{user['monthly_sip']:,} buys **{sim_units:.2f} units**. Lower prices accumulate more assets.")
             
-        elif st.session_state.story_step == 2:
-            st.markdown("### 🧭 Card 3 of 3: The Accumulator's Compass")
-            st.markdown("#### **Short-Term Fluctuations vs. 10-Year Goals**")
-            st.markdown(
-                f"• **Current Market Context:** {m['market_condition']}\n"
-                f"• **Why Red Numbers Don't Mean Destruction:** You have not sold any units. You own **{m['total_units']:.2f} pieces** "
-                f"of top Indian companies. As long as you stay invested, short-term paper fluctuations wash out.\n"
-                f"• **Historical Fact:** Over 10-year holding periods in Indian equities, the probability of negative returns is historically `<1%`."
-            )
-            st.success("🎯 **Recommended Action:** Sit back and let your monthly AutoPay do the work. No manual changes needed.")
-    
-    # Story Navigation Buttons
-    nav_c1, nav_c2, nav_c3 = st.columns([1, 2, 1])
-    with nav_c1:
-        if st.session_state.story_step > 0:
-            if st.button("⬅ Previous Card"):
+        elif curr_step == 2:
+            st.markdown("#### 🧭 Card 3: The Accumulator's Compass")
+            st.markdown(f"""
+            • **Current Market:** {m['market_condition']}  
+            • **Paper Loss vs. Realized Loss:** You haven't sold any units. You own **{m['total_units']:.2f} pieces** of India's top companies.  
+            • **10-Year Probability:** In Indian equities, 10-year holding periods historically carry `<1%` probability of negative returns.
+            """)
+            st.success("🎯 **Recommended Action:** Let your monthly AutoPay run. No manual intervention required.")
+            
+    # Clean Bottom Story Navigation
+    s_col1, s_col2 = st.columns(2)
+    with s_col1:
+        if curr_step > 0:
+            if st.button("⬅ Previous Card", use_container_width=True):
                 st.session_state.story_step -= 1
                 st.rerun()
-    with nav_c3:
-        if st.session_state.story_step < 2:
-            if st.button("Next Card ➔", type="primary"):
+        else:
+            if st.button("⬅ Back to Holdings", use_container_width=True):
+                st.session_state.current_screen = "📱 Holdings"
+                st.rerun()
+    with s_col2:
+        if curr_step < 2:
+            if st.button("Next Card ➔", type="primary", use_container_width=True):
                 st.session_state.story_step += 1
                 st.rerun()
         else:
-            if st.button("Back to Dashboard 🏁", type="primary"):
-                st.session_state.current_screen = "📱 Dashboard"
+            if st.button("Complete Story 🏁", type="primary", use_container_width=True):
+                st.session_state.current_screen = "📱 Holdings"
                 st.session_state.story_step = 0
                 st.rerun()
 
 # =====================================================================
-# SCREEN 3: "ASK ABOUT MY SIP" CONVERSATIONAL COMPANION
+# SCREEN 3: ASK ABOUT MY SIP (MOBILE-FIRST)
 # =====================================================================
 elif st.session_state.current_screen == "💬 Ask About My SIP":
-    st.markdown("## 💬 Ask About My SIP")
-    st.caption("Confused about negative returns, jargon, or market dips? Ask in plain language.")
+    st.markdown("""
+    <div style="margin: 4px 0 8px 0;">
+        <div style="font-size: 1.05rem; font-weight: 800; color: #191C1F;">💬 Ask About My SIP</div>
+        <div style="font-size: 0.76rem; color: #6F7684;">Instant plain-English answers backed by Groww ledger telemetry.</div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Quick Suggested Chips
-    st.markdown("**Common Questions:**")
-    q_col1, q_col2, q_col3 = st.columns(3)
-    
-    if q_col1.button("📉 Why is my return negative?"):
-        st.session_state.sip_query = "Why are my returns red even though I have been disciplined?"
-    if q_col2.button("⏱️ What does XIRR mean?"):
-        st.session_state.sip_query = "What does XIRR mean in simple words?"
-    if q_col3.button("⚠️ Should I sell this fund?"):
+    # Clean Prompt Chips
+    st.caption("Common questions:")
+    c_chip1, c_chip2 = st.columns(2)
+    with c_chip1:
+        if st.button("📉 Why is return negative?", use_container_width=True):
+            st.session_state.sip_query = "Why are my returns red even though I have been disciplined?"
+    with c_chip2:
+        if st.button("⏱️ What is XIRR?", use_container_width=True):
+            st.session_state.sip_query = "What does XIRR mean in simple words?"
+            
+    if st.button("⚠️ Should I stop this fund?", use_container_width=True):
         st.session_state.sip_query = "Should I sell this fund because it is in negative?"
     
-    # Search / Input Form
-    with st.form(key="chat_query_form"):
-        f_in, f_btn = st.columns([5, 1])
-        with f_in:
-            query_val = st.text_input(
-                "Your Question:",
-                value=st.session_state.sip_query,
-                placeholder="e.g. What is NAV? Why did my money decrease today?",
-                label_visibility="collapsed"
-            )
-        with f_btn:
-            submitted = st.form_submit_button("Ask ✨", type="primary", use_container_width=True)
-            
+    # Form input
+    with st.form(key="ask_sip_form"):
+        query_val = st.text_input(
+            "Your Question:",
+            value=st.session_state.sip_query,
+            placeholder="e.g. Why did my money drop today?",
+            label_visibility="collapsed"
+        )
+        submitted = st.form_submit_button("Ask ✨", type="primary", use_container_width=True)
+        
     active_q = query_val.strip() if query_val else None
     
     if active_q:
-        with st.spinner("Analyzing verified portfolio ledger with SEBI safety gates..."):
-            time.sleep(0.3)
+        with st.spinner("Consulting verified ledger with SEBI safety gates..."):
+            time.sleep(0.2)
             resp, eval_meta = engine.generate_perspective_response(active_q, scenario)
             
         with st.container(border=True):
             st.markdown(resp)
-            st.divider()
-            b1, b2, b3 = st.columns([2, 1, 1])
-            with b1:
-                st.markdown(f"<span class='badge-verified'>✔ Verified against Groww Ledger (Score: {eval_meta['quality_score']}/100)</span>", unsafe_allow_html=True)
-            with b2:
-                st.caption("Non-Advisory Guardrail: Active")
-            with b3:
-                st.caption("SEBI Compliant")
-                
+            st.markdown(f"""
+            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #EEF1F4; display: flex; justify-content: space-between; align-items: center;">
+                <span class="badge-verified">✔ Verified Ledger (Score: {eval_meta['quality_score']}/100)</span>
+                <span style="font-size: 0.70rem; color: #8F95A0; font-weight: 600;">SEBI Non-Advisory</span>
+            </div>
+            """, unsafe_allow_html=True)
+            
         if show_telemetry:
             with st.container(border=True):
-                st.markdown("##### 🔍 Mentor Eval Telemetry")
+                st.caption("🔍 Mentor Eval Telemetry")
                 st.json({
                     "query": active_q,
-                    "detected_intent": engine.classify_intent(active_q),
-                    "guardrail_checks": eval_meta["checks"],
+                    "intent": engine.classify_intent(active_q),
+                    "checks": eval_meta["checks"],
                     "quality_score": f"{eval_meta['quality_score']}/100",
-                    "is_safe_for_production": eval_meta["is_safe"]
+                    "safe": eval_meta["is_safe"]
                 })
 
 # =====================================================================
-# SCREEN 4: SMART EXIT & FLEXIBILITY FLOW (Downstream Safety Net)
+# SCREEN 4: SMART EXIT & FLEXIBILITY FLOW (MOBILE-FIRST)
 # =====================================================================
 elif st.session_state.current_screen == "⚙️ Manage / Exit Flow":
-    st.markdown("## ⚙️ SIP Management & Pause Options")
-    st.caption("Manage your SIP frequency, skip instalments, or adjust debit dates.")
+    st.markdown("""
+    <div style="margin: 4px 0 8px 0;">
+        <div style="font-size: 1.05rem; font-weight: 800; color: #191C1F;">⚙️ Manage & Pause Options</div>
+        <div style="font-size: 0.76rem; color: #6F7684;">Adjust dates, skip upcoming debit, or pause instalments.</div>
+    </div>
+    """, unsafe_allow_html=True)
     
     with st.container(border=True):
-        st.markdown(f"### Manage: {user['fund_name']}")
-        st.markdown(f"**Monthly Commitment:** ₹{user['monthly_sip']:,} on the 5th of every month")
-        st.markdown(f"**Current Status:** {'⏸️ Paused for next month' if st.session_state.skipped_month else '🟢 Active'}")
+        st.markdown(f"**{user['fund_name']}**")
+        st.caption(f"₹{user['monthly_sip']:,}/mo • Status: {'⏸️ Paused' if st.session_state.skipped_month else '🟢 Active AutoPay'}")
         
-        st.divider()
-        st.markdown("#### Considering pausing or cancelling your SIP?")
-        st.caption("Tell us what is prompting this decision so we can offer flexible relief:")
-        
+        st.markdown("---")
+        st.markdown("##### What is prompting your change?")
         exit_reason = st.radio(
-            "Select primary reason:",
+            "Select reason:",
             [
-                "💸 Tight on cash this month (Temporary salary delay or expense)",
-                "📉 Worried about market dips and negative returns",
-                "🛑 I want to permanently cancel this SIP mandate"
-            ]
+                "💸 Tight on cash this month",
+                "📉 Worried about market dips",
+                "🛑 Permanently cancel SIP mandate"
+            ],
+            label_visibility="collapsed"
         )
         
-        st.divider()
+        st.markdown("---")
         if "Tight on cash" in exit_reason:
-            st.info("💡 **Flexible Options Available:** If you are facing short-term cash flow constraints, you can adjust your schedule without needing to cancel your entire investment habit:")
-            st.markdown(
-                "• **Skip Next Month:** Pauses only the upcoming instalment with zero bank bounce fees.\n"
-                "• **Move Date:** Reschedules debit to 3 days after your monthly salary credit."
-            )
-            col_skip1, col_skip2 = st.columns(2)
-            with col_skip1:
-                if st.button("Skip Next Month", type="primary", use_container_width=True):
-                    st.session_state.skipped_month = True
-                    st.balloons()
-                    st.success("Next instalment skipped. Your AutoPay will automatically resume the following month.")
-            with col_skip2:
-                if st.button("Move Date to 10th (Post-Salary)", use_container_width=True):
-                    st.success("SIP debit date updated to the 10th of every month.")
-                    
-        elif "Worried about market dips" in exit_reason:
-            st.info(f"ℹ️ **Objective Market Context:** Mutual fund SIPs are designed to navigate market cycles over multi-year horizons. Currently, you own **{m['total_units']:.2f} units** with an average purchase cost of **₹{m['average_nav_cost']:.2f}**.")
-            st.markdown(
-                "In long-term investing, temporary market drawdowns are standard market behavior. "
-                "If you feel uneasy continuing deductions right now, you can **pause your instalments** instead of terminating your 10-year wealth journey."
-            )
+            st.info("💡 **Flexible Options:** Avoid bank bounce fees without terminating your long-term wealth habit.")
             
-            with st.container(border=True):
-                st.markdown("#### ⏸️ Pause Your SIP")
-                st.caption("Your bank mandate remains intact. No bounce fees will be charged, and your SIP will automatically resume after the pause period.")
+            if st.button("Skip Next Month's Instalment", type="primary", use_container_width=True):
+                st.session_state.skipped_month = True
+                st.balloons()
+                st.success("Next instalment skipped with zero fee! AutoPay resumes automatically next month.")
                 
-                p_col1, p_col2 = st.columns([2, 1])
-                with p_col1:
-                    pause_choice = st.selectbox(
-                        "How many months would you like to pause?",
-                        [
-                            "1 Month (Resume in Dec 2026)",
-                            "2 Months (Resume in Jan 2027)",
-                            "3 Months (Resume in Feb 2027)",
-                            "6 Months (Resume in May 2027)"
-                        ],
-                        key="pause_duration_select"
-                    )
-                with p_col2:
-                    st.write("")
-                    st.write("")
-                    if st.button("Proceed with Pausing ✨", type="primary", use_container_width=True):
-                        st.session_state.skipped_month = True
-                        st.session_state.pause_info = pause_choice.split(" ")[0]
-                        st.balloons()
-                        st.success(f"Done! Your SIP has been paused for {pause_choice}. Your mandate will automatically resume.")
+            if st.button("Move Date to 10th (Post-Salary)", use_container_width=True):
+                st.success("SIP debit date rescheduled to the 10th of every month.")
+                
+        elif "Worried about market dips" in exit_reason:
+            st.info(f"ℹ️ You own **{m['total_units']:.2f} units** with average cost of **₹{m['average_nav_cost']:.2f}**. Temporary dips accumulate more units at discounts.")
             
-            if st.button("Read Monthly Perspective 📖", type="secondary", use_container_width=True):
+            st.markdown("##### ⏸️ Pause Your SIP")
+            pause_choice = st.selectbox(
+                "Select pause duration:",
+                [
+                    "1 Month (Resume in Dec 2026)",
+                    "2 Months (Resume in Jan 2027)",
+                    "3 Months (Resume in Feb 2027)",
+                    "6 Months (Resume in May 2027)"
+                ]
+            )
+            if st.button("Proceed with Pausing ✨", type="primary", use_container_width=True):
+                st.session_state.skipped_month = True
+                st.balloons()
+                st.success(f"Done! Your SIP is paused for {pause_choice}. Your AutoPay mandate stays active.")
+                
+            if st.button("Read Monthly Perspective 📖", use_container_width=True):
                 st.session_state.current_screen = "📖 Monthly Perspective Story"
                 st.rerun()
                 
         else:
-            st.markdown("You have complete autonomy over your investments. If you wish to cancel this mandate, click below:")
-            if st.button("Proceed with Immediate SIP Cancellation", type="primary"):
+            st.caption("You have full control over your funds. Zero lock-in.")
+            if st.button("Proceed with SIP Cancellation", type="primary", use_container_width=True):
                 st.session_state.skipped_month = False
-                st.warning(f"Your SIP mandate has been cancelled as requested. Your {m['total_units']:.2f} units remain safely in your Groww portfolio and can be redeemed anytime.")
+                st.warning(f"Your SIP mandate has been cancelled. Your {m['total_units']:.2f} accumulated units remain safe in your Groww portfolio.")
