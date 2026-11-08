@@ -161,8 +161,13 @@ class EvalGateEngine:
         xirr_abs_str = f"{abs(m['xirr_pct']):.1f}"
         xirr_2dec_str = f"{abs(m['xirr_pct']):.2f}"
         nav_str = f"{m['current_nav']:.2f}"
+        nav_1dec_str = f"{m['current_nav']:.1f}"
         avg_nav_str = f"{m['average_nav_cost']:.2f}"
+        prev_avg_nav_str = f"{m.get('previous_average_nav', 0):.2f}"
+        avg_nav_1dec_str = f"{m['average_nav_cost']:.1f}"
         units_str = f"{m['total_units']:.2f}"
+        units_int_str = f"{int(m['total_units'])}"
+        units_1dec_str = f"{m['total_units']:.1f}"
 
         # Format helpers for clean Indian currency display
         if m['total_return_inr'] < 0:
@@ -195,7 +200,7 @@ class EvalGateEngine:
         # =====================================================================
 
         # 1. Total Invested Breakdown
-        if re.search(r"\btotal invest|how much.*invest|\bmy total invest|invested amount", q_lower) or re.search(rf"\b{inv_str}\b", q_clean):
+        if re.search(r"total.*invest|how much.*invest|invested.*amount|invested so far|amount invested|\bmy total\b", q_lower) or re.search(rf"\b{inv_str}\b", q_clean):
             response = (
                 f"💰 **Your Total Invested Breakdown**\n\n"
                 f"You have invested a cumulative total of **₹{m['total_invested']:,.2f}** into {user['fund_name']}.\n\n"
@@ -209,7 +214,7 @@ class EvalGateEngine:
             )
 
         # 2. Current Portfolio Value
-        elif re.search(r"current value|portfolio value|worth now|how much is my", q_lower) or re.search(rf"\b{val_str}\b", q_clean):
+        elif re.search(r"current value|portfolio value|present value|current worth|worth now|how much.*worth|current balance|how much is my", q_lower) or re.search(rf"\b{val_str}\b", q_clean):
             response = (
                 f"💎 **Your Current Portfolio Value Breakdown**\n\n"
                 f"The total market value of your holdings today is **₹{m['current_value']:,.2f}**.\n\n"
@@ -223,7 +228,7 @@ class EvalGateEngine:
             )
 
         # 3. Total Returns & How Returns Are Calculated
-        elif re.search(r"calculat.*return|how.*return.*calculat|return.*formula|total return|how.*p&l|\bp&l\b|what are my returns|my total return", q_lower) or (int(ret_inr_abs_str) > 0 and re.search(rf"\b{ret_inr_abs_str}\b", q_clean)) or (float(ret_pct_abs_str) > 0 and (re.search(rf"\b{ret_pct_abs_str}\b", q_clean) or re.search(rf"\b{ret_pct_short_str}\b", q_clean))):
+        elif re.search(r"calculat.*return|how.*return.*calculat|return.*formula|total return|how.*p&l|\bp&l\b|\bpnl\b|profit.*loss|what are my returns|my total return|returns? calculation", q_lower) or (int(ret_inr_abs_str) > 0 and re.search(rf"\b{ret_inr_abs_str}\b", q_clean)) or (float(ret_pct_abs_str) > 0 and (re.search(rf"\b{ret_pct_abs_str}\b", q_clean) or re.search(rf"\b{ret_pct_short_str}\b", q_clean))):
             response = (
                 f"📊 **How Your Total Return is Calculated**\n\n"
                 f"Your total return on the dashboard currently stands at **{formatted_return_inr} ({formatted_return_pct})**.\n\n"
@@ -238,7 +243,7 @@ class EvalGateEngine:
             )
 
         # 4. 1-Day Return
-        elif re.search(r"1-day|one day|today.*return|daily return", q_lower):
+        elif re.search(r"1.?day|one.?day|today.*return|daily.*return|today.*p&l|today.*gain|today.*drop|today.*loss", q_lower):
             response = (
                 f"📈 **Understanding Your 1-Day Return**\n\n"
                 f"Your 1-day return is **{formatted_od_inr} ({formatted_od_pct})**.\n\n"
@@ -268,7 +273,7 @@ class EvalGateEngine:
             )
 
         # 6. Average Cost / Rupee-Cost Averaging (Evaluated BEFORE general NAV to prevent collision)
-        elif re.search(r"average cost|average nav|avg cost|avg nav|cost per unit|cost basis|rupee.?cost averaging|discount|cheaper units", q_lower) or re.search(rf"\b{avg_nav_str}\b", q_clean):
+        elif re.search(r"average cost|average nav|avg cost|avg nav|cost per unit|cost basis|rupee.?cost averaging|discount|cheaper units|average price|avg price|purchase cost|buying cost", q_lower) or re.search(rf"\b({avg_nav_str}|{prev_avg_nav_str}|{avg_nav_1dec_str})\b", q_clean):
             response = (
                 f"🎯 **Your Average Cost per Unit (Rupee-Cost Averaging)**\n\n"
                 f"Your average purchase cost across all completed instalments is **₹{m['average_nav_cost']:.2f} per unit**.\n\n"
@@ -294,7 +299,7 @@ class EvalGateEngine:
             )
 
         # 8. NAV (Net Asset Value)
-        elif re.search(r"\bnav\b|net asset value", q_lower) or re.search(rf"\b{nav_str}\b", q_clean):
+        elif re.search(r"\bnav\b|net asset value|unit price|nav price", q_lower) or re.search(rf"\b({nav_str}|{nav_1dec_str})\b", q_clean):
             response = (
                 f"🏷️ **What is NAV (Net Asset Value)?**\n\n"
                 f"NAV is simply the **price of 1 unit** of your mutual fund. The current NAV of {user['fund_name']} is **₹{m['current_nav']:.2f}**.\n\n"
@@ -307,7 +312,7 @@ class EvalGateEngine:
             )
 
         # 9. Units & Unit Ownership
-        elif re.search(r"\bunits?\b|how many units|pieces", q_lower) or re.search(rf"\b{units_str}\b", q_clean):
+        elif re.search(r"\bunits?\b|how many units|pieces", q_lower) or re.search(rf"\b({units_str}|{units_int_str}|{units_1dec_str})\b", q_clean):
             response = (
                 f"📦 **Understanding Your Units**\n\n"
                 f"You currently own **{m['total_units']:.2f} accumulated units** of {user['fund_name']}.\n\n"
@@ -345,7 +350,7 @@ class EvalGateEngine:
             )
 
         # 12. Exit Load
-        elif re.search(r"exit load|penalty.*sell|exit fee|lock-in|\block in\b|\bpenalty\b", q_lower):
+        elif re.search(r"exit load|penalty.*sell|exit fee|lock-in|\block in\b|\bpenalty\b|exit charges?|redemption (fee|charge)s?", q_lower):
             response = (
                 f"🚪 **Exit Load and Lock-in Rules**\n\n"
                 f"Mutual fund redemptions are subject to the AMC's exit load policy:\n\n"
@@ -358,7 +363,7 @@ class EvalGateEngine:
             )
 
         # 13. Taxes: STCG & LTCG
-        elif re.search(r"\btax\b|stcg|ltcg|capital gain", q_lower):
+        elif re.search(r"\btax(es|ed|ation)?\b|stcg|ltcg|capital gain", q_lower):
             response = (
                 f"⚖️ **Capital Gains Taxation on Mutual Funds**\n\n"
                 f"Tax on equity mutual funds is levied only when you sell (redeem) units and realize a capital gain:\n\n"
