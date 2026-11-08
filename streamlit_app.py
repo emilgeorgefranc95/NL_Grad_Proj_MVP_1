@@ -208,7 +208,9 @@ if "screen" not in st.session_state:
 if "story_step" not in st.session_state:
     st.session_state.story_step = 0
 if "sip_query" not in st.session_state:
-    st.session_state.sip_query = ""
+    st.session_state.sip_query = "How are my returns calculated?"
+if "active_q" not in st.session_state:
+    st.session_state.active_q = "How are my returns calculated?"
 if "skipped_month" not in st.session_state:
     st.session_state.skipped_month = False
 if "pause_duration" not in st.session_state:
@@ -252,7 +254,9 @@ with st.sidebar:
     if st.button("🔄 Reset Prototype State", use_container_width=True, key="btn_reset_state"):
         st.session_state.screen = "holdings"
         st.session_state.story_step = 0
-        st.session_state.sip_query = ""
+        st.session_state.sip_query = "How are my returns calculated?"
+        st.session_state.active_q = "How are my returns calculated?"
+        st.session_state["input_ask_text"] = "How are my returns calculated?"
         st.session_state.skipped_month = False
         st.session_state.pause_duration = ""
         st.rerun()
@@ -307,7 +311,7 @@ with st.expander("🧪 Test Guide & Cohort Tasks", expanded=False):
     **Current User:** {user['name']} ({user['current_month']} • ₹{user['monthly_sip']:,}/mo)  
     1. **Holdings:** Review the 2x2 Overview and tap **"Open Monthly Perspective"**.  
     2. **Story:** On Card 2, test the **NAV Slider** to see how lower prices buy more units.  
-    3. **Ask AI:** Ask about any number or term (e.g. *"How are returns calculated?"* or *"What is XIRR?"*).  
+    3. **Ask AI:** Tap any question chip (e.g. *"How are returns calculated?"*) to decrypt your dashboard.  
     4. **Manage:** Test 1-click **"Skip Next Month"** or **"Pause SIP"**.  
     """)
 
@@ -348,7 +352,13 @@ if st.session_state.screen == "holdings":
     
     # Portfolio Overview: Compact 2x2 Mobile Grid (Zero scrolling needed!)
     ret_color = "#EB5757" if m['total_return_inr'] < 0 else "#00A87E"
-    ret_sign = "+" if m['total_return_inr'] >= 0 else ""
+    if m['total_return_inr'] < 0:
+        ret_display_str = f"-₹{abs(m['total_return_inr']):,.2f}"
+        ret_pct_str = f"{m['total_return_pct']}%"
+    else:
+        ret_display_str = f"+₹{m['total_return_inr']:,.2f}"
+        ret_pct_str = f"+{m['total_return_pct']}%"
+        
     xirr_color = "#EB5757" if m['xirr_pct'] < 0 else "#00A87E"
     
     st.markdown(f"""
@@ -371,8 +381,8 @@ if st.session_state.screen == "holdings":
             <!-- Bottom Left: Total Returns -->
             <div style="background: #F8FAFB; border-radius: 10px; padding: 9px 11px;">
                 <div style="font-size: 0.68rem; color: #7C828D; font-weight: 600;">TOTAL RETURNS</div>
-                <div style="font-size: 1.05rem; font-weight: 800; color: {ret_color}; margin-top: 2px;">{ret_sign}₹{m['total_return_inr']:,.2f}</div>
-                <div style="font-size: 0.70rem; font-weight: 700; color: {ret_color};">{ret_sign}{m['total_return_pct']}%</div>
+                <div style="font-size: 1.05rem; font-weight: 800; color: {ret_color}; margin-top: 2px;">{ret_display_str}</div>
+                <div style="font-size: 0.70rem; font-weight: 700; color: {ret_color};">{ret_pct_str}</div>
             </div>
             <!-- Bottom Right: Annualized Return -->
             <div style="background: #F8FAFB; border-radius: 10px; padding: 9px 11px;">
@@ -423,7 +433,9 @@ if st.session_state.screen == "holdings":
     with col_act1:
         if st.button("What is XIRR? ℹ️", use_container_width=True, key="btn_holdings_xirr"):
             st.session_state.screen = "ask_ai"
-            st.session_state.sip_query = "What does XIRR mean in simple words?"
+            st.session_state.sip_query = "What is XIRR and why is it showing -14%?"
+            st.session_state.active_q = "What is XIRR and why is it showing -14%?"
+            st.session_state["input_ask_text"] = "What is XIRR and why is it showing -14%?"
             st.rerun()
     with col_act2:
         if st.button("Manage SIP ⚙️", use_container_width=True, key="btn_holdings_manage"):
@@ -523,69 +535,118 @@ elif st.session_state.screen == "ask_ai":
     </div>
     """, unsafe_allow_html=True)
     
+    # State update callbacks for instant reactivity without desync
+    def select_sip_query(q_text):
+        st.session_state.sip_query = q_text
+        st.session_state.active_q = q_text
+        st.session_state["input_ask_text"] = q_text
+
+    def on_custom_ask():
+        typed = st.session_state.get("input_ask_text", "").strip()
+        if typed:
+            st.session_state.active_q = typed
+            st.session_state.sip_query = typed
+
     # Prompt Chips Section - Category 1: Numbers & Formulas
     st.caption("🔢 Explore Dashboard Numbers & Calculations:")
     n_col1, n_col2 = st.columns(2)
     with n_col1:
-        if st.button("📊 How are returns calculated?", use_container_width=True, key="chip_ret_calc"):
-            st.session_state.sip_query = "How are my returns calculated?"
-            st.rerun()
+        st.button(
+            "📊 How are returns calculated?",
+            use_container_width=True,
+            key="chip_ret_calc",
+            on_click=select_sip_query,
+            args=("How are my returns calculated?",)
+        )
     with n_col2:
-        if st.button("💰 Total Invested breakdown", use_container_width=True, key="chip_total_inv"):
-            st.session_state.sip_query = "What is my total invested?"
-            st.rerun()
+        st.button(
+            "💰 Total Invested breakdown",
+            use_container_width=True,
+            key="chip_total_inv",
+            on_click=select_sip_query,
+            args=("What is my total invested?",)
+        )
 
     n_col3, n_col4 = st.columns(2)
     with n_col3:
-        if st.button("🏷️ What is NAV & Unit Cost?", use_container_width=True, key="chip_nav_cost"):
-            st.session_state.sip_query = "What is NAV in simple words?"
-            st.rerun()
+        st.button(
+            "🏷️ What is NAV & Unit Cost?",
+            use_container_width=True,
+            key="chip_nav_cost",
+            on_click=select_sip_query,
+            args=("What is NAV in simple words?",)
+        )
     with n_col4:
-        if st.button("⏱️ What does XIRR mean?", use_container_width=True, key="chip_what_xirr"):
-            st.session_state.sip_query = "What is XIRR and why is it showing -14%?"
-            st.rerun()
+        st.button(
+            "⏱️ What does XIRR mean?",
+            use_container_width=True,
+            key="chip_what_xirr",
+            on_click=select_sip_query,
+            args=("What is XIRR and why is it showing -14%?",)
+        )
             
     # Category 2: Doubts & Concepts
     st.caption("💡 Clarify Concepts & Doubts:")
     d_col1, d_col2 = st.columns(2)
     with d_col1:
-        if st.button("📉 Why are returns red?", use_container_width=True, key="chip_why_neg"):
-            st.session_state.sip_query = "Why are my returns red even though I have been disciplined?"
-            st.rerun()
+        st.button(
+            "📉 Why are returns red?",
+            use_container_width=True,
+            key="chip_why_neg",
+            on_click=select_sip_query,
+            args=("Why are my returns red even though I have been disciplined?",)
+        )
     with d_col2:
-        if st.button("🛡️ Is my money safe?", use_container_width=True, key="chip_safety"):
-            st.session_state.sip_query = "Is my investment safe on Groww?"
-            st.rerun()
+        st.button(
+            "🛡️ Is my money safe?",
+            use_container_width=True,
+            key="chip_safety",
+            on_click=select_sip_query,
+            args=("Is my investment safe on Groww?",)
+        )
 
     d_col3, d_col4 = st.columns(2)
     with d_col3:
-        if st.button("🌱 What is Direct Growth?", use_container_width=True, key="chip_direct_growth"):
-            st.session_state.sip_query = "What does Direct Growth mean?"
-            st.rerun()
+        st.button(
+            "🌱 What is Direct Growth?",
+            use_container_width=True,
+            key="chip_direct_growth",
+            on_click=select_sip_query,
+            args=("What does Direct Growth mean?",)
+        )
     with d_col4:
-        if st.button("⚠️ Should I stop this fund?", use_container_width=True, key="chip_should_stop"):
-            st.session_state.sip_query = "Should I sell this fund because it is in negative?"
-            st.rerun()
+        st.button(
+            "⚠️ Should I stop this fund?",
+            use_container_width=True,
+            key="chip_should_stop",
+            on_click=select_sip_query,
+            args=("Should I sell this fund because it is in negative?",)
+        )
     
     # Custom Question Input field
     st.markdown("---")
     q_col1, q_col2 = st.columns([4, 1])
     with q_col1:
-        query_val = st.text_input(
+        st.text_input(
             "Your Question:",
-            value=st.session_state.sip_query,
             placeholder="Ask about any number, term, or return...",
             label_visibility="collapsed",
-            key="input_ask_text"
+            key="input_ask_text",
+            on_change=on_custom_ask
         )
     with q_col2:
-        submitted = st.button("Ask ✨", type="primary", use_container_width=True, key="btn_ask_action")
+        st.button("Ask ✨", type="primary", use_container_width=True, key="btn_ask_action", on_click=on_custom_ask)
         
-    active_q = query_val.strip() if query_val else st.session_state.sip_query.strip()
+    # Active query resolution
+    active_q = st.session_state.get("active_q")
+    if not active_q:
+        active_q = st.session_state.get("input_ask_text", "").strip() or st.session_state.get("sip_query", "").strip()
+    if not active_q:
+        active_q = "How are my returns calculated?"
     
     if active_q:
         with st.spinner("Decrypting dashboard ledger with SEBI safety gates..."):
-            time.sleep(0.15)
+            time.sleep(0.12)
             resp, eval_meta = engine.generate_perspective_response(active_q, scenario)
             
         with st.container(border=True):

@@ -149,9 +149,20 @@ class EvalGateEngine:
         m = scenario["metrics"]
         q_lower = query.lower().strip()
 
-        # Format helpers
-        ret_sign = "+" if m['total_return_inr'] >= 0 else ""
-        od_sign = "+" if m['one_day_return_inr'] >= 0 else ""
+        # Format helpers for clean Indian currency display
+        if m['total_return_inr'] < 0:
+            formatted_return_inr = f"-₹{abs(m['total_return_inr']):,.2f}"
+            formatted_return_pct = f"{m['total_return_pct']}%"
+        else:
+            formatted_return_inr = f"+₹{m['total_return_inr']:,.2f}"
+            formatted_return_pct = f"+{m['total_return_pct']}%"
+
+        if m['one_day_return_inr'] < 0:
+            formatted_od_inr = f"-₹{abs(m['one_day_return_inr']):,.2f}"
+            formatted_od_pct = f"{m['one_day_return_pct']}%"
+        else:
+            formatted_od_inr = f"+₹{m['one_day_return_inr']:,.2f}"
+            formatted_od_pct = f"+{m['one_day_return_pct']}%"
 
         # Tier 1 Priority: Advice or Exit Interceptors
         if intent == "ADVICE_SEEKING":
@@ -172,12 +183,12 @@ class EvalGateEngine:
         if re.search(r"how.*return.*calculat|return.*formula|total return|how.*p&l", q_lower):
             response = (
                 f"📊 **How Your Total Return is Calculated**\n\n"
-                f"Your total return on the dashboard currently stands at **{ret_sign}₹{abs(m['total_return_inr']):,.2f} ({ret_sign}{m['total_return_pct']}%)**.\n\n"
+                f"Your total return on the dashboard currently stands at **{formatted_return_inr} ({formatted_return_pct})**.\n\n"
                 f"**The Exact Dashboard Arithmetic:**\n\n"
                 f"* **Current Portfolio Value:** ₹{m['current_value']:,.2f} ({m['total_units']:.2f} units × current NAV ₹{m['current_nav']:.2f}).\n"
                 f"* **Total Amount Invested:** ₹{m['total_invested']:,.2f} ({m['completed_instalments']} monthly instalments of ₹{user['monthly_sip']:,}).\n"
-                f"* **Absolute Return Formula:** `Current Value (₹{m['current_value']:,.2f}) - Total Invested (₹{m['total_invested']:,.2f})` = **{ret_sign}₹{m['total_return_inr']:,.2f}**.\n"
-                f"* **Percentage Return Formula:** `(Total Return / Total Invested) × 100` = **{ret_sign}{m['total_return_pct']}%**.\n"
+                f"* **Absolute Return Formula:** `Current Value (₹{m['current_value']:,.2f}) - Total Invested (₹{m['total_invested']:,.2f})` = **{formatted_return_inr}**.\n"
+                f"* **Percentage Return Formula:** `(Total Return / Total Invested) × 100` = **{formatted_return_pct}**.\n"
                 f"* **Paper Fluctuation:** This is an unrealized paper figure. Your returns only become permanent if you redeem your units.\n\n"
                 f"---\n"
                 f"{self.disclaimer}"
@@ -215,7 +226,7 @@ class EvalGateEngine:
         elif re.search(r"1-day|one day|today.*return|daily return", q_lower):
             response = (
                 f"📈 **Understanding Your 1-Day Return**\n\n"
-                f"Your 1-day return is **{od_sign}₹{m['one_day_return_inr']:,.2f} ({od_sign}{m['one_day_return_pct']}%)**.\n\n"
+                f"Your 1-day return is **{formatted_od_inr} ({formatted_od_pct})**.\n\n"
                 f"**What This Number Means:**\n\n"
                 f"* **Daily NAV Delta:** It reflects the price movement between yesterday's closing NAV and today's closing NAV for the {m['total_units']:.2f} units you own.\n"
                 f"* **Stock Market Linkage:** Mutual fund NAVs fluctuate daily because the underlying companies in {user['fund_name']} trade on the NSE/BSE every business day.\n"
