@@ -16,14 +16,15 @@ ADVICE_KEYWORDS = [
 ]
 
 EXIT_INTENT_KEYWORDS = [
-    r"\bcancel.*sip\b", r"\bstop.*sip\b", r"\bpause.*sip\b",
+    r"\bcancel\b", r"\bstop\b", r"\bpause\b", r"\bskip\b",
     r"\bwithdraw(al)?\b", r"\bcash crunch\b", r"\bno money\b",
-    r"\bclose account\b", r"\bneed money urgently\b"
+    r"\bclose account\b", r"\bneed money urgently\b", r"\btight on cash\b",
+    r"\bhow to pause\b", r"\bhow to skip\b", r"\bhow to cancel\b"
 ]
 
 VOLATILITY_KEYWORDS = [
     r"\bwhy.*(red|negative|down)\b", r"\b(lose|lost|losing).*money\b",
-    r"\bnegative return\b", r"\bmarket.*(falling|crash|dipping|down)\b",
+    r"\bnegative return\b", r"\bmarket.*(falling|crash|dipping|down|dip|correction)\b",
     r"\bam i in loss\b", r"\blower than\b"
 ]
 
@@ -149,6 +150,19 @@ class EvalGateEngine:
         user = scenario["user_profile"]
         m = scenario["metrics"]
         q_lower = query.lower().strip()
+        q_clean = q_lower.replace("₹", "").replace(",", "").replace("%", "").strip()
+
+        # Dynamic metric string representations for literal numeric dashboard lookups
+        inv_str = f"{int(m['total_invested'])}"
+        val_str = f"{int(m['current_value'])}"
+        ret_inr_abs_str = f"{abs(int(m['total_return_inr']))}"
+        ret_pct_abs_str = f"{abs(m['total_return_pct']):.2f}"
+        ret_pct_short_str = f"{abs(m['total_return_pct']):.1f}"
+        xirr_abs_str = f"{abs(m['xirr_pct']):.1f}"
+        xirr_2dec_str = f"{abs(m['xirr_pct']):.2f}"
+        nav_str = f"{m['current_nav']:.2f}"
+        avg_nav_str = f"{m['average_nav_cost']:.2f}"
+        units_str = f"{m['total_units']:.2f}"
 
         # Format helpers for clean Indian currency display
         if m['total_return_inr'] < 0:
@@ -180,23 +194,8 @@ class EvalGateEngine:
         # DASHBOARD METRICS & ARITHMETIC DECRYPTOR (REGEX-POWERED)
         # =====================================================================
 
-        # 1. Total Returns & How Returns Are Calculated
-        if re.search(r"calculat.*return|how.*return.*calculat|return.*formula|total return|how.*p&l", q_lower):
-            response = (
-                f"📊 **How Your Total Return is Calculated**\n\n"
-                f"Your total return on the dashboard currently stands at **{formatted_return_inr} ({formatted_return_pct})**.\n\n"
-                f"**The Exact Dashboard Arithmetic:**\n\n"
-                f"* **Current Portfolio Value:** ₹{m['current_value']:,.2f} ({m['total_units']:.2f} units × current NAV ₹{m['current_nav']:.2f}).\n"
-                f"* **Total Amount Invested:** ₹{m['total_invested']:,.2f} ({m['completed_instalments']} monthly instalments of ₹{user['monthly_sip']:,}).\n"
-                f"* **Absolute Return Formula:** `Current Value (₹{m['current_value']:,.2f}) - Total Invested (₹{m['total_invested']:,.2f})` = **{formatted_return_inr}**.\n"
-                f"* **Percentage Return Formula:** `(Total Return / Total Invested) × 100` = **{formatted_return_pct}**.\n"
-                f"* **Paper Fluctuation:** This is an unrealized paper figure. Your returns only become permanent if you redeem your units.\n\n"
-                f"---\n"
-                f"{self.disclaimer}"
-            )
-
-        # 2. Total Invested
-        elif re.search(r"\btotal invest|how much.*invest|\bmy total invest", q_lower):
+        # 1. Total Invested Breakdown
+        if re.search(r"\btotal invest|how much.*invest|\bmy total invest|invested amount", q_lower) or re.search(rf"\b{inv_str}\b", q_clean):
             response = (
                 f"💰 **Your Total Invested Breakdown**\n\n"
                 f"You have invested a cumulative total of **₹{m['total_invested']:,.2f}** into {user['fund_name']}.\n\n"
@@ -209,8 +208,8 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 3. Current Value
-        elif re.search(r"current value|portfolio value|worth now|how much is my", q_lower):
+        # 2. Current Portfolio Value
+        elif re.search(r"current value|portfolio value|worth now|how much is my", q_lower) or re.search(rf"\b{val_str}\b", q_clean):
             response = (
                 f"💎 **Your Current Portfolio Value Breakdown**\n\n"
                 f"The total market value of your holdings today is **₹{m['current_value']:,.2f}**.\n\n"
@@ -219,6 +218,21 @@ class EvalGateEngine:
                 f"* **Current Net Asset Value (NAV):** ₹{m['current_nav']:.2f} per unit as of today's market close.\n"
                 f"* **Valuation Formula:** `Total Units ({m['total_units']:.2f}) × Latest NAV (₹{m['current_nav']:.2f})` = **₹{m['current_value']:,.2f}**.\n"
                 f"* **Daily Market Update:** Mutual fund NAVs are updated once every business evening by the AMC based on the closing prices of the fund's underlying stocks.\n\n"
+                f"---\n"
+                f"{self.disclaimer}"
+            )
+
+        # 3. Total Returns & How Returns Are Calculated
+        elif re.search(r"calculat.*return|how.*return.*calculat|return.*formula|total return|how.*p&l|\bp&l\b|\breturns?\b", q_lower) or (int(ret_inr_abs_str) > 0 and re.search(rf"\b{ret_inr_abs_str}\b", q_clean)) or (float(ret_pct_abs_str) > 0 and (re.search(rf"\b{ret_pct_abs_str}\b", q_clean) or re.search(rf"\b{ret_pct_short_str}\b", q_clean))):
+            response = (
+                f"📊 **How Your Total Return is Calculated**\n\n"
+                f"Your total return on the dashboard currently stands at **{formatted_return_inr} ({formatted_return_pct})**.\n\n"
+                f"**The Exact Dashboard Arithmetic:**\n\n"
+                f"* **Current Portfolio Value:** ₹{m['current_value']:,.2f} ({m['total_units']:.2f} units × current NAV ₹{m['current_nav']:.2f}).\n"
+                f"* **Total Amount Invested:** ₹{m['total_invested']:,.2f} ({m['completed_instalments']} monthly instalments of ₹{user['monthly_sip']:,}).\n"
+                f"* **Absolute Return Formula:** `Current Value (₹{m['current_value']:,.2f}) - Total Invested (₹{m['total_invested']:,.2f})` = **{formatted_return_inr}**.\n"
+                f"* **Percentage Return Formula:** `(Total Return / Total Invested) × 100` = **{formatted_return_pct}**.\n"
+                f"* **Paper Fluctuation:** This is an unrealized paper figure. Your returns only become permanent if you redeem your units.\n\n"
                 f"---\n"
                 f"{self.disclaimer}"
             )
@@ -253,47 +267,8 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 6. General XIRR / Annualized Return
-        elif re.search(r"\bxirr\b|annualized", q_lower):
-            response = (
-                f"⏱️ **Demystifying XIRR (Extended Internal Rate of Return)**\n\n"
-                f"Your annualized return (XIRR) is currently **{m['xirr_pct']}%**.\n\n"
-                f"**Why XIRR is Different from Simple Return:**\n\n"
-                f"* **Multiple Cash Flows:** Because an SIP involves investments made on multiple distinct dates, simple CAGR cannot calculate returns accurately. XIRR computes the exact annualized compounding rate across each cash outflow.\n"
-                f"* **The Speed-Limit Analogy:** Think of XIRR as your speedometer. In the first 1–6 months, the formula extrapolates a 30-day price dip across a full 365-day year, resulting in an artificially magnified negative percentage.\n"
-                f"* **Noise in Months 1–6:** Financial planners disregard early XIRR numbers as statistically noisy. XIRR becomes meaningful only after 12 to 24 months of consistent investing.\n\n"
-                f"---\n"
-                f"{self.disclaimer}"
-            )
-
-        # 6. NAV (Net Asset Value)
-        elif re.search(r"\bnav\b|net asset value", q_lower):
-            response = (
-                f"🏷️ **What is NAV (Net Asset Value)?**\n\n"
-                f"NAV is simply the **price of 1 unit** of your mutual fund. The current NAV of {user['fund_name']} is **₹{m['current_nav']:.2f}**.\n\n"
-                f"**How NAV Works on Your Dashboard:**\n\n"
-                f"* **The Gold Analogy:** Just like gold is priced per gram, a mutual fund is priced per unit. When the NAV drops, your ₹{user['monthly_sip']:,} buys more units (\"more grams\").\n"
-                f"* **Unit Allotment:** Every time your monthly SIP of ₹{user['monthly_sip']:,} is debited, Groww divides ₹{user['monthly_sip']:,} by that day's NAV to credit new units to your portfolio.\n"
-                f"* **This Month's Purchase:** At ₹{m['current_nav']:.2f} NAV, your ₹{user['monthly_sip']:,} bought **{m['units_bought_this_month']:.2f} units**—giving you **+{m['additional_units_this_month']:.2f} extra units** compared to last month.\n\n"
-                f"---\n"
-                f"{self.disclaimer}"
-            )
-
-        # 7. Units & Unit Ownership
-        elif re.search(r"\bunits?\b|how many units", q_lower):
-            response = (
-                f"📦 **Understanding Your Units**\n\n"
-                f"You currently own **{m['total_units']:.2f} accumulated units** of {user['fund_name']}.\n\n"
-                f"**What Units Mean for an Investor:**\n\n"
-                f"* **Proportional Ownership:** Each unit represents your fraction of ownership in the underlying diversified portfolio of 30–50+ leading companies.\n"
-                f"* **Accumulation Phase:** In Months 1–12, your primary goal as an SIP investor is to accumulate as many units as possible before the next major market upswing.\n"
-                f"* **Average Acquisition Cost:** Across your {m['completed_instalments']} instalments, your average purchase cost per unit is **₹{m['average_nav_cost']:.2f}**.\n\n"
-                f"---\n"
-                f"{self.disclaimer}"
-            )
-
-        # 8. Average NAV / Average Purchase Cost
-        elif re.search(r"average cost|average nav|avg cost|cost per unit", q_lower):
+        # 6. Average Cost / Rupee-Cost Averaging (Evaluated BEFORE general NAV to prevent collision)
+        elif re.search(r"average cost|average nav|avg cost|avg nav|cost per unit|cost basis|rupee.?cost averaging|discount|cheaper units", q_lower) or re.search(rf"\b{avg_nav_str}\b", q_clean):
             response = (
                 f"🎯 **Your Average Cost per Unit (Rupee-Cost Averaging)**\n\n"
                 f"Your average purchase cost across all completed instalments is **₹{m['average_nav_cost']:.2f} per unit**.\n\n"
@@ -305,8 +280,47 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 9. Direct Growth vs Regular
-        elif re.search(r"direct growth|direct plan|growth option", q_lower):
+        # 7. General XIRR / Annualized Return
+        elif re.search(r"\bxirr\b|annualized", q_lower) or (float(xirr_abs_str) > 0 and re.search(rf"\b({xirr_abs_str}|{xirr_2dec_str})\b", q_clean)):
+            response = (
+                f"⏱️ **Demystifying XIRR (Extended Internal Rate of Return)**\n\n"
+                f"Your annualized return (XIRR) is currently **{m['xirr_pct']}%**.\n\n"
+                f"**Why XIRR is Different from Simple Return:**\n\n"
+                f"* **Multiple Cash Flows:** Because an SIP involves investments made on multiple distinct dates, simple CAGR cannot calculate returns accurately. XIRR computes the exact annualized compounding rate across each cash outflow.\n"
+                f"* **The Speed-Limit Analogy:** Think of XIRR as your speedometer. In the first 1–6 months, the formula extrapolates a 30-day price dip across a full 365-day year, resulting in an artificially magnified negative percentage.\n"
+                f"* **Noise in Months 1–6:** Financial planners disregard early XIRR numbers as statistically noisy. XIRR becomes meaningful only after 12 to 24 months of consistent investing.\n\n"
+                f"---\n"
+                f"{self.disclaimer}"
+            )
+
+        # 8. NAV (Net Asset Value)
+        elif re.search(r"\bnav\b|net asset value", q_lower) or re.search(rf"\b{nav_str}\b", q_clean):
+            response = (
+                f"🏷️ **What is NAV (Net Asset Value)?**\n\n"
+                f"NAV is simply the **price of 1 unit** of your mutual fund. The current NAV of {user['fund_name']} is **₹{m['current_nav']:.2f}**.\n\n"
+                f"**How NAV Works on Your Dashboard:**\n\n"
+                f"* **The Gold Analogy:** Just like gold is priced per gram, a mutual fund is priced per unit. When the NAV drops, your ₹{user['monthly_sip']:,} buys more units (\"more grams\").\n"
+                f"* **Unit Allotment:** Every time your monthly SIP of ₹{user['monthly_sip']:,} is debited, Groww divides ₹{user['monthly_sip']:,} by that day's NAV to credit new units to your portfolio.\n"
+                f"* **This Month's Purchase:** At ₹{m['current_nav']:.2f} NAV, your ₹{user['monthly_sip']:,} bought **{m['units_bought_this_month']:.2f} units**—giving you **+{m['additional_units_this_month']:.2f} extra units** compared to last month.\n\n"
+                f"---\n"
+                f"{self.disclaimer}"
+            )
+
+        # 9. Units & Unit Ownership
+        elif re.search(r"\bunits?\b|how many units|pieces", q_lower) or re.search(rf"\b{units_str}\b", q_clean):
+            response = (
+                f"📦 **Understanding Your Units**\n\n"
+                f"You currently own **{m['total_units']:.2f} accumulated units** of {user['fund_name']}.\n\n"
+                f"**What Units Mean for an Investor:**\n\n"
+                f"* **Proportional Ownership:** Each unit represents your fraction of ownership in the underlying diversified portfolio of 30–50+ leading companies.\n"
+                f"* **Accumulation Phase:** In Months 1–12, your primary goal as an SIP investor is to accumulate as many units as possible before the next major market upswing.\n"
+                f"* **Average Acquisition Cost:** Across your {m['completed_instalments']} instalments, your average purchase cost per unit is **₹{m['average_nav_cost']:.2f}**.\n\n"
+                f"---\n"
+                f"{self.disclaimer}"
+            )
+
+        # 10. Direct Growth vs Regular
+        elif re.search(r"direct growth|direct plan|growth option|\bdirect\b|\bgrowth\b", q_lower):
             response = (
                 f"🌱 **What Does \"Direct - Growth\" Mean?**\n\n"
                 f"Your investment in {user['fund_name']} is under the **Direct Plan - Growth Option**.\n\n"
@@ -318,8 +332,8 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 10. Next Debit Date & AutoPay
-        elif re.search(r"next debit|due date|autopay|mandate|when will money", q_lower):
+        # 11. Next Debit Date & AutoPay
+        elif re.search(r"next debit|due date|autopay|mandate|when will money|e-nach|nach|upi autopay|\b5th\b", q_lower):
             response = (
                 f"📅 **Your Next SIP Debit & AutoPay Status**\n\n"
                 f"Your monthly SIP of **₹{user['monthly_sip']:,}** is automated via bank AutoPay.\n\n"
@@ -331,8 +345,8 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 11. Exit Load
-        elif re.search(r"exit load|penalty.*sell|exit fee|lock-in", q_lower):
+        # 12. Exit Load
+        elif re.search(r"exit load|penalty.*sell|exit fee|lock-in|\block in\b|\bpenalty\b", q_lower):
             response = (
                 f"🚪 **Exit Load and Lock-in Rules**\n\n"
                 f"Mutual fund redemptions are subject to the AMC's exit load policy:\n\n"
@@ -344,7 +358,7 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 12. Taxes: STCG & LTCG
+        # 13. Taxes: STCG & LTCG
         elif re.search(r"\btax\b|stcg|ltcg|capital gain", q_lower):
             response = (
                 f"⚖️ **Capital Gains Taxation on Mutual Funds**\n\n"
@@ -356,8 +370,8 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 13. Expense Ratio / TER
-        elif re.search(r"expense ratio|\bter\b|fund charge", q_lower):
+        # 14. Expense Ratio / TER
+        elif re.search(r"expense ratio|\bter\b|fund charge|charges|fees|brokerage|commission", q_lower):
             response = (
                 f"🏷️ **Understanding Expense Ratio (TER)**\n\n"
                 f"The Total Expense Ratio (TER) is the annual operating cost charged by the AMC to manage {user['fund_name']}.\n\n"
@@ -369,8 +383,8 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 14. Safety & Custodianship
-        elif re.search(r"safe|safety|risk|can groww take", q_lower):
+        # 15. Safety & Custodianship
+        elif re.search(r"safe|safety|risk|can groww take|\bsebi\b|\bcams\b|\bkfintech\b|custod|bse star|iccl", q_lower):
             response = (
                 f"🛡️ **Safety, Custodianship & SEBI Regulation**\n\n"
                 f"Your mutual fund investments on Groww are protected under strict SEBI regulatory frameworks:\n\n"
@@ -382,8 +396,22 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 15. Volatility / Why Returns Are Negative (Cognitive Reframing)
-        elif intent == "VOLATILITY_ANXIETY" or any(k in q_lower for k in ["why are my returns", "why red", "did i lose", "am i in loss", "market falling"]):
+        # 16. Consistency Streak & Habit Milestone
+        elif re.search(r"streak|habit|milestone|consistency|discipline|on track", q_lower):
+            response = (
+                f"🏆 **Your Consistency Streak & Habit Milestone**\n\n"
+                f"You have successfully completed **{m['completed_instalments']} consecutive monthly instalments** without missing a single debit.\n\n"
+                f"**Milestone Progress:**\n\n"
+                f"* **Year 1 Target:** {m['completed_instalments']} of {m['target_instalments']} months ({m['streak_pct']:.0f}% completed).\n"
+                f"* **Consistency Over Timing:** In your first 12 months, building the automated discipline to invest ₹{user['monthly_sip']:,} every month creates 80% of long-term wealth compounding.\n"
+                f"* **Habit Score:** 100% On Track. Zero missed debits.\n"
+                f"* **Next Milestone:** Month {m['completed_instalments'] + 1} debit on Nov 5, 2026.\n\n"
+                f"---\n"
+                f"{self.disclaimer}"
+            )
+
+        # 17. Volatility / Why Returns Are Negative (Cognitive Reframing)
+        elif intent == "VOLATILITY_ANXIETY" or any(k in q_lower for k in ["why are my returns", "why red", "did i lose", "am i in loss", "market falling", "market dip", "market crash", "correction"]):
             response = (
                 f"📊 **Understanding Your Returns in Month {m['completed_instalments']}**\n\n"
                 f"Seeing a negative return (**{m['total_return_pct']}%**) during your first year is completely natural, but here is what is mathematically happening behind the scenes:\n\n"
