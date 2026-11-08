@@ -529,66 +529,76 @@ elif st.session_state.screen == "ask_ai":
     </div>
     """, unsafe_allow_html=True)
     
+    chip_clicked_question = None
+
     # Prompt Chips Section - Category 1: Numbers & Formulas
     st.caption("🔢 Explore Dashboard Numbers & Calculations:")
     n_col1, n_col2 = st.columns(2)
     with n_col1:
         if st.button("📊 How are returns calculated?", use_container_width=True, key="chip_ret_calc"):
-            st.session_state.active_question = "How are my returns calculated?"
+            chip_clicked_question = "How are my returns calculated?"
     with n_col2:
         if st.button("💰 Total Invested breakdown", use_container_width=True, key="chip_total_inv"):
-            st.session_state.active_question = "What is my total invested?"
+            chip_clicked_question = "What is my total invested?"
 
     n_col3, n_col4 = st.columns(2)
     with n_col3:
         if st.button("🏷️ What is NAV & Unit Cost?", use_container_width=True, key="chip_nav_cost"):
-            st.session_state.active_question = "What is NAV in simple words?"
+            chip_clicked_question = "What is NAV in simple words?"
     with n_col4:
         if st.button("⏱️ What does XIRR mean?", use_container_width=True, key="chip_what_xirr"):
-            st.session_state.active_question = "What is XIRR and why is it showing -14%?"
+            chip_clicked_question = "What is XIRR and why is it showing -14%?"
 
     n_col5, n_col6 = st.columns(2)
     with n_col5:
         if st.button("⏱️ Why is XIRR 'Noisy in M1–6'?", use_container_width=True, key="chip_xirr_noisy"):
-            st.session_state.active_question = "Why is XIRR noisy in M1-6?"
+            chip_clicked_question = "Why is XIRR noisy in M1-6?"
     with n_col6:
         if st.button("📅 Next Debit & AutoPay", use_container_width=True, key="chip_autopay_sched"):
-            st.session_state.active_question = "When is my next SIP debit date?"
+            chip_clicked_question = "When is my next SIP debit date?"
             
     # Category 2: Doubts & Concepts
     st.caption("💡 Clarify Concepts & Doubts:")
     d_col1, d_col2 = st.columns(2)
     with d_col1:
         if st.button("📉 Why are returns red?", use_container_width=True, key="chip_why_neg"):
-            st.session_state.active_question = "Why are my returns red even though I have been disciplined?"
+            chip_clicked_question = "Why are my returns red even though I have been disciplined?"
     with d_col2:
         if st.button("🛡️ Is my money safe?", use_container_width=True, key="chip_safety"):
-            st.session_state.active_question = "Is my investment safe on Groww?"
+            chip_clicked_question = "Is my investment safe on Groww?"
 
     d_col3, d_col4 = st.columns(2)
     with d_col3:
         if st.button("🌱 What is Direct Growth?", use_container_width=True, key="chip_direct_growth"):
-            st.session_state.active_question = "What does Direct Growth mean?"
+            chip_clicked_question = "What does Direct Growth mean?"
     with d_col4:
         if st.button("⚠️ Should I stop this fund?", use_container_width=True, key="chip_should_stop"):
-            st.session_state.active_question = "Should I sell this fund because it is in negative?"
+            chip_clicked_question = "Should I sell this fund because it is in negative?"
     
-    # Custom Question Input field (Pressing Enter or tapping Ask ✨ submits)
+    # Custom Question Input field (No form wrapper - works with mobile keyboards & Return key)
     st.markdown("---")
-    with st.form("ask_custom_form", clear_on_submit=True):
-        q_col1, q_col2 = st.columns([3.2, 1])
-        with q_col1:
-            custom_typed = st.text_input(
-                "Your Question:",
-                placeholder="Ask about any number or term (e.g. noisy in M1-6)...",
-                label_visibility="collapsed",
-                key="custom_user_query"
-            )
-        with q_col2:
-            btn_submitted = st.form_submit_button("Ask ✨", type="primary", use_container_width=True)
-            
-    if btn_submitted and custom_typed.strip():
+    st.caption("✍️ Or ask your own question about any dashboard term or number:")
+    q_col1, q_col2 = st.columns([3, 1])
+    with q_col1:
+        custom_typed = st.text_input(
+            "Ask about your portfolio:",
+            placeholder="Ask about any number or term (e.g. noisy in M1-6)...",
+            label_visibility="collapsed",
+            key="custom_user_query"
+        )
+    with q_col2:
+        btn_submitted = st.button("Ask ✨", type="primary", use_container_width=True, key="btn_ask_custom")
+        
+    # State resolution (Guarantees chips and mobile keyboard return both update immediately):
+    if chip_clicked_question:
+        st.session_state.active_question = chip_clicked_question
+        st.session_state.last_resolved_query = chip_clicked_question
+    elif btn_submitted and custom_typed.strip():
         st.session_state.active_question = custom_typed.strip()
+        st.session_state.last_resolved_query = custom_typed.strip()
+    elif custom_typed.strip() and custom_typed.strip() != st.session_state.get("last_resolved_query", ""):
+        st.session_state.active_question = custom_typed.strip()
+        st.session_state.last_resolved_query = custom_typed.strip()
         
     # Active query resolution - Guaranteed default to "How are my returns calculated?"
     active_q = st.session_state.get("active_question")
