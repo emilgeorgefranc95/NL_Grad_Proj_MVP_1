@@ -59,8 +59,23 @@ st.markdown("""
     div[data-testid="stDecoration"] {
         display: none !important;
     }
-    [data-testid="stStatusWidget"], .viewerBadge_container__1QSob, #manage-app-button {
+    
+    /* Completely hide Streamlit Cloud manage-app red crown / viewer badge */
+    div[class*="viewerBadge"],
+    span[class*="viewerBadge"],
+    a[class*="viewerBadge"],
+    #manage-app-button,
+    button[data-testid="manage-app-button"],
+    div[data-testid="manage-app-button"],
+    div[data-testid="stStatusWidget"],
+    .viewerBadge_container__1QSob,
+    .viewerBadge_link__1S137 {
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        height: 0 !important;
+        width: 0 !important;
     }
     
     /* 2. Sleek Mobile App Viewport Container (Max 480px) */
@@ -87,6 +102,21 @@ st.markdown("""
     p, span, label, div {
         color: #191C1F !important;
         font-size: 0.88rem !important;
+    }
+    
+    /* Bullet points styling for clarity and readability */
+    ul {
+        margin-top: 0.4rem !important;
+        margin-bottom: 0.6rem !important;
+        padding-left: 1.25rem !important;
+    }
+    li {
+        margin-bottom: 0.45rem !important;
+        line-height: 1.45 !important;
+        color: #191C1F !important;
+    }
+    li strong {
+        color: #0E1116 !important;
     }
     
     .stCaption, [data-testid="stCaptionContainer"], small {
@@ -125,11 +155,11 @@ st.markdown("""
     .stButton > button {
         border-radius: 10px !important;
         font-weight: 600 !important;
-        font-size: 0.85rem !important;
+        font-size: 0.82rem !important;
         color: #191C1F !important;
         border: 1px solid #DCE1E7 !important;
         background-color: #FFFFFF !important;
-        padding: 0.45rem 0.75rem !important;
+        padding: 0.45rem 0.65rem !important;
     }
     
     /* 6. Groww Badges & Pills */
@@ -277,7 +307,7 @@ with st.expander("🧪 Test Guide & Cohort Tasks", expanded=False):
     **Current User:** {user['name']} ({user['current_month']} • ₹{user['monthly_sip']:,}/mo)  
     1. **Holdings:** Review the 2x2 Overview and tap **"Open Monthly Perspective"**.  
     2. **Story:** On Card 2, test the **NAV Slider** to see how lower prices buy more units.  
-    3. **Ask AI:** Test questions like *"Why is return negative?"* or *"What is XIRR?"*.  
+    3. **Ask AI:** Ask about any number or term (e.g. *"How are returns calculated?"* or *"What is XIRR?"*).  
     4. **Manage:** Test 1-click **"Skip Next Month"** or **"Pause SIP"**.  
     """)
 
@@ -404,7 +434,6 @@ if st.session_state.screen == "holdings":
 # SCREEN 2: INTERACTIVE PERSPECTIVE STORY MODE (MOBILE-FIRST)
 # =====================================================================
 elif st.session_state.screen == "story":
-    # Story Top Bar
     curr_step = st.session_state.story_step
     
     st.markdown(f"""
@@ -416,7 +445,6 @@ elif st.session_state.screen == "story":
     
     st.progress((curr_step + 1) / 3.0)
     
-    # Story Cards Container
     with st.container(border=True):
         if curr_step == 0:
             st.markdown("#### 🏆 Card 1: Consistency Streak")
@@ -463,7 +491,6 @@ elif st.session_state.screen == "story":
             """)
             st.success("🎯 **Recommended Action:** Let your monthly AutoPay run. No manual intervention required.")
             
-    # Clean Bottom Story Navigation
     s_col1, s_col2 = st.columns(2)
     with s_col1:
         if curr_step > 0:
@@ -486,39 +513,68 @@ elif st.session_state.screen == "story":
                 st.rerun()
 
 # =====================================================================
-# SCREEN 3: ASK ABOUT MY SIP (MOBILE-FIRST)
+# SCREEN 3: ASK ABOUT MY SIP (MOBILE-FIRST DASHBOARD DECRYPTOR)
 # =====================================================================
 elif st.session_state.screen == "ask_ai":
     st.markdown("""
     <div style="margin: 4px 0 8px 0;">
         <div style="font-size: 1.05rem; font-weight: 800; color: #191C1F;">💬 Ask About My SIP</div>
-        <div style="font-size: 0.76rem; color: #6F7684;">Instant plain-English answers backed by Groww ledger telemetry.</div>
+        <div style="font-size: 0.76rem; color: #6F7684;">Instant plain-English decryptor for any number or term on your dashboard.</div>
     </div>
     """, unsafe_allow_html=True)
     
-    # Clean Prompt Chips
-    st.caption("Common questions:")
-    c_chip1, c_chip2 = st.columns(2)
-    with c_chip1:
-        if st.button("📉 Why is return negative?", use_container_width=True, key="chip_why_neg"):
-            st.session_state.sip_query = "Why are my returns red even though I have been disciplined?"
+    # Prompt Chips Section - Category 1: Numbers & Formulas
+    st.caption("🔢 Explore Dashboard Numbers & Calculations:")
+    n_col1, n_col2 = st.columns(2)
+    with n_col1:
+        if st.button("📊 How are returns calculated?", use_container_width=True, key="chip_ret_calc"):
+            st.session_state.sip_query = "How are my returns calculated?"
             st.rerun()
-    with c_chip2:
-        if st.button("⏱️ What is XIRR?", use_container_width=True, key="chip_what_xirr"):
-            st.session_state.sip_query = "What does XIRR mean in simple words?"
+    with n_col2:
+        if st.button("💰 Total Invested breakdown", use_container_width=True, key="chip_total_inv"):
+            st.session_state.sip_query = "What is my total invested?"
+            st.rerun()
+
+    n_col3, n_col4 = st.columns(2)
+    with n_col3:
+        if st.button("🏷️ What is NAV & Unit Cost?", use_container_width=True, key="chip_nav_cost"):
+            st.session_state.sip_query = "What is NAV in simple words?"
+            st.rerun()
+    with n_col4:
+        if st.button("⏱️ What does XIRR mean?", use_container_width=True, key="chip_what_xirr"):
+            st.session_state.sip_query = "What is XIRR and why is it showing -14%?"
             st.rerun()
             
-    if st.button("⚠️ Should I stop this fund?", use_container_width=True, key="chip_should_stop"):
-        st.session_state.sip_query = "Should I sell this fund because it is in negative?"
-        st.rerun()
+    # Category 2: Doubts & Concepts
+    st.caption("💡 Clarify Concepts & Doubts:")
+    d_col1, d_col2 = st.columns(2)
+    with d_col1:
+        if st.button("📉 Why are returns red?", use_container_width=True, key="chip_why_neg"):
+            st.session_state.sip_query = "Why are my returns red even though I have been disciplined?"
+            st.rerun()
+    with d_col2:
+        if st.button("🛡️ Is my money safe?", use_container_width=True, key="chip_safety"):
+            st.session_state.sip_query = "Is my investment safe on Groww?"
+            st.rerun()
+
+    d_col3, d_col4 = st.columns(2)
+    with d_col3:
+        if st.button("🌱 What is Direct Growth?", use_container_width=True, key="chip_direct_growth"):
+            st.session_state.sip_query = "What does Direct Growth mean?"
+            st.rerun()
+    with d_col4:
+        if st.button("⚠️ Should I stop this fund?", use_container_width=True, key="chip_should_stop"):
+            st.session_state.sip_query = "Should I sell this fund because it is in negative?"
+            st.rerun()
     
-    # Input field and submit button
+    # Custom Question Input field
+    st.markdown("---")
     q_col1, q_col2 = st.columns([4, 1])
     with q_col1:
         query_val = st.text_input(
             "Your Question:",
             value=st.session_state.sip_query,
-            placeholder="e.g. Why did my money drop today?",
+            placeholder="Ask about any number, term, or return...",
             label_visibility="collapsed",
             key="input_ask_text"
         )
@@ -528,8 +584,8 @@ elif st.session_state.screen == "ask_ai":
     active_q = query_val.strip() if query_val else st.session_state.sip_query.strip()
     
     if active_q:
-        with st.spinner("Consulting verified ledger with SEBI safety gates..."):
-            time.sleep(0.2)
+        with st.spinner("Decrypting dashboard ledger with SEBI safety gates..."):
+            time.sleep(0.15)
             resp, eval_meta = engine.generate_perspective_response(active_q, scenario)
             
         with st.container(border=True):
