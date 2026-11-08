@@ -223,7 +223,7 @@ class EvalGateEngine:
             )
 
         # 3. Total Returns & How Returns Are Calculated
-        elif re.search(r"calculat.*return|how.*return.*calculat|return.*formula|total return|how.*p&l|\bp&l\b|\breturns?\b", q_lower) or (int(ret_inr_abs_str) > 0 and re.search(rf"\b{ret_inr_abs_str}\b", q_clean)) or (float(ret_pct_abs_str) > 0 and (re.search(rf"\b{ret_pct_abs_str}\b", q_clean) or re.search(rf"\b{ret_pct_short_str}\b", q_clean))):
+        elif re.search(r"calculat.*return|how.*return.*calculat|return.*formula|total return|how.*p&l|\bp&l\b|what are my returns|my total return", q_lower) or (int(ret_inr_abs_str) > 0 and re.search(rf"\b{ret_inr_abs_str}\b", q_clean)) or (float(ret_pct_abs_str) > 0 and (re.search(rf"\b{ret_pct_abs_str}\b", q_clean) or re.search(rf"\b{ret_pct_short_str}\b", q_clean))):
             response = (
                 f"📊 **How Your Total Return is Calculated**\n\n"
                 f"Your total return on the dashboard currently stands at **{formatted_return_inr} ({formatted_return_pct})**.\n\n"
@@ -332,7 +332,7 @@ class EvalGateEngine:
             )
 
         # 11. Next Debit Date & AutoPay
-        elif re.search(r"next debit|due date|autopay|mandate|when will money|e-nach|nach|upi autopay|\b5th\b", q_lower):
+        elif re.search(r"next.*debit|due date|autopay|mandate|when will money|e-nach|nach|upi autopay|\b5th\b|debit date", q_lower):
             response = (
                 f"📅 **Your Next SIP Debit & AutoPay Status**\n\n"
                 f"Your monthly SIP of **₹{user['monthly_sip']:,}** is automated via bank AutoPay.\n\n"
@@ -395,21 +395,7 @@ class EvalGateEngine:
                 f"{self.disclaimer}"
             )
 
-        # 16. Consistency Streak & Habit Milestone
-        elif re.search(r"streak|habit|milestone|consistency|discipline|on track", q_lower):
-            response = (
-                f"🏆 **Your Consistency Streak & Habit Milestone**\n\n"
-                f"You have successfully completed **{m['completed_instalments']} consecutive monthly instalments** without missing a single debit.\n\n"
-                f"**Milestone Progress:**\n\n"
-                f"* **Year 1 Target:** {m['completed_instalments']} of {m['target_instalments']} months ({m['streak_pct']:.0f}% completed).\n"
-                f"* **Consistency Over Timing:** In your first 12 months, building the automated discipline to invest ₹{user['monthly_sip']:,} every month creates 80% of long-term wealth compounding.\n"
-                f"* **Habit Score:** 100% On Track. Zero missed debits.\n"
-                f"* **Next Milestone:** Month {m['completed_instalments'] + 1} debit on Nov 5, 2026.\n\n"
-                f"---\n"
-                f"{self.disclaimer}"
-            )
-
-        # 17. Volatility / Why Returns Are Negative (Cognitive Reframing)
+        # 16. Volatility / Why Returns Are Negative (Cognitive Reframing)
         elif intent == "VOLATILITY_ANXIETY" or any(k in q_lower for k in ["why are my returns", "why red", "did i lose", "am i in loss", "market falling", "market dip", "market crash", "correction"]):
             response = (
                 f"📊 **Understanding Your Returns in Month {m['completed_instalments']}**\n\n"
@@ -421,6 +407,20 @@ class EvalGateEngine:
                 f"to **₹{m['average_nav_cost']:.2f}** ({m['cost_basis_reduction_pct']}% reduction).\n"
                 f"* **Paper Dip vs. Real Loss:** You have not sold any units. You own all **{m['total_units']:.2f} pieces** of India's leading companies.\n"
                 f"* **The 10-Year Reality:** Over 10-year holding periods in Indian equities, the historical probability of negative returns is `<1%`.\n\n"
+                f"---\n"
+                f"{self.disclaimer}"
+            )
+
+        # 17. Consistency Streak & Habit Milestone
+        elif re.search(r"streak|habit|milestone|consistency|discipline|on track", q_lower):
+            response = (
+                f"🏆 **Your Consistency Streak & Habit Milestone**\n\n"
+                f"You have successfully completed **{m['completed_instalments']} consecutive monthly instalments** without missing a single debit.\n\n"
+                f"**Milestone Progress:**\n\n"
+                f"* **Year 1 Target:** {m['completed_instalments']} of {m['target_instalments']} months ({m['streak_pct']:.0f}% completed).\n"
+                f"* **Consistency Over Timing:** In your first 12 months, building the automated discipline to invest ₹{user['monthly_sip']:,} every month creates 80% of long-term wealth compounding.\n"
+                f"* **Habit Score:** 100% On Track. Zero missed debits.\n"
+                f"* **Next Milestone:** Month {m['completed_instalments'] + 1} debit on Nov 5, 2026.\n\n"
                 f"---\n"
                 f"{self.disclaimer}"
             )
