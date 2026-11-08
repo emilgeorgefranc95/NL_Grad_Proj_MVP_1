@@ -332,7 +332,7 @@ class EvalGateEngine:
             )
 
         # 11. Next Debit Date & AutoPay
-        elif re.search(r"next.*debit|due date|autopay|mandate|when will money|e-nach|nach|upi autopay|\b5th\b|debit date", q_lower):
+        elif re.search(r"next.*(debit|sip|instalment|installment|date)|due date|autopay|mandate|when.*(money|deduct|debit|sip)|e-nach|nach|upi autopay|\b5th\b|debit date|sip date|deduct.*date", q_lower):
             response = (
                 f"📅 **Your Next SIP Debit & AutoPay Status**\n\n"
                 f"Your monthly SIP of **₹{user['monthly_sip']:,}** is automated via bank AutoPay.\n\n"
