@@ -145,19 +145,30 @@
 
 ## Slide 9: User Testing & Next Iteration Backlog (Part 6)
 
-* **Slide Title:** User Testing Validates Plain-Language Reassurance While Highlighting Flexibility Needs
-* **Testing Scope:** Tested live production MVP with 3 target segment users on real investment tracking tasks.
-* **User Feedback Summary:**
-  * **What Users Liked:**
-    * *Unit Accumulation Reframing:* Users reported immediate relief seeing that a -5.8% return actually bought +6.55 extra units at a discount.
-    * *Jargon Demystification:* Praised the XIRR "speed limit" metaphor for removing anxiety over extreme negative percentages.
-    * *Frictionless Pause/Skip:* Unanimously preferred the 1-click "Skip Next Month" option over having to cancel their bank mandate during tight months.
-  * **What Didn't Work / Constructive Feedback:**
-    * Initial exit flow felt restrictive until the multi-month SIP Pause selector was added.
-    * Requested advance push notifications 3–4 days before debit summarizing upcoming unit projections.
-* **Next Iteration (V2 Backlog):**
-  1. Pre-debit push notifications with projected unit accumulation 3 days prior.
-  2. Multi-year goal bucketing (tagging funds for "Travel" or "Emergency").
+* **Slide Title:** Prototype Testing Validates Anxiety Reduction; Surfaces Demand for Transactional Expansion
+* **Subtitle:** Usability Protocol with First-Time SIP Investors Validates Conviction Hypotheses
+* **Usability Testing Protocol & Cohort:**
+  * **Sample & Scope:** Qualitative task-based usability testing on the live mobile MVP with target first-time SIP investors (salaried retail investors, age 22–30, in Months 2–6 of their first mutual fund SIP).
+  * **Core Tasks Evaluated:** (1) Reviewing portfolio during a market dip, (2) Interacting with the Rupee-Cost Averaging NAV Simulator, (3) Asking ad-hoc questions in "Ask About My SIP", (4) Navigating exit options during a hypothetical tight cash-flow month.
+
+* **Key Findings: What Users Validated (Core Hypotheses Confirmed):**
+  1. *Uncluttered & Focused Mobile UI:* Users praised the clean visual hierarchy (*"Data was not cluttered at all, very easy to focus on each button and metric... pretty self-explanatory"*), validating the departure from Groww's legacy trading-heavy clutter.
+  2. *NAV Simulator as an Anxiety Diffuser:* The interactive RCA slider was singled out as a critical mental breakthrough (*"Gave a very clear explanation... the NAV Simulator will be very helpful for beginners to reduce anxiety"*).
+  3. *Layman Jargon Decryption:* Users validated the plain-English translations (*"Very accurate and free of jargon, especially explaining what XIRR is and why it's noisy in Months 1 to 6... understood by any layman"*).
+  4. *Habit Defense via Flexibility:* Users confirmed they would actively choose Skip/Pause over cancellation (*"If I face a tight month I would definitely use this... I can skip 1 month or manually select how many months to pause from the dropdown with immediate effect"*).
+
+* **User Desires & Product Insight (The Next Frontier):**
+  * *User Feedback:* Users found zero friction in the companion, but naturally expected full transactional capabilities: *"In the next version, I expect features to invest in a fund (one-time or new SIP), exit a fund, explore new funds, and add money through Groww Wallet."*
+  * *PM Strategic Synthesis:* When an AI companion successfully builds conviction, users immediately want to take financial action (e.g., buying extra units while NAV is discounted). The companion must evolve from passive guidance to an actionable financial co-pilot.
+
+* **Prioritized V2 Product Backlog:**
+
+| Priority | Feature / Enhancement | User Need / Feedback Solved | Strategic Impact on 12-Mo Retention | Effort |
+| :---: | :--- | :--- | :--- | :---: |
+| **P0** | **Opportunistic "Dip Top-Up" (1-Click Lump Sum in Story Mode)** | User desire to invest extra when the NAV Simulator proves units are on discount. | Converts passive reassurance into active capital accumulation, deepening investor commitment. | Med |
+| **P0** | **Pre-Debit Advance Intimations (3 Days Prior + 1-Click Skip)** | Solves bank balance anxiety and mandate bounce penalties raised in discovery. | Prevents involuntary mandate failures and bank penalty frustration before debit day. | Low |
+| **P1** | **Groww Wallet / UPI Auto-Fallback Mandate** | User request to fund SIPs via Groww Wallet balance when primary bank account is low. | Eliminates payment drop-offs when primary salary account runs low at month-end. | Med |
+| **P1** | **SEBI-Compliant Goal-Based Fund Exploration** | User request to explore new funds directly from their portfolio context. | Deepens long-term investor engagement and cross-fund diversification past Month 6. | High |
 
 ---
 

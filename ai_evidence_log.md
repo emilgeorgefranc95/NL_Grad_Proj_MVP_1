@@ -83,3 +83,36 @@ As part of the evaluation lifecycle, 3 specific failure patterns were flagged an
   * Violates project brief constraint (*"CANNOT use fear, FOMO or urgency-based nudges"*). Shaming an anxious user who has a genuine cash crunch creates resentment and constitutes an unethical dark pattern.
 * **Correction Applied:**  
   * Rewrote the Exit-Intent handler to be **neutral, respectful, and autonomy-preserving**. It acknowledges the cash crunch, surfaces non-punitive options (*"Skip 1 month without penalty"* or *"Move date to salary day"*), and always includes an unhindered button to proceed with cancellation.
+
+---
+
+## 4. Prototype Usability Testing & User Feedback Protocol (Part 6)
+
+To validate whether the AI-native companion successfully bridges the "Conviction Cliff", task-based usability interviews were conducted with target first-time retail SIP investors using the live production mobile MVP.
+
+### Usability Protocol & Verbatim Responses
+
+#### Question 1: Navigation & Visual Focus
+* **Prompt:** *Was the app easy to understand and navigate on your device?*
+* **User Response:** *"Yes, the device was easy to understand. It was pretty self-explanatory. Also it was not cluttered. The data was not cluttered at all so it was easy to focus on each and every button. It was fine."*
+* **PM Takeaway:** Validates the rejection of high-density trading layouts. The uncluttered 2x2 grid successfully prevents cognitive fatigue.
+
+#### Question 2: Rupee-Cost Averaging & Market Dip Anxiety
+* **Prompt:** *Did the "Rupee-Cost Averaging" explanation in the Story help you understand why market dips aren't necessarily a loss?*
+* **User Response:** *"Yes it gave very clear explanation especially, the 🎮 Simulator: What if NAV fluctuates? it will be very helpful for beginners to reduce anxiety."*
+* **PM Takeaway:** Direct validation of the core cognitive reframing hypothesis. An interactive slider showing unit accumulation actively diffuses paper loss panic.
+
+#### Question 3: Plain-English Decryptor & Jargon Clarity
+* **Prompt:** *Was the AI response in "Ask About My SIP" clear and free of confusing jargon?*
+* **User Response:** *"Their response was very accurate and free of all the jargon, especially when we asked about what XIRR is, and why it is noisy in months 1 to 6. For all these things they have returned a very clear response that could be understood by any layman."*
+* **PM Takeaway:** Validates the speed-limit analogy and early tenure noise explainer. First-time investors grasp complex annualization math when framed in plain language.
+
+#### Question 4: Smart Exit Flexibility (Skip/Pause vs. Permanent Cancellation)
+* **Prompt:** *If you faced a tight month, would you prefer the "Skip 1 Month / Pause SIP" option over permanently cancelling your SIP?*
+* **User Response:** *"Yes. If I face any tight month I would use this feature because I can skip for 1 month. If I want to pause the SIP for a few months, that option is also available where I can manually pause it. I can select from the dropdown how many months I want to pause it for and I can do it. It will immediately take effect."*
+* **PM Takeaway:** Direct validation of habit preservation. Non-punitive 1-click skips and multi-month pauses successfully protect active SIP mandates from permanent cancellation.
+
+#### Question 5: Constructive Critique & V2 Expansion Wishlist
+* **Prompt:** *What is one thing that was confusing, or that you would improve in the next version?*
+* **User Response:** *"Nothing was confusing. But I expect the below features in the next version: (a) Investing in a fund (one time or SIP), (b) exiting a fund, (c) exploring new funds, (d) adding funds to the Groww wallet."*
+* **PM Takeaway:** Strong signal of user trust and engagement. The companion succeeded in demystifying the portfolio, creating immediate demand for actionable transactional capabilities (e.g. opportunistic lump-sum top-ups during dips, wallet funding fallback, and curated discovery).
