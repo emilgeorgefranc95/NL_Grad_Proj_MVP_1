@@ -172,23 +172,17 @@ st.markdown("""
 # Initialize engine & session state
 engine = EvalGateEngine()
 
-if "current_screen" not in st.session_state:
-    st.session_state.current_screen = "📱 Holdings"
+# Single Source of Truth for Screen Navigation: "holdings" | "story" | "ask_ai" | "manage"
+if "screen" not in st.session_state:
+    st.session_state.screen = "holdings"
 if "story_step" not in st.session_state:
     st.session_state.story_step = 0
 if "sip_query" not in st.session_state:
     st.session_state.sip_query = ""
 if "skipped_month" not in st.session_state:
     st.session_state.skipped_month = False
-
-# Screen name mapping for clean mobile tabs
-SCREEN_MAP = {
-    "📱 Holdings": "📱 Holdings",
-    "📖 Story": "📖 Monthly Perspective Story",
-    "💬 Ask AI": "💬 Ask About My SIP",
-    "⚙️ Manage": "⚙️ Manage / Exit Flow"
-}
-REVERSE_SCREEN_MAP = {v: k for k, v in SCREEN_MAP.items()}
+if "pause_duration" not in st.session_state:
+    st.session_state.pause_duration = ""
 
 # --- SIDEBAR: Scenario Switcher & Controls ---
 with st.sidebar:
@@ -199,7 +193,8 @@ with st.sidebar:
     selected_key = st.selectbox(
         "Active Investor Persona:",
         scenario_keys,
-        format_func=lambda k: SCENARIOS[k]["name"]
+        format_func=lambda k: SCENARIOS[k]["name"],
+        key="persona_selector"
     )
     scenario = get_scenario(selected_key)
     user = scenario["user_profile"]
@@ -214,30 +209,31 @@ with st.sidebar:
     st.markdown(f"**Goal:** {user['goal']}")
     
     st.divider()
-    st.markdown("#### 🧭 Jump to Screen")
-    sb_screens = ["📱 Holdings", "📖 Story", "💬 Ask AI", "⚙️ Manage"]
-    current_short = REVERSE_SCREEN_MAP.get(st.session_state.current_screen, "📱 Holdings")
-    chosen_screen = st.radio("Screen:", sb_screens, index=sb_screens.index(current_short), key="sb_radio_screen")
-    if SCREEN_MAP[chosen_screen] != st.session_state.current_screen:
-        st.session_state.current_screen = SCREEN_MAP[chosen_screen]
-        st.rerun()
+    st.markdown("#### 🧭 Screen Navigation")
+    for s_key, s_label in [("holdings", "📱 Holdings"), ("story", "📖 Story"), ("ask_ai", "💬 Ask AI"), ("manage", "⚙️ Manage")]:
+        if st.button(s_label, key=f"sb_nav_{s_key}", use_container_width=True, type="primary" if st.session_state.screen == s_key else "secondary"):
+            st.session_state.screen = s_key
+            st.rerun()
     
     st.divider()
-    show_telemetry = st.checkbox("🔍 Show Mentor Eval Telemetry", value=False)
+    show_telemetry = st.checkbox("🔍 Show Mentor Eval Telemetry", value=False, key="check_telemetry")
     
     st.divider()
-    if st.button("🔄 Reset Prototype State", use_container_width=True):
-        st.session_state.current_screen = "📱 Holdings"
+    if st.button("🔄 Reset Prototype State", use_container_width=True, key="btn_reset_state"):
+        st.session_state.screen = "holdings"
         st.session_state.story_step = 0
         st.session_state.sip_query = ""
         st.session_state.skipped_month = False
+        st.session_state.pause_duration = ""
         st.rerun()
 
-# Scenario fallback if sidebar hasn't run yet
+# Scenario fallback if sidebar hasn't loaded local vars
 if "user" not in locals():
     scenario = get_scenario("scenario_a_dip_month3")
     user = scenario["user_profile"]
     m = scenario["metrics"]
+if "show_telemetry" not in locals():
+    show_telemetry = False
 
 # =====================================================================
 # SLEEK GROWW MOBILE APP BAR
@@ -257,23 +253,22 @@ st.markdown(f"""
 
 # Compact 4-Tab Navigation Bar (Side-by-side, perfectly proportioned for mobile)
 nav_cols = st.columns(4)
-current_active_tab = REVERSE_SCREEN_MAP.get(st.session_state.current_screen, "📱 Holdings")
 
 with nav_cols[0]:
-    if st.button("📱 Holdings", use_container_width=True, type="primary" if current_active_tab == "📱 Holdings" else "secondary"):
-        st.session_state.current_screen = "📱 Holdings"
+    if st.button("📱 Holdings", use_container_width=True, type="primary" if st.session_state.screen == "holdings" else "secondary", key="top_nav_holdings"):
+        st.session_state.screen = "holdings"
         st.rerun()
 with nav_cols[1]:
-    if st.button("📖 Story", use_container_width=True, type="primary" if current_active_tab == "📖 Story" else "secondary"):
-        st.session_state.current_screen = "📖 Monthly Perspective Story"
+    if st.button("📖 Story", use_container_width=True, type="primary" if st.session_state.screen == "story" else "secondary", key="top_nav_story"):
+        st.session_state.screen = "story"
         st.rerun()
 with nav_cols[2]:
-    if st.button("💬 Ask AI", use_container_width=True, type="primary" if current_active_tab == "💬 Ask AI" else "secondary"):
-        st.session_state.current_screen = "💬 Ask About My SIP"
+    if st.button("💬 Ask AI", use_container_width=True, type="primary" if st.session_state.screen == "ask_ai" else "secondary", key="top_nav_ask"):
+        st.session_state.screen = "ask_ai"
         st.rerun()
 with nav_cols[3]:
-    if st.button("⚙️ Manage", use_container_width=True, type="primary" if current_active_tab == "⚙️ Manage" else "secondary"):
-        st.session_state.current_screen = "⚙️ Manage / Exit Flow"
+    if st.button("⚙️ Manage", use_container_width=True, type="primary" if st.session_state.screen == "manage" else "secondary", key="top_nav_manage"):
+        st.session_state.screen = "manage"
         st.rerun()
 
 # Clean collapsible Usability Guide
@@ -289,7 +284,7 @@ with st.expander("🧪 Test Guide & Cohort Tasks", expanded=False):
 # =====================================================================
 # SCREEN 1: GROWW PORTFOLIO DASHBOARD (MOBILE-FIRST)
 # =====================================================================
-if st.session_state.current_screen == "📱 Holdings":
+if st.session_state.screen == "holdings":
     # Compact User & Fund Header
     st.markdown(f"""
     <div style="display: flex; justify-content: space-between; align-items: baseline; margin: 6px 0 10px 0;">
@@ -316,8 +311,9 @@ if st.session_state.current_screen == "📱 Holdings":
     </div>
     """, unsafe_allow_html=True)
     
-    if st.button("Open My Monthly Perspective Story ✨", type="primary", use_container_width=True):
-        st.session_state.current_screen = "📖 Monthly Perspective Story"
+    if st.button("Open My Monthly Perspective Story ✨", type="primary", use_container_width=True, key="btn_hero_open_story"):
+        st.session_state.screen = "story"
+        st.session_state.story_step = 0
         st.rerun()
     
     # Portfolio Overview: Compact 2x2 Mobile Grid (Zero scrolling needed!)
@@ -359,15 +355,21 @@ if st.session_state.current_screen == "📱 Holdings":
     """, unsafe_allow_html=True)
     
     # Active SIP Holdings Card
-    status_text = "⏸️ Paused for next month" if st.session_state.skipped_month else "🟢 Active AutoPay"
-    next_date = "Dec 5, 2026" if st.session_state.skipped_month else "Nov 5, 2026"
+    if st.session_state.skipped_month:
+        status_text = f"⏸️ Paused ({st.session_state.pause_duration if st.session_state.pause_duration else 'Next Month'})"
+        status_color = "#E67E22"
+        next_date = "Dec 5, 2026"
+    else:
+        status_text = "🟢 Active AutoPay"
+        status_color = "#00A87E"
+        next_date = "Nov 5, 2026"
     
     st.markdown(f"""
     <div style="background: #FFFFFF; border: 1px solid #DCE1E7; border-radius: 14px; padding: 12px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); margin-bottom: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
             <div>
                 <div style="font-size: 0.88rem; font-weight: 700; color: #191C1F;">{user['fund_name']}</div>
-                <div style="font-size: 0.72rem; color: {'#E67E22' if st.session_state.skipped_month else '#00A87E'}; font-weight: 600; margin-top: 2px;">{status_text} • Next: {next_date}</div>
+                <div style="font-size: 0.72rem; color: {status_color}; font-weight: 600; margin-top: 2px;">{status_text} • Next: {next_date}</div>
             </div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; padding-top: 8px; border-top: 1px solid #EEF1F4;">
@@ -389,25 +391,20 @@ if st.session_state.current_screen == "📱 Holdings":
     
     col_act1, col_act2 = st.columns(2)
     with col_act1:
-        if st.button("What is XIRR? ℹ️", use_container_width=True):
-            st.session_state.current_screen = "💬 Ask About My SIP"
+        if st.button("What is XIRR? ℹ️", use_container_width=True, key="btn_holdings_xirr"):
+            st.session_state.screen = "ask_ai"
             st.session_state.sip_query = "What does XIRR mean in simple words?"
             st.rerun()
     with col_act2:
-        if st.button("Manage SIP ⚙️", use_container_width=True):
-            st.session_state.current_screen = "⚙️ Manage / Exit Flow"
+        if st.button("Manage SIP ⚙️", use_container_width=True, key="btn_holdings_manage"):
+            st.session_state.screen = "manage"
             st.rerun()
 
 # =====================================================================
 # SCREEN 2: INTERACTIVE PERSPECTIVE STORY MODE (MOBILE-FIRST)
 # =====================================================================
-elif st.session_state.current_screen == "📖 Monthly Perspective Story":
+elif st.session_state.screen == "story":
     # Story Top Bar
-    step_titles = [
-        "1. Consistency Streak",
-        "2. Rupee-Cost Averaging",
-        "3. Long-Term Compass"
-    ]
     curr_step = st.session_state.story_step
     
     st.markdown(f"""
@@ -453,7 +450,7 @@ elif st.session_state.current_screen == "📖 Monthly Perspective Story":
             
             st.markdown("---")
             st.markdown("##### 🎮 Simulator: What if NAV fluctuates?")
-            sim_nav = st.slider("Simulate NAV (₹):", min_value=30.0, max_value=55.0, value=float(m['current_nav']), step=0.5)
+            sim_nav = st.slider("Simulate NAV (₹):", min_value=30.0, max_value=55.0, value=float(m['current_nav']), step=0.5, key="story_slider_nav")
             sim_units = user['monthly_sip'] / sim_nav
             st.caption(f"At ₹{sim_nav:.2f} NAV, ₹{user['monthly_sip']:,} buys **{sim_units:.2f} units**. Lower prices accumulate more assets.")
             
@@ -470,28 +467,28 @@ elif st.session_state.current_screen == "📖 Monthly Perspective Story":
     s_col1, s_col2 = st.columns(2)
     with s_col1:
         if curr_step > 0:
-            if st.button("⬅ Previous Card", use_container_width=True):
+            if st.button("⬅ Previous Card", use_container_width=True, key="btn_story_prev"):
                 st.session_state.story_step -= 1
                 st.rerun()
         else:
-            if st.button("⬅ Back to Holdings", use_container_width=True):
-                st.session_state.current_screen = "📱 Holdings"
+            if st.button("⬅ Back to Holdings", use_container_width=True, key="btn_story_back_holdings"):
+                st.session_state.screen = "holdings"
                 st.rerun()
     with s_col2:
         if curr_step < 2:
-            if st.button("Next Card ➔", type="primary", use_container_width=True):
+            if st.button("Next Card ➔", type="primary", use_container_width=True, key="btn_story_next"):
                 st.session_state.story_step += 1
                 st.rerun()
         else:
-            if st.button("Complete Story 🏁", type="primary", use_container_width=True):
-                st.session_state.current_screen = "📱 Holdings"
+            if st.button("Complete Story 🏁", type="primary", use_container_width=True, key="btn_story_finish"):
+                st.session_state.screen = "holdings"
                 st.session_state.story_step = 0
                 st.rerun()
 
 # =====================================================================
 # SCREEN 3: ASK ABOUT MY SIP (MOBILE-FIRST)
 # =====================================================================
-elif st.session_state.current_screen == "💬 Ask About My SIP":
+elif st.session_state.screen == "ask_ai":
     st.markdown("""
     <div style="margin: 4px 0 8px 0;">
         <div style="font-size: 1.05rem; font-weight: 800; color: #191C1F;">💬 Ask About My SIP</div>
@@ -503,26 +500,32 @@ elif st.session_state.current_screen == "💬 Ask About My SIP":
     st.caption("Common questions:")
     c_chip1, c_chip2 = st.columns(2)
     with c_chip1:
-        if st.button("📉 Why is return negative?", use_container_width=True):
+        if st.button("📉 Why is return negative?", use_container_width=True, key="chip_why_neg"):
             st.session_state.sip_query = "Why are my returns red even though I have been disciplined?"
+            st.rerun()
     with c_chip2:
-        if st.button("⏱️ What is XIRR?", use_container_width=True):
+        if st.button("⏱️ What is XIRR?", use_container_width=True, key="chip_what_xirr"):
             st.session_state.sip_query = "What does XIRR mean in simple words?"
+            st.rerun()
             
-    if st.button("⚠️ Should I stop this fund?", use_container_width=True):
+    if st.button("⚠️ Should I stop this fund?", use_container_width=True, key="chip_should_stop"):
         st.session_state.sip_query = "Should I sell this fund because it is in negative?"
+        st.rerun()
     
-    # Form input
-    with st.form(key="ask_sip_form"):
+    # Input field and submit button
+    q_col1, q_col2 = st.columns([4, 1])
+    with q_col1:
         query_val = st.text_input(
             "Your Question:",
             value=st.session_state.sip_query,
             placeholder="e.g. Why did my money drop today?",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            key="input_ask_text"
         )
-        submitted = st.form_submit_button("Ask ✨", type="primary", use_container_width=True)
+    with q_col2:
+        submitted = st.button("Ask ✨", type="primary", use_container_width=True, key="btn_ask_action")
         
-    active_q = query_val.strip() if query_val else None
+    active_q = query_val.strip() if query_val else st.session_state.sip_query.strip()
     
     if active_q:
         with st.spinner("Consulting verified ledger with SEBI safety gates..."):
@@ -552,7 +555,7 @@ elif st.session_state.current_screen == "💬 Ask About My SIP":
 # =====================================================================
 # SCREEN 4: SMART EXIT & FLEXIBILITY FLOW (MOBILE-FIRST)
 # =====================================================================
-elif st.session_state.current_screen == "⚙️ Manage / Exit Flow":
+elif st.session_state.screen == "manage":
     st.markdown("""
     <div style="margin: 4px 0 8px 0;">
         <div style="font-size: 1.05rem; font-weight: 800; color: #191C1F;">⚙️ Manage & Pause Options</div>
@@ -573,19 +576,21 @@ elif st.session_state.current_screen == "⚙️ Manage / Exit Flow":
                 "📉 Worried about market dips",
                 "🛑 Permanently cancel SIP mandate"
             ],
-            label_visibility="collapsed"
+            label_visibility="collapsed",
+            key="radio_manage_reason"
         )
         
         st.markdown("---")
         if "Tight on cash" in exit_reason:
             st.info("💡 **Flexible Options:** Avoid bank bounce fees without terminating your long-term wealth habit.")
             
-            if st.button("Skip Next Month's Instalment", type="primary", use_container_width=True):
+            if st.button("Skip Next Month's Instalment", type="primary", use_container_width=True, key="btn_action_skip"):
                 st.session_state.skipped_month = True
+                st.session_state.pause_duration = "1 Month"
                 st.balloons()
                 st.success("Next instalment skipped with zero fee! AutoPay resumes automatically next month.")
                 
-            if st.button("Move Date to 10th (Post-Salary)", use_container_width=True):
+            if st.button("Move Date to 10th (Post-Salary)", use_container_width=True, key="btn_action_move_date"):
                 st.success("SIP debit date rescheduled to the 10th of every month.")
                 
         elif "Worried about market dips" in exit_reason:
@@ -599,19 +604,23 @@ elif st.session_state.current_screen == "⚙️ Manage / Exit Flow":
                     "2 Months (Resume in Jan 2027)",
                     "3 Months (Resume in Feb 2027)",
                     "6 Months (Resume in May 2027)"
-                ]
+                ],
+                key="select_pause_months"
             )
-            if st.button("Proceed with Pausing ✨", type="primary", use_container_width=True):
+            if st.button("Proceed with Pausing ✨", type="primary", use_container_width=True, key="btn_action_pause"):
                 st.session_state.skipped_month = True
+                st.session_state.pause_duration = pause_choice.split(" ")[0] + " " + pause_choice.split(" ")[1]
                 st.balloons()
                 st.success(f"Done! Your SIP is paused for {pause_choice}. Your AutoPay mandate stays active.")
                 
-            if st.button("Read Monthly Perspective 📖", use_container_width=True):
-                st.session_state.current_screen = "📖 Monthly Perspective Story"
+            if st.button("Read Monthly Perspective 📖", use_container_width=True, key="btn_manage_go_story"):
+                st.session_state.screen = "story"
+                st.session_state.story_step = 0
                 st.rerun()
                 
         else:
             st.caption("You have full control over your funds. Zero lock-in.")
-            if st.button("Proceed with SIP Cancellation", type="primary", use_container_width=True):
+            if st.button("Proceed with SIP Cancellation", type="primary", use_container_width=True, key="btn_action_cancel"):
                 st.session_state.skipped_month = False
+                st.session_state.pause_duration = ""
                 st.warning(f"Your SIP mandate has been cancelled. Your {m['total_units']:.2f} accumulated units remain safe in your Groww portfolio.")
