@@ -436,8 +436,8 @@ def create_deck():
     # SLIDE 5: Defining the Problem (6-Box Framework)
     # ==========================================
     slide5 = prs.slides.add_slide(blank_layout)
-    add_header(slide5, "Defining the Problem: The NextLeap 6-Box Framework",
-               "Framing Root Causes, Target Cohort, Validation Evidence, Business Value, and Strategic Timing")
+    add_header(slide5, "First-Time Investors Lapse Due to an Early Conviction Deficit and Red-Return Panic",
+               "The NextLeap 6-Box Framework: Deconstructing Root Causes, Target Cohort, and Strategic Value for Groww")
     
     t_shape5 = slide5.shapes.add_table(2, 3, Inches(0.8), Inches(1.5), Inches(11.733), Inches(5.3))
     table5 = t_shape5.table
@@ -709,8 +709,8 @@ def create_deck():
     # SLIDE 9: GTM Strategy & Measuring Success
     # ==========================================
     slide9 = prs.slides.add_slide(blank_layout)
-    add_header(slide9, "GTM Strategy and Measuring Success",
-               "Phased Rollout Plan & Guardrailed Metrics Architecture to Defend 12-Month SIP Retention")
+    add_header(slide9, "Phased Rollout to High-Drop-Off Cohorts While Tracking 12-Month Mandate Health",
+               "4-Stage GTM Architecture & Guardrailed Metrics Hierarchy (Leading, Lagging, and Guardrail Indicators)")
     
     # Left Card: GTM Rollout
     add_card(slide9, Inches(0.8), Inches(1.5), Inches(5.5), Inches(5.3))
@@ -790,7 +790,7 @@ def create_deck():
     # SLIDE 10: Measuring the Impact and Risks
     # ==========================================
     slide10 = prs.slides.add_slide(blank_layout)
-    add_header(slide10, "Measuring the Impact and Risks",
+    add_header(slide10, "Protecting ₹26.8 Cr Annualized Inflows While Mitigating Advice and Bounce Risks",
                "Multi-Year Enterprise Financial Impact Sizing & Pre-Mortem Risk Mitigation Strategies")
     
     # Left Card: Impact Sizing
