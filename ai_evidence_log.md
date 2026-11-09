@@ -86,7 +86,37 @@ As part of the evaluation lifecycle, 3 specific failure patterns were flagged an
 
 ---
 
-## 4. Prototype Usability Testing & User Feedback Protocol (Part 6)
+## 4. Where AI Genuinely Earns Its Place vs. What a Non-AI Version Misses
+
+To fulfill the NextLeap requirement (*"Explain where in the user journey AI genuinely earns its place, and what a non-AI version would miss"*), this section details the comparative architectural analysis:
+
+### 1. Where in the User Journey AI Genuinely Earns Its Place
+* **The Critical Touchpoint:** Months 2 to 6 of the first-time investor journey—specifically during the **first market correction or dip**.
+* **The Psychological Context:**
+  * When a user checks their dashboard in Month 3 and sees `-₹520 (-5.78%)` in red with a confusing `XIRR: -14.2%`, they experience acute buyer's remorse and cognitive anxiety.
+  * Their doubts are unstructured, emotional, and intensely personal: *"Why did my money drop if I followed the rules?", "Is my fund failing?", "What does XIRR mean in plain English?"*
+* **The Role of AI:**
+  * AI earns its place by taking **dynamic, user-specific ledger state** (their exact monthly instalments, NAV changes, unit counts, and duration) and synthesizing personalized, plain-English context in real-time.
+  * It translates cryptic annualization math into intuitive everyday analogies (e.g. explaining why XIRR is like a car speedometer at a red light in early months) and frames market drawdowns as discounted unit accumulation.
+
+### 2. What a Non-AI Version (Static Tooltips & Rule Engines) Would Miss
+
+| Evaluation Vector | Non-AI Version (Static FAQs / Tooltips / Rules) | AI-Native Eval-Gated Companion (Groww Perspective) | What the Non-AI Version Misses |
+| :--- | :--- | :--- | :--- |
+| **Personalized Context** | Static tooltips explain generic definitions (*"NAV is Net Asset Value"*). | Synthesizes the user's specific ledger: *"Your ₹3,000 bought 78.70 units at ₹38.12 (6.55 extra units vs last month), lowering your average cost to ₹40.46."* | **Cannot connect abstract theory to the user's personal financial numbers.** |
+| **Query Flexibility & Nuance** | Keyword lookup or rule engines break when phrasing diverges (e.g. *"Why is my dashboard red?"* vs *"Did I lose money?"*). | Natural language understanding comprehends over 50+ linguistic variations of beginner anxiety while adhering to intent classes. | **Fails to comprehend conversational, colloquial phrasing, forcing user frustration.** |
+| **Anxiety De-escalation** | Impersonal, dense help articles require heavy reading effort during high emotional distress. | Conversational, supportive tone using proven pedagogical metaphors (e.g. gold grams, speedometer) tailored to the user's exact tenure. | **Fails to reduce cognitive fatigue; users abandon the app instead of reading articles.** |
+| **Support Deflection** | Drives users to external search (YouTube/Google) or forces expensive customer support tickets. | Resolves doubts in-context in seconds with a visible `✔ Verified Ledger (Score: 100/100)` badge. | **High operational support costs (₹120–₹180/ticket) and loss of user to external misinformation.** |
+
+### 3. The Eval-Gated Guardrail & Safe Fallback Architecture
+* **Visible Quality Check:** Every AI response renders an emerald verified badge: `✔ Verified Ledger (Score: 100/100) • SEBI Non-Advisory Compliant`.
+* **Deterministic Arithmetic Separation:** The LLM does zero math; numbers are pre-calculated by Python (`portfolio_data.py`), preventing hallucinated financial figures.
+* **Safe Fallback (Declining to Answer):** If a user asks for stock tips, fund switches, or market timing (*"Should I sell now?"*), the engine strictly declines:  
+  * *“🛡️ SEBI Compliance Guardrail: Groww cannot recommend buying, holding, or exiting specific mutual funds. As an educational tool, I can only explain how market cycles and Rupee-Cost Averaging work.”*
+
+---
+
+## 5. Prototype Usability Testing & User Feedback Protocol (Part 6)
 
 To validate whether the AI-native companion successfully bridges the "Conviction Cliff", task-based usability interviews were conducted with target first-time retail SIP investors using the live production mobile MVP.
 
@@ -119,7 +149,7 @@ To validate whether the AI-native companion successfully bridges the "Conviction
 
 ---
 
-## 5. Comprehensive Business Impact Sizing Model
+## 6. Comprehensive Business Impact Sizing Model
 
 To demonstrate commercial viability and direct business impact on Groww's enterprise growth, the financial model evaluates cohort retention economics over 1-year and 3-year horizons:
 
@@ -159,7 +189,7 @@ To demonstrate commercial viability and direct business impact on Groww's enterp
 
 ---
 
-## 6. Pre-Mortem Risk Analysis & Mitigation Strategies
+## 7. Pre-Mortem Risk Analysis & Mitigation Strategies
 
 To safeguard enterprise reputation, user trust, and regulatory adherence, the product architecture incorporates four strict risk mitigation guardrails:
 
