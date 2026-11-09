@@ -47,14 +47,14 @@ def create_deck():
         p2.font.color.rgb = SLATE_MUT
 
     def add_footer(slide, placeholder_text, slide_num):
-        tb = slide.shapes.add_textbox(Inches(0.8), Inches(7.05), Inches(11.733), Inches(0.35))
+        tb = slide.shapes.add_textbox(Inches(0.8), Inches(7.05), Inches(9.5), Inches(0.35))
         tf = tb.text_frame
         tf.word_wrap = True
         tf.margin_left = tf.margin_top = tf.margin_right = tf.margin_bottom = 0
         p = tf.paragraphs[0]
         p.text = f"{placeholder_text}   |   NextLeap PM Graduation Project • Groww Growth Track • Strictly Anonymized"
         p.font.name = "Arial"
-        p.font.size = Pt(13)
+        p.font.size = Pt(14)
         p.font.color.rgb = SLATE_MUT
         
         tb_num = slide.shapes.add_textbox(Inches(10.5), Inches(7.05), Inches(2.033), Inches(0.35))
@@ -64,7 +64,7 @@ def create_deck():
         p_num.text = f"Slide {slide_num} of 10"
         p_num.alignment = PP_ALIGN.RIGHT
         p_num.font.name = "Arial"
-        p_num.font.size = Pt(13)
+        p_num.font.size = Pt(14)
         p_num.font.bold = True
         p_num.font.color.rgb = DARK_NAVY
 
