@@ -12,18 +12,18 @@ def create_deck():
     prs.slide_height = Inches(7.5)
     blank_layout = prs.slide_layouts[6]
 
-    # Color Palette
-    DARK_NAVY = RGBColor(15, 23, 42)      # #0F172A
-    EMERALD   = RGBColor(5, 150, 105)     # #059669
-    CORAL_RED = RGBColor(220, 38, 38)     # #DC2626
-    SLATE_BODY= RGBColor(51, 65, 85)      # #334155
-    SLATE_MUT = RGBColor(100, 116, 139)   # #64748B
+    # High-Contrast Color Palette
+    DARK_NAVY = RGBColor(15, 23, 42)      # #0F172A (Deep Slate - High contrast)
+    EMERALD   = RGBColor(5, 150, 105)     # #059669 (Groww Green)
+    CORAL_RED = RGBColor(220, 38, 38)     # #DC2626 (Alert Red)
+    SLATE_BODY= RGBColor(30, 41, 59)      # #1E293B (Dark Slate for body text)
+    SLATE_MUT = RGBColor(71, 85, 105)     # #475569 (Medium Slate for secondary)
     CARD_BG   = RGBColor(248, 250, 252)   # #F8FAFC
-    CARD_BDR  = RGBColor(226, 232, 240)   # #E2E8F0
+    CARD_BDR  = RGBColor(203, 213, 225)   # #CBD5E1 (Visible border)
     WHITE     = RGBColor(255, 255, 255)
     LIGHT_EMR = RGBColor(236, 253, 245)   # #ECFDF5
     LIGHT_RED = RGBColor(254, 242, 242)   # #FEF2F2
-    LIGHT_BLU = RGBColor(240, 249, 255)   # #F0F9FF
+    LIGHT_HDR = RGBColor(241, 245, 249)   # #F1F5F9
 
     def add_header(slide, title_text, subtitle_text):
         tb = slide.shapes.add_textbox(Inches(0.8), Inches(0.45), Inches(11.733), Inches(0.95))
@@ -81,6 +81,22 @@ def create_deck():
             shape.line.fill.background()
         return shape
 
+    def format_cell(cell, text, font_size=10, bold=False, color=DARK_NAVY, align=PP_ALIGN.LEFT, bg_color=WHITE):
+        cell.text = text
+        cell.fill.solid()
+        cell.fill.fore_color.rgb = bg_color
+        for p in cell.text_frame.paragraphs:
+            p.font.name = "Arial"
+            p.font.size = Pt(font_size)
+            p.font.bold = bold
+            p.font.color.rgb = color
+            p.alignment = align
+            for r in p.runs:
+                r.font.name = "Arial"
+                r.font.size = Pt(font_size)
+                r.font.bold = bold
+                r.font.color.rgb = color
+
     # ==========================================
     # SLIDE 1: Business Metric Decomposition
     # ==========================================
@@ -97,6 +113,7 @@ def create_deck():
     tf1.margin_left = tf1.margin_top = tf1.margin_right = tf1.margin_bottom = 0
     p = tf1.paragraphs[0]
     p.text = "🌟 NORTH STAR METRIC"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(13)
     p.font.color.rgb = EMERALD
@@ -104,6 +121,7 @@ def create_deck():
     
     p = tf1.add_paragraph()
     p.text = "% of First-Time Investors with an Active SIP at Month 12"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(12)
     p.font.color.rgb = DARK_NAVY
@@ -111,12 +129,14 @@ def create_deck():
     
     p = tf1.add_paragraph()
     p.text = "Formula: Active = ≥1 successful instalment in trailing 30 days at Month 12 / Total First-Time Cohort."
+    p.font.name = "Arial"
     p.font.size = Pt(11)
     p.font.color.rgb = SLATE_BODY
     p.space_after = Pt(4)
 
     p = tf1.add_paragraph()
     p.text = "Core Goal: Defends genuine compounding habit. Filters out one-off setup spikes."
+    p.font.name = "Arial"
     p.font.size = Pt(10.5)
     p.font.color.rgb = SLATE_MUT
 
@@ -128,6 +148,7 @@ def create_deck():
     tf2.margin_left = tf2.margin_top = tf2.margin_right = tf2.margin_bottom = 0
     p = tf2.paragraphs[0]
     p.text = "🎯 PRIMARY METRICS"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(13)
     p.font.color.rgb = DARK_NAVY
@@ -142,11 +163,13 @@ def create_deck():
         p = tf2.add_paragraph()
         run1 = p.add_run()
         run1.text = "• " + b_title
+        run1.font.name = "Arial"
         run1.font.bold = True
         run1.font.size = Pt(11)
         run1.font.color.rgb = DARK_NAVY
         run2 = p.add_run()
         run2.text = b_desc
+        run2.font.name = "Arial"
         run2.font.size = Pt(10.5)
         run2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(2)
@@ -159,6 +182,7 @@ def create_deck():
     tf3.margin_left = tf3.margin_top = tf3.margin_right = tf3.margin_bottom = 0
     p = tf3.paragraphs[0]
     p.text = "⚙️ L1 / INPUT METRICS"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(13)
     p.font.color.rgb = DARK_NAVY
@@ -174,11 +198,13 @@ def create_deck():
         p = tf3.add_paragraph()
         run1 = p.add_run()
         run1.text = "• " + b_title
+        run1.font.name = "Arial"
         run1.font.bold = True
         run1.font.size = Pt(10.5)
         run1.font.color.rgb = DARK_NAVY
         run2 = p.add_run()
         run2.text = b_desc
+        run2.font.name = "Arial"
         run2.font.size = Pt(10)
         run2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(2)
@@ -199,18 +225,9 @@ def create_deck():
     ]
     for i, h in enumerate(headers_s1):
         cell = table.cell(0, i)
-        cell.text = h
-        p = cell.text_frame.paragraphs[0]
-        p.font.bold = True
-        p.font.size = Pt(10.5)
-        p.alignment = PP_ALIGN.CENTER
-        cell.fill.solid()
-        if i == 2:
-            cell.fill.fore_color.rgb = LIGHT_RED
-            p.font.color.rgb = CORAL_RED
-        else:
-            cell.fill.fore_color.rgb = RGBColor(241, 245, 249)
-            p.font.color.rgb = DARK_NAVY
+        bg_col = LIGHT_RED if i == 2 else LIGHT_HDR
+        txt_col = CORAL_RED if i == 2 else DARK_NAVY
+        format_cell(cell, h, font_size=10.5, bold=True, color=txt_col, align=PP_ALIGN.CENTER, bg_color=bg_col)
 
     row_data_s1 = [
         ("User Journey & Actions", [
@@ -239,15 +256,8 @@ def create_deck():
     for row_idx, (r_name, r_vals) in enumerate(row_data_s1, start=1):
         for col_idx, text_val in enumerate(r_vals):
             cell = table.cell(row_idx, col_idx)
-            cell.text = text_val
-            p = cell.text_frame.paragraphs[0]
-            p.font.size = Pt(9.5)
-            p.font.color.rgb = SLATE_BODY
-            cell.fill.solid()
-            if col_idx == 2:
-                cell.fill.fore_color.rgb = RGBColor(255, 245, 245)
-            else:
-                cell.fill.fore_color.rgb = WHITE
+            bg_col = RGBColor(255, 245, 245) if col_idx == 2 else WHITE
+            format_cell(cell, text_val, font_size=9.5, bold=False, color=SLATE_BODY, align=PP_ALIGN.LEFT, bg_color=bg_col)
 
     add_footer(slide1, "[Placeholder: Link to Business Metric Decomposition Doc]", 1)
 
@@ -302,6 +312,7 @@ def create_deck():
         
         p = tf.paragraphs[0]
         p.text = title_ic
+        p.font.name = "Arial"
         p.font.bold = True
         p.font.size = Pt(14)
         p.font.color.rgb = DARK_NAVY
@@ -309,12 +320,14 @@ def create_deck():
         
         p = tf.add_paragraph()
         p.text = desc_ic
+        p.font.name = "Arial"
         p.font.size = Pt(11)
         p.font.color.rgb = SLATE_MUT
         p.space_after = Pt(6)
         
         p = tf.add_paragraph()
         p.text = quote_ic
+        p.font.name = "Arial"
         p.font.italic = True
         p.font.size = Pt(12)
         p.font.color.rgb = EMERALD
@@ -322,6 +335,7 @@ def create_deck():
         
         p = tf.add_paragraph()
         p.text = author_ic
+        p.font.name = "Arial"
         p.font.bold = True
         p.font.size = Pt(10.5)
         p.font.color.rgb = DARK_NAVY
@@ -344,6 +358,7 @@ def create_deck():
     
     p = tf_pers.paragraphs[0]
     p.text = "👤 TARGET PERSONA: SUSHANT"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(15)
     p.font.color.rgb = DARK_NAVY
@@ -361,11 +376,13 @@ def create_deck():
         p = tf_pers.add_paragraph()
         r1 = p.add_run()
         r1.text = "• " + pt_title
+        r1.font.name = "Arial"
         r1.font.bold = True
         r1.font.size = Pt(11.5)
         r1.font.color.rgb = DARK_NAVY
         r2 = p.add_run()
         r2.text = pt_desc
+        r2.font.name = "Arial"
         r2.font.size = Pt(11)
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(4)
@@ -379,6 +396,7 @@ def create_deck():
     
     p = tf_crit.paragraphs[0]
     p.text = "⚡ THE CRITICAL DROP-OFF MOMENT (MONTH 3)"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(15)
     p.font.color.rgb = CORAL_RED
@@ -386,6 +404,7 @@ def create_deck():
     
     p = tf_crit.add_paragraph()
     p.text = "The Trigger Event: Month 3 auto-debit clears ₹3,000. Broader market undergoes a normal 4% dip."
+    p.font.name = "Arial"
     p.font.size = Pt(11.5)
     p.font.color.rgb = SLATE_BODY
     p.space_after = Pt(6)
@@ -393,6 +412,7 @@ def create_deck():
     # Visual Red Box
     p = tf_crit.add_paragraph()
     p.text = "What Groww Displays (Visual Panic Trigger):"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(11)
     p.font.color.rgb = DARK_NAVY
@@ -400,6 +420,7 @@ def create_deck():
     
     p = tf_crit.add_paragraph()
     p.text = "  Total Invested: ₹9,000   |   Current Value: ₹8,480\n  Total Returns: -₹520.00 (-5.78%)   |   Annualized (XIRR): -14.2%"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(11)
     p.font.color.rgb = CORAL_RED
@@ -415,11 +436,13 @@ def create_deck():
         p = tf_crit.add_paragraph()
         r1 = p.add_run()
         r1.text = st_title
+        r1.font.name = "Arial"
         r1.font.bold = True
         r1.font.size = Pt(11)
         r1.font.color.rgb = DARK_NAVY
         r2 = p.add_run()
         r2.text = st_desc
+        r2.font.name = "Arial"
         r2.font.size = Pt(10.5)
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(3)
@@ -462,17 +485,28 @@ def create_deck():
         cell.fill.fore_color.rgb = CARD_BG
         tf = cell.text_frame
         tf.word_wrap = True
+        tf.clear()
+        
         p = tf.paragraphs[0]
         p.text = b_title
+        p.font.name = "Arial"
         p.font.bold = True
         p.font.size = Pt(12)
         p.font.color.rgb = EMERALD if "VALUE" in b_title else DARK_NAVY
         p.space_after = Pt(4)
+        for r in p.runs:
+            r.font.name = "Arial"
+            r.font.bold = True
+            r.font.color.rgb = EMERALD if "VALUE" in b_title else DARK_NAVY
         
-        p = tf.add_paragraph()
-        p.text = b_desc
-        p.font.size = Pt(10)
-        p.font.color.rgb = SLATE_BODY
+        p2 = tf.add_paragraph()
+        p2.text = b_desc
+        p2.font.name = "Arial"
+        p2.font.size = Pt(10)
+        p2.font.color.rgb = SLATE_BODY
+        for r in p2.runs:
+            r.font.name = "Arial"
+            r.font.color.rgb = SLATE_BODY
 
     add_footer(slide5, "[Placeholder: Link to Problem Definition Working Doc]", 5)
 
@@ -491,12 +525,14 @@ def create_deck():
     tf.word_wrap = True
     p = tf.paragraphs[0]
     p.text = "👑 SELECTED CHAMPION: GROWW PERSPECTIVE (AI Companion)"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(13)
     p.font.color.rgb = EMERALD
     p.space_after = Pt(3)
     p = tf.add_paragraph()
     p.text = "• Core Mechanism: Synthesizes raw ledger state into 3-card Monthly Debrief + NAV Simulator + \"Ask About My SIP\" decryptor with SEBI eval-gates.\n• Why It Wins: Dynamically personalizes each user's exact numbers (78.70 discounted units bought), which static text cannot do.\n• Defends Habit: Pairs plain-English education with 1-click non-punitive Skip/Pause flexibility."
+    p.font.name = "Arial"
     p.font.size = Pt(10.5)
     p.font.color.rgb = SLATE_BODY
 
@@ -507,12 +543,14 @@ def create_deck():
     tf.word_wrap = True
     p = tf.paragraphs[0]
     p.text = "❌ EVALUATED & REJECTED ALTERNATIVES"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(13)
     p.font.color.rgb = CORAL_RED
     p.space_after = Pt(3)
     p = tf.add_paragraph()
     p.text = "1. Groww Clarity View (Beginner Mode Toggle):\n• What it is: A simple toggle switch that hides NAV and XIRR numbers.\n• Why Rejected: Passive hiding does not build financial conviction. Users still panic when total value drops below invested amount during market dips.\n\n2. Static Tooltips & In-App Articles (Groww Academy 2.0):\n• What it is: Infotip popups and educational articles on mutual fund basics.\n• Why Rejected: High cognitive load. Users in financial panic do not read generic 800-word articles. Cannot compute personal unit savings."
+    p.font.name = "Arial"
     p.font.size = Pt(10)
     p.font.color.rgb = SLATE_BODY
 
@@ -526,13 +564,7 @@ def create_deck():
     rice_headers = ["Solution Concept", "Reach (1–10)", "Impact (1–3)", "Confidence (0–1)", "Effort (1–5)", "RICE Score", "Rank"]
     for i, h in enumerate(rice_headers):
         cell = table6.cell(0, i)
-        cell.text = h
-        p = cell.text_frame.paragraphs[0]
-        p.font.bold = True
-        p.font.size = Pt(11)
-        p.alignment = PP_ALIGN.CENTER
-        cell.fill.solid()
-        cell.fill.fore_color.rgb = RGBColor(241, 245, 249)
+        format_cell(cell, h, font_size=11, bold=True, color=DARK_NAVY, align=PP_ALIGN.CENTER, bg_color=LIGHT_HDR)
 
     rice_rows = [
         ("👑 Groww Perspective (In-Context AI Companion)", "8", "3", "0.90", "3", "7.20", "Rank 1 (Selected)"),
@@ -542,19 +574,12 @@ def create_deck():
     for row_idx, r_data in enumerate(rice_rows, start=1):
         for col_idx, val in enumerate(r_data):
             cell = table6.cell(row_idx, col_idx)
-            cell.text = val
-            p = cell.text_frame.paragraphs[0]
-            p.font.size = Pt(10.5)
-            if col_idx in [1, 2, 3, 4, 5, 6]:
-                p.alignment = PP_ALIGN.CENTER
-            cell.fill.solid()
+            align_c = PP_ALIGN.CENTER if col_idx in [1, 2, 3, 4, 5, 6] else PP_ALIGN.LEFT
             if row_idx == 1:
-                cell.fill.fore_color.rgb = LIGHT_EMR
-                p.font.bold = True
-                p.font.color.rgb = EMERALD if col_idx in [0, 5, 6] else DARK_NAVY
+                col_c = EMERALD if col_idx in [0, 5, 6] else DARK_NAVY
+                format_cell(cell, val, font_size=10.5, bold=True, color=col_c, align=align_c, bg_color=LIGHT_EMR)
             else:
-                cell.fill.fore_color.rgb = WHITE
-                p.font.color.rgb = SLATE_BODY
+                format_cell(cell, val, font_size=10, bold=False, color=DARK_NAVY, align=align_c, bg_color=WHITE)
 
     add_footer(slide6, "[Placeholder: Link to Full RICE Prioritization Model]", 6)
 
@@ -565,7 +590,6 @@ def create_deck():
     add_header(slide7, "An Eval-Gated, SEBI-Compliant In-App Companion Built and Deployed",
                "4-Pillar Architecture Translating Ledger Data into Plain-Language Conviction & Flexibility")
     
-    # 4 Mobile Screenshot Panels
     screens = [
         ("1. Contextual Anchor", "holdings_dashboard_2_clean.png",
          "Holdings surface reframes -₹520 loss via October Perspective card before panic sets in."),
@@ -589,6 +613,7 @@ def create_deck():
         tf.word_wrap = True
         p = tf.paragraphs[0]
         p.text = s_title
+        p.font.name = "Arial"
         p.font.bold = True
         p.font.size = Pt(11)
         p.alignment = PP_ALIGN.CENTER
@@ -605,6 +630,7 @@ def create_deck():
         tf_d.word_wrap = True
         p = tf_d.paragraphs[0]
         p.text = s_desc
+        p.font.name = "Arial"
         p.font.size = Pt(9.5)
         p.font.color.rgb = SLATE_BODY
         p.alignment = PP_ALIGN.CENTER
@@ -612,7 +638,7 @@ def create_deck():
     add_footer(slide7, "[Placeholder: Link to Live Interactive MVP & Evidence Log]", 7)
 
     # ==========================================
-    # SLIDE 8: User Testing Insights & V2 Roadmap
+    # SLIDE 8: User Testing Insights & V2 Roadmap (FIXED TEXT COLORS)
     # ==========================================
     slide8 = prs.slides.add_slide(blank_layout)
     add_header(slide8, "Prototype Testing Validates Anxiety Reduction; Surfaces Demand for V2 Expansion",
@@ -625,6 +651,7 @@ def create_deck():
     tf8_l.word_wrap = True
     p = tf8_l.paragraphs[0]
     p.text = "✅ WHAT REAL USERS VALIDATED (CONFIRMED)"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(14)
     p.font.color.rgb = EMERALD
@@ -644,21 +671,24 @@ def create_deck():
         p = tf8_l.add_paragraph()
         r1 = p.add_run()
         r1.text = "• " + v_title
+        r1.font.name = "Arial"
         r1.font.bold = True
         r1.font.size = Pt(11)
         r1.font.color.rgb = DARK_NAVY
         r2 = p.add_run()
         r2.text = v_desc
+        r2.font.name = "Arial"
         r2.font.size = Pt(10.5)
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(4)
 
-    # Right Card: Prioritized V2 Roadmap Table
+    # Right Card: Prioritized V2 Roadmap Table (100% EXPLICIT DARK TEXT)
     add_card(slide8, Inches(6.6), Inches(1.5), Inches(5.933), Inches(5.2))
     tb8_r = slide8.shapes.add_textbox(Inches(6.8), Inches(1.7), Inches(5.533), Inches(0.4))
     tf8_r = tb8_r.text_frame
     p = tf8_r.paragraphs[0]
     p.text = "📋 PRIORITIZED V2 ROADMAP (FROM USER TESTING)"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(14)
     p.font.color.rgb = DARK_NAVY
@@ -673,13 +703,7 @@ def create_deck():
     t8_headers = ["Priority", "V2 Enhancement", "Feedback Solved", "Effort"]
     for i, h in enumerate(t8_headers):
         cell = t8.cell(0, i)
-        cell.text = h
-        p = cell.text_frame.paragraphs[0]
-        p.font.bold = True
-        p.font.size = Pt(10.5)
-        p.alignment = PP_ALIGN.CENTER
-        cell.fill.solid()
-        cell.fill.fore_color.rgb = RGBColor(241, 245, 249)
+        format_cell(cell, h, font_size=11, bold=True, color=DARK_NAVY, align=PP_ALIGN.CENTER, bg_color=LIGHT_HDR)
 
     v2_rows = [
         ("P0", "Opportunistic Dip Top-Up\n(1-Click Lump Sum in Story)", "Desire to invest extra when units are on discount (Request a).", "Med"),
@@ -690,14 +714,10 @@ def create_deck():
     for r_idx, r_vals in enumerate(v2_rows, start=1):
         for c_idx, val in enumerate(r_vals):
             cell = t8.cell(r_idx, c_idx)
-            cell.text = val
-            p = cell.text_frame.paragraphs[0]
-            p.font.size = Pt(9.5)
-            if c_idx in [0, 3]:
-                p.alignment = PP_ALIGN.CENTER
-                p.font.bold = True
-            cell.fill.solid()
-            cell.fill.fore_color.rgb = WHITE
+            align_c = PP_ALIGN.CENTER if c_idx in [0, 3] else PP_ALIGN.LEFT
+            bold_c = True if c_idx in [0, 3] else False
+            color_c = EMERALD if c_idx == 0 else (DARK_NAVY if c_idx == 3 else SLATE_BODY)
+            format_cell(cell, val, font_size=10, bold=bold_c, color=color_c, align=align_c, bg_color=WHITE)
 
     add_footer(slide8, "[Placeholder: Link to User Testing Transcripts & V2 PRD]", 8)
 
@@ -715,6 +735,7 @@ def create_deck():
     tf9_l.word_wrap = True
     p = tf9_l.paragraphs[0]
     p.text = "🚀 4-PHASE GTM STAGED ROLLOUT STRATEGY"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(14)
     p.font.color.rgb = DARK_NAVY
@@ -734,11 +755,13 @@ def create_deck():
         p = tf9_l.add_paragraph()
         r1 = p.add_run()
         r1.text = "• " + ph_title + ": "
+        r1.font.name = "Arial"
         r1.font.bold = True
         r1.font.size = Pt(11)
         r1.font.color.rgb = DARK_NAVY
         r2 = p.add_run()
         r2.text = ph_desc
+        r2.font.name = "Arial"
         r2.font.size = Pt(10.5)
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(4)
@@ -750,6 +773,7 @@ def create_deck():
     tf9_r.word_wrap = True
     p = tf9_r.paragraphs[0]
     p.text = "📊 GUARDRAILED METRICS ARCHITECTURE"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(14)
     p.font.color.rgb = DARK_NAVY
@@ -765,11 +789,13 @@ def create_deck():
         p = tf9_r.add_paragraph()
         r1 = p.add_run()
         r1.text = m_title
+        r1.font.name = "Arial"
         r1.font.bold = True
         r1.font.size = Pt(11)
         r1.font.color.rgb = EMERALD if "North Star" in m_title else DARK_NAVY
         r2 = p.add_run()
         r2.text = m_desc
+        r2.font.name = "Arial"
         r2.font.size = Pt(10)
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(3)
@@ -790,6 +816,7 @@ def create_deck():
     tf10_l.word_wrap = True
     p = tf10_l.paragraphs[0]
     p.text = "💰 BUSINESS IMPACT SIZING (FINANCIAL MODEL)"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(14)
     p.font.color.rgb = EMERALD
@@ -808,11 +835,13 @@ def create_deck():
         p = tf10_l.add_paragraph()
         r1 = p.add_run()
         r1.text = "• " + ip_title
+        r1.font.name = "Arial"
         r1.font.bold = True
         r1.font.size = Pt(10.5)
         r1.font.color.rgb = DARK_NAVY
         r2 = p.add_run()
         r2.text = ip_desc
+        r2.font.name = "Arial"
         r2.font.size = Pt(10)
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(2)
@@ -824,6 +853,7 @@ def create_deck():
     tf10_r.word_wrap = True
     p = tf10_r.paragraphs[0]
     p.text = "🛡️ PRE-MORTEM RISK & MITIGATION STRATEGIES"
+    p.font.name = "Arial"
     p.font.bold = True
     p.font.size = Pt(14)
     p.font.color.rgb = CORAL_RED
@@ -843,11 +873,13 @@ def create_deck():
         p = tf10_r.add_paragraph()
         r1 = p.add_run()
         r1.text = "• " + r_title + "\n"
+        r1.font.name = "Arial"
         r1.font.bold = True
         r1.font.size = Pt(10.5)
         r1.font.color.rgb = DARK_NAVY
         r2 = p.add_run()
         r2.text = r_desc
+        r2.font.name = "Arial"
         r2.font.size = Pt(9.5)
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(3)
