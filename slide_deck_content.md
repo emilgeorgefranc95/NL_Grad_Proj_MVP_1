@@ -1,42 +1,35 @@
-# NextLeap PM Graduation Project: Complete Slide Deck Blueprint
+# NextLeap PM Graduation Project: 10-Slide Deck Blueprint
 
 **Target Company:** Groww | Growth Track  
 **File Name for Export:** `NL_Groww.pdf`  
-**Deck Structure:** Cover Slide + 10 Numbered Content Slides (Matches NextLeap "Top Fellow" Benchmark)  
+**Total Slides:** Exactly 10 Slides (Page 1 to Page 10)  
 **Strict Rule:** No fellow name or personal email anywhere on the slides!
 
 ---
 
-## Cover Slide: Title & Strategic Context (Page 1)
+## Slide 1: Business Metric Decomposition (Page 1)
 
-* **Slide Title:** Driving 12-Month SIP Continuation for First-Time Investors on Groww
-* **Subtitle:** An AI-Native Discovery Engine, Post-Investment Conviction Companion, and Evaluated Production Prototype
-* **Track:** Product Management Fellowship • Growth Track • Mutual Funds
-* **Strategic Problem Statement:** Starting an SIP is frictionless, but long-term continuation breaks down. Groww's strategic goal is to increase the % of first-time mutual fund investors who still have an active SIP 12 months after starting their first one.
-* **Hyperlinks (Bottom Banner):**
-  * [Live AI-Native MVP Prototype](https://nlgradprojmvp1-mxxgftodd6jewu6ahse9nu.streamlit.app/)
-  * [Live AI Discovery Engine](REPLACE_WITH_YOUR_CLAUDE_LINK)
-  * [AI Evidence Log & Golden Set Benchmark](https://github.com/emilgeorgefranc95/NL_Grad_Proj_MVP_1/blob/main/ai_evidence_log.md)
-  * [Primary User Research Notes](https://github.com/emilgeorgefranc95/NL_Grad_Proj_MVP_1/blob/main/user_interviews.md)
+* **Slide Title:** Breaking Down 12-Month SIP Continuation for First-Time Investors
+* **Subtitle:** Decomposing Retention into North Star, Primary, L1 Operational Metrics & The 5-Stage Lifecycle Journey
+* **Visual Layout:** Top Section: 3 Metric Columns | Bottom Section: 5-Stage Lifecycle Journey Table
 
----
+### Top Section: Metric Hierarchy
 
-## Slide 1: Business Metric Decomposition (Page 2)
+| NORTH STAR METRIC | PRIMARY METRICS | L1 / INPUT METRICS |
+| :--- | :--- | :--- |
+| **% of First-Time Mutual Fund Investors with an Active SIP at Month 12**<br><br>$$\text{12-Mo SIP Retention} = \frac{\text{First-time investors with } \ge 1 \text{ successful instalment in trailing 30 days at Month 12}}{\text{Total first-time investors who started their first SIP}}$$ | • **12-Month SIP Retention Rate:** Baseline $\sim 50\% \longrightarrow$ Target $56\%$ ($+6\%$ absolute lift).<br>• **Month 2–6 Churn Cliff Survival Rate:** Reduce drop-off during the critical friction window from $45\%$ churn to $<30\%$.<br>• **Average Inflow Retention:** Average monthly SIP amount preserved ($\sim ₹2,500/\text{month}$). | • **Mandate Execution Success Rate:** % of scheduled debits cleared without bank bounce penalties.<br>• **Contextual Engagement Rate:** % of active investors reviewing monthly portfolio perspective.<br>• **In-App Query Resolution Rate:** % of jargon/confusion queries resolved without support escalation.<br>• **Flexibility vs. Churn Ratio:** % of at-risk users choosing Skip/Pause over permanent cancellation. |
 
-* **Slide Title:** 12-Month SIP Continuation Breaks Down at the Month 2–6 "Conviction Cliff"
-* **North Star Metric Equation:**
-  $$\text{12-Mo SIP Retention} = \frac{\text{First-time investors with } \ge 1 \text{ successful instalment in trailing 30 days at Month 12}}{\text{Total first-time investors who started their first SIP}}$$
-* **The 5-Stage Lifecycle Funnel:**
-  1. *Month 0 (Setup):* Frictionless UPI setup; high initial intent and compounding optimism.
-  2. *Month 1 (First Debit):* Routine verification; negligible return (+₹10); novelty active.
-  3. *Months 2–6 (The Churn Cliff):* **CRITICAL DROP-OFF (40–50% churn).** First market dip occurs; dashboard flashes red returns and complex jargon (NAV, XIRR); zero contextual reassurance; cognitive fatigue triggers SIP cancellation.
-  4. *Months 7–11 (Habit Formation):* Survival past Month 6 yields >75% probability of reaching Month 12.
-  5. *Month 12+ (Long-Term Compounding):* Habit cemented; user begins voluntary SIP step-ups.
-* **Core Takeaway:** To move the North Star, Groww must solve the psychological "Conviction Deficit" during Months 2 to 6.
+### Bottom Section: The 5-Stage Lifecycle Journey Table
+
+| Stage / Journey | Month 0: Setup & First Mandate | Month 1: First Automated Debit | Months 2–6: The Churn Cliff (Market Volatility) 🔥 | Months 7–11: Habit Consolidation | Month 12+: Compounding & Step-Up |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **User Behaviour & Psychology** | High optimism, low financial literacy. Sets up UPI auto-pay expecting steady compounding. | Verifies debit notification. Negligible return (+₹10). Novelty active; low friction. | **CRITICAL DROP-OFF POINT (40–50% churn).** Encounters first market dip (-5%). Sees red returns (-₹520) and cryptic XIRR (-14.2%). Panic, buyer's remorse, cash tightness. | Routine stabilizes. User sees partial market recovery. Ignores daily noise if core rupee-cost averaging concept was understood. | Long-term investing habit cemented. Understands market cycles. Receptive to voluntary step-up. |
+| **Friction / Breakdown** | Overwhelmed by fund choices; unrealistic short-term expectations. | Disappointed by flat returns; lack of immediate gratification. | **The Conviction Deficit:** Legacy trading UI treats long-term SIP like day trading. Red numbers feel like capital loss. Bank debit timing anxiety. | Inactive tracking; lack of milestone reinforcement leads to passive drop-off. | SIP stagnates at original ₹1k–₹2k without inflation adjustment. |
+| **Desired Product Outcome (Groww Perspective)** | Frictionless mandate setup; clear 3–5 year wealth horizon expectation setting. | First investment milestone badge; establish consistency streak. | **Cognitive Reframing & Habit Defense:**<br>1. Explain market dips discount NAV and accumulate more units (Rupee-Cost Averaging).<br>2. Decrypt noisy XIRR in plain English.<br>3. Provide 1-click Skip/Pause to avoid bank bounce penalties. | Consistency streak celebration (6-month milestone); quarterly portfolio health check. | 12-month completion milestone; prompt 10% annual SIP step-up to beat inflation. |
 
 ---
 
-## Slide 2: AI-Powered Discovery Engine (Page 3)
+## Slide 2: AI-Powered Discovery Engine & Secondary Research (Page 2)
 
 * **Slide Title:** Public Investor Voice Reveals a Post-Onboarding Conviction Deficit
 * **Data Corpus Analyzed:** 9,000+ public retail investor conversations analyzed across Play Store (1,840 reviews), Reddit (4,700 comments on r/IndiaInvestments), TradingQ&A (310 threads), and YouTube Finance comments (2,450).
@@ -52,7 +45,7 @@
 
 ---
 
-## Slide 3: Primary User Research (Page 4)
+## Slide 3: Primary User Research (Page 3)
 
 * **Slide Title:** User Interviews Validate: Confusion and Lack of Handholding Drive Cancellation Intent
 * **Methodology:** 5 in-depth qualitative 1-on-1 interviews (30–45 mins) with retail SIP investors across Groww and competitor platforms.
@@ -65,10 +58,11 @@
      *“No one gives investment advice, but there was no handholding... had to search Google and YouTube to understand.”* — **Bijoy (38, Groww)**
   4. *Mandate Timing Anxiety:*  
      *“Groww intimates only 1 day before debit. If they gave 3–4 days advance notice, we could maintain funds in time to avoid bank penalties.”* — **Bijoy & Pradhul**
+* **Evidence Repository:** [Verbatim Interview Notes](https://github.com/emilgeorgefranc95/NL_Grad_Proj_MVP_1/blob/main/user_interviews.md)
 
 ---
 
-## Slide 4: Target User Segment & Critical Moment (Page 5)
+## Slide 4: Target User Segment & Critical Drop-Off Moment (Page 4)
 
 * **Slide Title:** Targeting First-Time Salaried Investors Entering the Underwhelming Quarter (Months 2–6)
 * **Target Segment Profile:**
@@ -83,7 +77,7 @@
 
 ---
 
-## Slide 5: Defining the Problem (The 6-Box Framework) (Page 6)
+## Slide 5: Defining the Problem (The 6-Box Framework) (Page 5)
 
 * **Slide Title:** Overwhelmed by Jargon and Unclear Metrics, First-Timers Lose Conviction in Months 2–6
 
@@ -95,7 +89,7 @@
 
 ---
 
-## Slide 6: Picking the Solution (Champion vs. Alternatives + RICE) (Page 7)
+## Slide 6: Picking the Solution (Champion vs. Alternatives + RICE) (Page 6)
 
 * **Slide Title:** Prioritizing an In-Context AI Companion to Translate Data into Plain-Language Conviction
 * **Winning Solution: 👑 GROWW PERSPECTIVE (Dynamic AI Portfolio Companion)**
@@ -112,7 +106,7 @@
 
 ---
 
-## Slide 7: The Solution in Action (Interactive MVP Walkthrough) (Page 8)
+## Slide 7: The Solution in Action (Interactive MVP Walkthrough) (Page 7)
 
 * **Slide Title:** An Eval-Gated, SEBI-Compliant In-App Companion Built and Deployed to Production
 * **Subtitle:** 4-Pillar Architecture Translating Ledger Data into Plain-Language Conviction & Flexibility
@@ -143,7 +137,7 @@
 
 ---
 
-## Slide 8: User Testing & Next Iteration Backlog (Page 9)
+## Slide 8: User Testing & Next Iteration Backlog (Page 8)
 
 * **Slide Title:** Prototype Testing Validates Anxiety Reduction; Surfaces Demand for Transactional Expansion
 * **Subtitle:** Usability Protocol with First-Time SIP Investors Validates Conviction Hypotheses
@@ -175,7 +169,7 @@
 
 ---
 
-## Slide 9: GTM Strategy and Measuring Success (Page 10)
+## Slide 9: GTM Strategy and Measuring Success (Page 9)
 
 * **Slide Title:** GTM Strategy and Measuring Success
 * **Subtitle:** Phased Rollout Plan & Guardrailed Metrics Architecture to Defend 12-Month SIP Retention
@@ -201,7 +195,7 @@
 ### Right Column: Measuring Success (Metrics Architecture)
 * **North Star Metric:**
   * **12-Month Active SIP Continuation Rate for First-Time Investors**  
-    (% of first-time mutual fund investors with $\ge 1$ successful instalment in trailing 30 days at Month 12).
+    $$\frac{\text{First-time investors with } \ge 1 \text{ successful instalment in trailing 30 days at Month 12}}{\text{Total first-time investors who started their first SIP}}$$
 * **Leading Indicators (Telemetry & Engagement):**
   * **Story Mode Completion Rate:** % of target users who complete the 3-card monthly debrief ($\ge 65\%$ target).
   * **AI Query Resolution Rate:** % of users whose question is answered without contacting support ($>85\%$ target).
@@ -218,14 +212,14 @@
 
 ---
 
-## Slide 10: Measuring the Impact and Risks (Page 11)
+## Slide 10: Measuring the Impact and Risks (Page 10)
 
 * **Slide Title:** Measuring the Impact and Risks
 * **Subtitle:** Multi-Year Enterprise Financial Impact Sizing & Pre-Mortem Risk Mitigation Strategies
 * **Visual Layout:** Two-Column Split (Left: Impact Sizing | Right: Risk & Mitigation Strategies)
 
 ### Left Column: Impact Sizing (Conservative Financial Model)
-* **Addressable Population:**
+* **Addressable Cohort Scale:**
   * **$\sim 500,000$ first-time mutual fund investors onboarded monthly** on Groww ($\sim 6\text{M}$ annual cohort).
 * **The Churn Problem Baseline:**
   * **$\sim 50\%$ drop off within 12 months**, with the steepest 40% churn cliff concentrated in Months 2–6 due to market dip anxiety and mandate debit friction.
@@ -258,19 +252,3 @@
 * **4. Performance & Page Latency Risk:**
   * *Risk:* Real-time LLM inference adding 2–4 seconds of loading delay to the core mutual fund holdings page.
   * *Mitigation:* Asynchronous overnight batch generation. Story cards and initial perspective summaries are pre-computed post-market close, ensuring $<200\text{ms}$ instantaneous native UI rendering.
-
----
-
-## Alternative: 10-Slide Deck if Cover Counts Toward Limit (Strict 10-Page Format)
-
-If your submission portal strictly caps total PDF pages at 10 (including Cover), merge Slide 4 & Slide 5 as follows:
-* **Slide 1:** Cover Slide (Title, Strategic Goal, Live Prototype Links)
-* **Slide 2:** Business Metric Decomposition (North Star & 5-Stage Funnel)
-* **Slide 3:** Secondary Research: AI Discovery Engine (9k+ Reviews)
-* **Slide 4:** Primary Research: 5 User Interviews & Verbatim Evidence
-* **Slide 5:** Target User Segment & Problem Definition (Merged Sushant Persona + 6-Box Framework)
-* **Slide 6:** Picking the Solution (RICE Prioritization Table)
-* **Slide 7:** The Solution in Action (4-Screen Mobile Prototype Walkthrough)
-* **Slide 8:** User Testing Insights & V2 Roadmap (Hypothesis Validation & Backlog)
-* **Slide 9:** GTM Strategy & Measuring Success (Phased Rollout + Metrics)
-* **Slide 10:** Measuring the Impact and Risks (Impact Sizing + Risk & Mitigation Strategies)
