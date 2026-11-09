@@ -32,16 +32,22 @@
 ## Slide 2: AI-Powered Discovery Engine & Secondary Research (Page 2)
 
 * **Slide Title:** Public Investor Voice Reveals a Post-Onboarding Conviction Deficit
-* **Data Corpus Analyzed:** 9,000+ public retail investor conversations analyzed across Play Store (1,840 reviews), Reddit (4,700 comments on r/IndiaInvestments), TradingQ&A (310 threads), and YouTube Finance comments (2,450).
-* **Key Signals Extracted:**
+* **Subtitle:** AI Synthesis of 327,385 Public Retail Investor Items Across Reddit, Play Store & YouTube
+* **Data Corpus Analyzed & Ingestion Pipeline:**
+  * **327,385 Total Public Items Collected:** Reddit 5 subreddits (286,390 posts), Google Play Store Groww reviews (8,000), YouTube finance comments (32,995).
+  * **15,005 Passed Relevance Filter:** Filtered for first-hand SIP experiences and explicit investor friction.
+  * **1,965 Relevant Evidence Items Tagged:** (1,553 rated strong evidence). 221 specific "lapse stories" where retail investors stopped, paused, or reduced SIPs.
+* **Golden Set Validation on Discovery Engine:**
+  * Hand-labeled 20-item Golden Set (10 Reddit, 10 Play Store) evaluating the AI search engine. Achieved **75% full/partial agreement** (30% full, 45% partial, 25% disagreed/corrected) with documented rejection examples.
+* **Key Signals Extracted (Why Investors Lapse in Months 2–6):**
   * **64%** of negative beginner reviews cite confusion over why portfolio value decreased despite regular monthly investing.
   * **52%** report feeling intimidated by XIRR and daily red/green P&L volatility.
-  * **38%** cite mandate debit timing friction (1-day reminder causing balance anxiety).
+  * **38%** cite mandate debit timing friction (1-day reminder causing balance anxiety and bounce fees).
 * **3 User Voice Extract Cards:**
-  * *Play Store:* “Started SIP 3 months ago. Dashboard shows -₹400 in red and XIRR -14%. Nobody tells you if this is normal. Stopped my auto-debit.”
-  * *Reddit:* “Groww treats mutual funds like stock trading. Why do I need to see 1-day change in red every morning for a 10-year investment?”
-  * *YouTube:* “Had a tight month and wanted to pause, but couldn't find an easy way, so I cancelled my mandate completely.”
-* **Artifact Links:** [Live Discovery Workflow](REPLACE_WITH_YOUR_CLAUDE_LINK) • [Detailed Synthesis Report](https://github.com/emilgeorgefranc95/NL_Grad_Proj_MVP_1/blob/main/ai_evidence_log.md)
+  * *Play Store (PS-03/PS-04):* “Started SIP 3 months ago. Dashboard shows red returns and XIRR -14%. Nobody tells you if this is normal. Stopped my auto-debit.”
+  * *Reddit (RD-02/RD-09):* “Groww treats mutual funds like stock trading. Why do I need to see 1-day change in red every morning for a 10-year investment?”
+  * *YouTube / Reddit Lapse:* “Had a tight month and wanted to pause, but couldn't find an easy way, so I cancelled my mandate completely.”
+* **Artifact Links:** [Live AI Evidence Log](REPLACE_WITH_YOUR_CLAUDE_LINK) • [Secondary Research Synthesis](https://github.com/emilgeorgefranc95/NL_Grad_Proj_MVP_1/blob/main/ai_evidence_log.md)
 
 ---
 
