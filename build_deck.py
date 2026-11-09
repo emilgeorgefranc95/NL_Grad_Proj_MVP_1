@@ -24,6 +24,8 @@ def create_deck():
     LIGHT_EMR = RGBColor(236, 253, 245)   # #ECFDF5
     LIGHT_RED = RGBColor(254, 242, 242)   # #FEF2F2
     LIGHT_HDR = RGBColor(241, 245, 249)   # #F1F5F9
+    BLUE_ACCENT = RGBColor(37, 99, 235)   # #2563EB
+    STAGE_BG    = RGBColor(248, 250, 252) # #F8FAFC
 
     # Standards: Strictly adhering to >= 14pt for content as per NextLeap brief
     def add_header(slide, title_text, subtitle_text):
@@ -78,6 +80,14 @@ def create_deck():
         else:
             shape.line.fill.background()
         return shape
+
+    def strip_table_styles(shape):
+        if shape.has_table:
+            tblPr = shape._element.xpath('.//a:tblPr')[0]
+            tblPr.attrib['firstRow'] = '0'
+            tblPr.attrib['bandRow'] = '0'
+            for s_id in tblPr.xpath('.//a:tableStyleId'):
+                tblPr.remove(s_id)
 
     def format_cell(cell, text, font_size=14, bold=False, color=DARK_NAVY, align=PP_ALIGN.LEFT, bg_color=WHITE):
         cell.text = text
@@ -206,6 +216,7 @@ def create_deck():
 
     # Bottom Table: 5-Stage Lifecycle Journey
     t_shape = slide1.shapes.add_table(4, 5, Inches(0.8), Inches(4.1), Inches(11.733), Inches(2.8))
+    strip_table_styles(t_shape)
     table = t_shape.table
     col_w = Inches(11.733 / 5)
     for i in range(5):
@@ -440,6 +451,7 @@ def create_deck():
                "The NextLeap 6-Box Framework: Deconstructing Root Causes, Target Cohort, and Strategic Value for Groww")
     
     t_shape5 = slide5.shapes.add_table(2, 3, Inches(0.8), Inches(1.5), Inches(11.733), Inches(5.3))
+    strip_table_styles(t_shape5)
     table5 = t_shape5.table
     table5.columns[0].width = Inches(3.911)
     table5.columns[1].width = Inches(3.911)
@@ -540,6 +552,7 @@ def create_deck():
 
     # Bottom RICE Table (Font size >= 14pt)
     t_shape6 = slide6.shapes.add_table(4, 7, Inches(0.8), Inches(4.2), Inches(11.733), Inches(2.6))
+    strip_table_styles(t_shape6)
     table6 = t_shape6.table
     r_widths = [Inches(3.733), Inches(1.3), Inches(1.3), Inches(1.4), Inches(1.3), Inches(1.4), Inches(1.3)]
     for i, w in enumerate(r_widths):
@@ -666,7 +679,7 @@ def create_deck():
         r2.font.color.rgb = SLATE_BODY
         p.space_after = Pt(3)
 
-    # Right Card: Prioritized V2 Roadmap Table (14pt STRICT)
+    # Right Card: Prioritized V2 Roadmap (High-Contrast Native Cards, 14pt STRICT)
     add_card(slide8, Inches(6.6), Inches(1.5), Inches(5.933), Inches(5.3))
     tb8_r = slide8.shapes.add_textbox(Inches(6.8), Inches(1.65), Inches(5.533), Inches(0.4))
     tf8_r = tb8_r.text_frame
@@ -677,31 +690,58 @@ def create_deck():
     p.font.size = Pt(16)
     p.font.color.rgb = DARK_NAVY
 
-    t_shape8 = slide8.shapes.add_table(5, 4, Inches(6.8), Inches(2.2), Inches(5.533), Inches(4.4))
-    t8 = t_shape8.table
-    t8.columns[0].width = Inches(1.0)
-    t8.columns[1].width = Inches(2.033)
-    t8.columns[2].width = Inches(1.7)
-    t8.columns[3].width = Inches(0.8)
-
-    t8_headers = ["Priority", "V2 Enhancement", "Feedback Solved", "Effort"]
-    for i, h in enumerate(t8_headers):
-        cell = t8.cell(0, i)
-        format_cell(cell, h, font_size=14, bold=True, color=DARK_NAVY, align=PP_ALIGN.CENTER, bg_color=LIGHT_HDR)
-
-    v2_rows = [
-        ("P0", "Opportunistic Dip Top-Up\n(1-Click Lump Sum in Story)", "Invest extra when units are discounted.", "Med"),
-        ("P0", "Pre-Debit Advance Alerts\n(3 Days Prior + 1-Click Skip)", "Prevents mandate bounce penalties.", "Low"),
-        ("P1", "Groww Wallet Auto-Fallback\nMandate Integration", "Funds SIP when bank balance is low.", "Med"),
-        ("P1", "Goal-Based Exploration &\nFull Redemption Flow", "Discover new funds & manage exits.", "High")
+    v2_features = [
+        ("P0", EMERALD, "Opportunistic Dip Top-Up", "Med Effort",
+         "In-story 1-click lump sum when NAV drops, turning market panic into compounding conviction."),
+        ("P0", EMERALD, "3-Day Advance Pre-Debit Alerts", "Low Effort",
+         "Replaces 1-day surprise with 3-day WhatsApp alert + 1-click Skip; eliminates ₹250–₹500 bounce fees."),
+        ("P1", BLUE_ACCENT, "Groww Wallet Auto-Fallback", "Med Effort",
+         "Automatically debits Groww wallet balance if bank account has insufficient funds to clear SIP."),
+        ("P1", BLUE_ACCENT, "Goal Tracking & Transparent Exits", "High Effort",
+         "Allows investors to map SIPs to life milestones and execute partial/full redemptions with zero dark patterns.")
     ]
-    for r_idx, r_vals in enumerate(v2_rows, start=1):
-        for c_idx, val in enumerate(r_vals):
-            cell = t8.cell(r_idx, c_idx)
-            align_c = PP_ALIGN.CENTER if c_idx in [0, 3] else PP_ALIGN.LEFT
-            bold_c = True if c_idx in [0, 3] else False
-            color_c = EMERALD if c_idx == 0 else (DARK_NAVY if c_idx == 3 else SLATE_BODY)
-            format_cell(cell, val, font_size=14, bold=bold_c, color=color_c, align=align_c, bg_color=WHITE)
+
+    card_tops = [Inches(2.15), Inches(3.25), Inches(4.35), Inches(5.45)]
+    for idx, (p_tag, p_col, f_title, effort, f_desc) in enumerate(v2_features):
+        top_y = card_tops[idx]
+        # Mini Card Container
+        add_card(slide8, Inches(6.8), top_y, Inches(5.533), Inches(1.0), bg_color=STAGE_BG, border_color=CARD_BDR)
+        tb_item = slide8.shapes.add_textbox(Inches(6.9), top_y + Inches(0.08), Inches(5.333), Inches(0.84))
+        tf_i = tb_item.text_frame
+        tf_i.word_wrap = True
+        tf_i.margin_left = tf_i.margin_top = tf_i.margin_right = tf_i.margin_bottom = 0
+
+        # Line 1: Priority Badge + Feature Title + Effort
+        p1 = tf_i.paragraphs[0]
+        r_p = p1.add_run()
+        r_p.text = f"[{p_tag}] "
+        r_p.font.name = "Arial"
+        r_p.font.bold = True
+        r_p.font.size = Pt(14)
+        r_p.font.color.rgb = p_col
+
+        r_t = p1.add_run()
+        r_t.text = f"{f_title}  "
+        r_t.font.name = "Arial"
+        r_t.font.bold = True
+        r_t.font.size = Pt(14)
+        r_t.font.color.rgb = DARK_NAVY
+
+        r_e = p1.add_run()
+        r_e.text = f"•  {effort}"
+        r_e.font.name = "Arial"
+        r_e.font.bold = False
+        r_e.font.size = Pt(14)
+        r_e.font.color.rgb = SLATE_MUT
+        p1.space_after = Pt(2)
+
+        # Line 2: Feedback Solved Description
+        p2 = tf_i.add_paragraph()
+        r_d = p2.add_run()
+        r_d.text = f"• Solves: {f_desc}"
+        r_d.font.name = "Arial"
+        r_d.font.size = Pt(14)
+        r_d.font.color.rgb = SLATE_BODY
 
     add_footer(slide8, "[Placeholder: Link to User Testing Transcripts & V2 PRD]", 8)
 
